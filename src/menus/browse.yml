@@ -1,0 +1,64 @@
+menu:
+  categories-title: Categories
+  category-title: '%category%'
+  close:
+    type: redstone_block
+    name: '&cClose Menu'
+  back:
+    type: redstone_block
+    name: '&cBack to Categories'
+  search:
+    type: compass
+    name: '&7Search Heads'
+  categories:
+    category:
+      type: player_head
+      name: '&7%category%'
+      lore:
+      - '&6%heads% &eheads'
+    unselected-page:
+      type: paper
+      name: '&7Page %page%'
+    selected-page:
+      type: map
+      name: '&7Page %page%'
+    scrollbar:
+      left:
+        type: arrow
+        name: '&7Left'
+      right:
+        type: arrow
+        name: '&7Right'
+      no-left:
+        type: air
+      no-right:
+        type: air
+      filler:
+        type: black_stained_glass_pane
+        name: ' '
+  heads:
+    head:
+      type: player_head
+      name: '&7%name%'
+      lore:
+      - '&eCost: &6%cost%'
+    unselected-page:
+      type: paper
+      name: '&7Page %page%'
+    selected-page:
+      type: map
+      name: '&7Page %page%'
+    scrollbar:
+      left:
+        type: arrow
+        name: '&7Left'
+      right:
+        type: arrow
+        name: '&7Right'
+      no-left:
+        type: air
+      no-right:
+        type: air
+      filler:
+        type: black_stained_glass_pane
+        name: ' '
