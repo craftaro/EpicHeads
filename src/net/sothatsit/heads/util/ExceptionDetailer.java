@@ -2,44 +2,47 @@ package net.sothatsit.heads.util;
 
 public abstract class ExceptionDetailer {
 
-    private static class DetailException extends Exception {
-        public DetailException(String detail) {
-            super(detail);
-        }
-    }
+	private static class DetailException extends Exception {
 
-    public RuntimeException detail(RuntimeException exception) {
-        return (RuntimeException) detail((Exception) exception);
-    }
+		private static final long serialVersionUID = 7714839411923164464L;
 
-    public abstract Exception detail(Exception exception);
+		public DetailException(String detail) {
+			super(detail);
+		}
+	}
 
-    public static ExceptionDetailer constructorDetailer() {
-        final DetailException constructorStackTrace = new DetailException("Object constructed at");
+	public RuntimeException detail(RuntimeException exception) {
+		return (RuntimeException) detail((Exception) exception);
+	}
 
-        return new ExceptionDetailer() {
-            @Override
-            public Exception detail(Exception exception) {
-                try {
-                    return appendInfo(exception, constructorStackTrace);
-                } catch(Exception e) {
-                    new Exception("Exception appending info to exception", e).printStackTrace();
+	public abstract Exception detail(Exception exception);
 
-                    constructorStackTrace.printStackTrace();
+	public static ExceptionDetailer constructorDetailer() {
+		final DetailException constructorStackTrace = new DetailException("Object constructed at");
 
-                    return exception;
-                }
-            }
-        };
-    }
+		return new ExceptionDetailer() {
+			@Override
+			public Exception detail(Exception exception) {
+				try {
+					return appendInfo(exception, constructorStackTrace);
+				} catch (Exception e) {
+					new Exception("Exception appending info to exception", e).printStackTrace();
 
-    public static Exception appendInfo(Exception exception, DetailException info) {
-        Checks.ensureNonNull(exception, "exception");
-        Checks.ensureNonNull(info, "info");
+					constructorStackTrace.printStackTrace();
 
-        exception.addSuppressed(info);
+					return exception;
+				}
+			}
+		};
+	}
 
-        return exception;
-    }
+	public static Exception appendInfo(Exception exception, DetailException info) {
+		Checks.ensureNonNull(exception, "exception");
+		Checks.ensureNonNull(info, "info");
+
+		exception.addSuppressed(info);
+
+		return exception;
+	}
 
 }
