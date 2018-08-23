@@ -1,114 +1,120 @@
 package net.sothatsit.heads.api;
 
-import com.google.common.collect.ImmutableList;
-import net.sothatsit.heads.Heads;
-import net.sothatsit.heads.cache.CacheHead;
-import net.sothatsit.heads.util.Checks;
-import net.sothatsit.heads.volatilecode.TextureGetter;
-import org.bukkit.inventory.ItemStack;
-
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import org.bukkit.inventory.ItemStack;
+
+import com.google.common.collect.ImmutableList;
+
+import net.sothatsit.heads.Heads;
+import net.sothatsit.heads.cache.CacheHead;
+import net.sothatsit.heads.util.Checks;
+import net.sothatsit.heads.volatilecode.TextureGetter;
+
 public class HeadsAPI {
 
-    public static class Head {
+	public static class Head {
 
-        private final CacheHead head;
+		private final CacheHead head;
 
-        private Head(CacheHead head) {
-            Checks.ensureNonNull(head, "head");
+		private Head(CacheHead head) {
+			Checks.ensureNonNull(head, "head");
 
-            this.head = head;
-        }
+			this.head = head;
+		}
 
-        public int getId() {
-            return head.getId();
-        }
+		public boolean isEnabled() {
+			return Heads.getInstance() != null;
+		}
 
-        public String getName() {
-            return head.getName();
-        }
+		public int getId() {
+			return head.getId();
+		}
 
-        public String getCategory() {
-            return head.getCategory();
-        }
+		public String getName() {
+			return head.getName();
+		}
 
-        public double getCost() {
-            return head.getCost();
-        }
+		public String getCategory() {
+			return head.getCategory();
+		}
 
-        public ItemStack getItem() {
-            return head.getItemStack();
-        }
+		public double getCost() {
+			return head.getCost();
+		}
 
-        public ItemStack getItem(String displayName) {
-            return head.getItemStack(displayName);
-        }
+		public ItemStack getItem() {
+			return head.getItemStack();
+		}
 
-        private static Head fromCacheHead(CacheHead head) {
-            return (head == null ? null : new Head(head));
-        }
+		public ItemStack getItem(String displayName) {
+			return head.getItemStack(displayName);
+		}
 
-        private static Head fromNameAndTexture(String name, String texture) {
-            return (texture == null ? null : fromCacheHead(new CacheHead(name, "HeadsAPI", texture)));
-        }
+		private static Head fromCacheHead(CacheHead head) {
+			return (head == null ? null : new Head(head));
+		}
 
-        private static List<Head> fromCacheHeads(List<CacheHead> heads) {
-            ImmutableList.Builder<Head> converted = ImmutableList.builder();
+		private static Head fromNameAndTexture(String name, String texture) {
+			return (texture == null ? null : fromCacheHead(new CacheHead(name, "HeadsAPI", texture)));
+		}
 
-            for(CacheHead head : heads) {
-                converted.add(Head.fromCacheHead(head));
-            }
+		private static List<Head> fromCacheHeads(List<CacheHead> heads) {
+			ImmutableList.Builder<Head> converted = ImmutableList.builder();
 
-            return converted.build();
-        }
+			for (CacheHead head : heads) {
+				converted.add(Head.fromCacheHead(head));
+			}
 
-    }
+			return converted.build();
+		}
 
-    public static Head getHead(int id) {
-        CacheHead head = Heads.getCache().findHead(id);
+	}
 
-        if(head == null)
-            return null;
+	public static Head getHead(int id) {
+		CacheHead head = Heads.getCache().findHead(id);
 
-        return new Head(head);
-    }
+		if (head == null)
+			return null;
 
-    @Deprecated
-    public static List<Head> searchHeads(String query) {
-        List<CacheHead> search = Heads.getCache().searchHeads(query);
+		return new Head(head);
+	}
 
-        return Head.fromCacheHeads(search);
-    }
+	@Deprecated
+	public static List<Head> searchHeads(String query) {
+		List<CacheHead> search = Heads.getCache().searchHeads(query);
 
-    public static void searchHeads(String query, Consumer<List<Head>> onResult) {
-        Heads.getCache().searchHeadsAsync(query, heads -> {
-            onResult.accept(Head.fromCacheHeads(heads));
-        });
-    }
+		return Head.fromCacheHeads(search);
+	}
 
-    public static Set<String> getCategories() {
-        return Heads.getCache().getCategories();
-    }
+	public static void searchHeads(String query, Consumer<List<Head>> onResult) {
+		Heads.getCache().searchHeadsAsync(query, heads -> {
+			onResult.accept(Head.fromCacheHeads(heads));
+		});
+	}
 
-    public static List<Head> getCategoryHeads(String category) {
-        List<CacheHead> categoryHeads = Heads.getCache().getCategoryHeads(category);
+	public static Set<String> getCategories() {
+		return Heads.getCache().getCategories();
+	}
 
-        return Head.fromCacheHeads(categoryHeads);
-    }
+	public static List<Head> getCategoryHeads(String category) {
+		List<CacheHead> categoryHeads = Heads.getCache().getCategoryHeads(category);
 
-    public static List<Head> getAllHeads() {
-        List<CacheHead> heads = Heads.getCache().getHeads();
+		return Head.fromCacheHeads(categoryHeads);
+	}
 
-        return Head.fromCacheHeads(heads);
-    }
+	public static List<Head> getAllHeads() {
+		List<CacheHead> heads = Heads.getCache().getHeads();
 
-    public static void downloadHead(String playerName, Consumer<Head> consumer) {
-        TextureGetter.getTexture(playerName, (texture) -> {
-            consumer.accept(Head.fromNameAndTexture(playerName, texture));
-        });
-    }
+		return Head.fromCacheHeads(heads);
+	}
+
+	public static void downloadHead(String playerName, Consumer<Head> consumer) {
+		TextureGetter.getTexture(playerName, (texture) -> {
+			consumer.accept(Head.fromNameAndTexture(playerName, texture));
+		});
+	}
 
 }

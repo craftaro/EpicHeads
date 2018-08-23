@@ -8,8 +8,8 @@ Quality, performance, and support are my priorities for this resource. Purchase 
 Here is an example with built-in methods for developers that want to use the developers API to code other resources.
 ```ruby
 # Check if Heads is installed and enabled.
-if(Bukkit.getPluginManager().getPlugin("Heads") != null) {
-Bukkit.broadcastMessage("Hooray!");
+if (HeadsAPI.isEnabled()) {
+Hooray();
 }
 
 # How you would get the heads in any way.

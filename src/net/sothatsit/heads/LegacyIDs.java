@@ -45,10 +45,12 @@ public class LegacyIDs {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public static LegacyIDs create() {
 		Map<Integer, String> idToType = new HashMap<>();
 
 		for (Material type : Material.values()) {
+			// This need to be kept for the legacy IDS for 1.13.
 			idToType.put(type.getId(), type.name());
 		}
 

@@ -1,101 +1,98 @@
 package net.sothatsit.heads.config.oldmenu;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.bukkit.configuration.ConfigurationSection;
+
 import net.sothatsit.heads.Heads;
 import net.sothatsit.heads.config.ConfigFile;
-
 import net.sothatsit.heads.util.Clock;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class MenuConfig {
-    
-    private final ConfigurationSection defaults;
-    private final ConfigFile configFile;
-    private final Map<String, Menu> menus;
-    private final Map<String, Menu> defaultMenus;
-    
-    public MenuConfig(ConfigFile configFile) {
-        this.menus = new HashMap<>();
-        this.defaultMenus = new HashMap<>();
 
-        this.configFile = configFile;
-        this.defaults = loadDefaults();
+	private final ConfigurationSection defaults;
+	private final ConfigFile configFile;
+	private final Map<String, Menu> menus;
+	private final Map<String, Menu> defaultMenus;
 
-        reload();
-    }
+	public MenuConfig(ConfigFile configFile) {
+		this.menus = new HashMap<>();
+		this.defaultMenus = new HashMap<>();
 
-    public Menu getMenu(String name) {
-        Menu menu = menus.get(name.toLowerCase());
+		this.configFile = configFile;
+		this.defaults = loadDefaults();
 
-        return (menu != null ? menu : defaultMenus.get(name.toLowerCase()));
-    }
-    
-    public void reload() {
-        Clock timer = Clock.start();
-        
-        configFile.copyDefaults();
-        configFile.reload();
+		reload();
+	}
 
-        String filename = configFile.getName();
-        ConfigurationSection config = configFile.getConfig();
-        AtomicBoolean shouldSave = new AtomicBoolean(false);
+	public Menu getMenu(String name) {
+		Menu menu = menus.get(name.toLowerCase());
 
-        menus.clear();
+		return (menu != null ? menu : defaultMenus.get(name.toLowerCase()));
+	}
 
-        for (String key : config.getKeys(false)) {
-            if (!config.isConfigurationSection(key)) {
-                Heads.warning("Unknown use of value " + key + " in " + filename);
-                continue;
-            }
+	public void reload() {
+		Clock timer = Clock.start();
 
-            ConfigurationSection menuSection = config.getConfigurationSection(key);
+		configFile.copyDefaults();
+		configFile.reload();
 
-            Menu defaultMenu = defaultMenus.get(key.toLowerCase());
-            Menu menu = Menu.loadMenu(filename, menuSection, shouldSave, defaultMenu);
-            
-            menus.put(key.toLowerCase(), menu);
-        }
-        
-        for (String key : defaultMenus.keySet()) {
-            if(menus.containsKey(key))
-                continue;
+		String filename = configFile.getName();
+		ConfigurationSection config = configFile.getConfig();
+		AtomicBoolean shouldSave = new AtomicBoolean(false);
 
-            config.set(key, defaults.getConfigurationSection(key));
+		menus.clear();
 
-            Heads.warning(key + " was missing in " + filename + ", creating it");
-            shouldSave.set(true);
-        }
-        
-        if (shouldSave.get()) {
-            configFile.save();
-        }
-        
-        Heads.info("Loaded Menu Config with " + menus.size() + " Menus " + timer);
-    }
+		for (String key : config.getKeys(false)) {
+			if (!config.isConfigurationSection(key)) {
+				Heads.warning("Unknown use of value " + key + " in " + filename);
+				continue;
+			}
 
-    private ConfigurationSection loadDefaults() {
-        String filename = configFile.getName();
-        ConfigurationSection config = configFile.getDefaults();
-        AtomicBoolean shouldSave = new AtomicBoolean(false);
+			ConfigurationSection menuSection = config.getConfigurationSection(key);
 
-        defaultMenus.clear();
+			Menu defaultMenu = defaultMenus.get(key.toLowerCase());
+			Menu menu = Menu.loadMenu(filename, menuSection, shouldSave, defaultMenu);
 
-        for (String key : config.getKeys(false)) {
-            if (!config.isConfigurationSection(key))
-                continue;
+			menus.put(key.toLowerCase(), menu);
+		}
 
-            ConfigurationSection menuSection = config.getConfigurationSection(key);
+		for (String key : defaultMenus.keySet()) {
+			if (menus.containsKey(key))
+				continue;
 
-            defaultMenus.put(key.toLowerCase(), Menu.loadMenu(filename, menuSection, shouldSave));
-        }
+			config.set(key, defaults.getConfigurationSection(key));
 
-        return config;
-    }
+			Heads.warning(key + " was missing in " + filename + ", creating it");
+			shouldSave.set(true);
+		}
+
+		if (shouldSave.get()) {
+			configFile.save();
+		}
+
+		Heads.info("Loaded Menu Config with " + menus.size() + " Menus " + timer);
+	}
+
+	private ConfigurationSection loadDefaults() {
+		String filename = configFile.getName();
+		ConfigurationSection config = configFile.getDefaults();
+		AtomicBoolean shouldSave = new AtomicBoolean(false);
+
+		defaultMenus.clear();
+
+		for (String key : config.getKeys(false)) {
+			if (!config.isConfigurationSection(key))
+				continue;
+
+			ConfigurationSection menuSection = config.getConfigurationSection(key);
+
+			defaultMenus.put(key.toLowerCase(), Menu.loadMenu(filename, menuSection, shouldSave));
+		}
+
+		return config;
+	}
 
 }

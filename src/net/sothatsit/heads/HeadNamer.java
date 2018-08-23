@@ -45,15 +45,17 @@ public class HeadNamer implements Listener {
 		return Heads.getMainConfig().shouldUseBlockStore() && Heads.isBlockStoreAvailable();
 	}
 
+	@SuppressWarnings("deprecation")
 	private boolean isHeadsHead(ItemStack item) {
 		if (!Items.isSkull(item))
 			return false;
 
 		SkullMeta meta = (SkullMeta) item.getItemMeta();
-
+		// This needs to be kept too since it will not work on 1.8 if changed.
 		return meta.hasOwner() && meta.getOwner().equals("SpigotHeadPlugin");
 	}
 
+	@SuppressWarnings("deprecation")
 	private boolean isHeadsHead(Block block) {
 		BlockState state = block.getState();
 		if (!(state instanceof Skull))
@@ -61,6 +63,7 @@ public class HeadNamer implements Listener {
 
 		Skull skull = (Skull) state;
 
+		// This needs to be kept too since it will not work on 1.8 if changed.
 		return skull.getOwner() != null && skull.getOwner().equals("SpigotHeadPlugin");
 	}
 

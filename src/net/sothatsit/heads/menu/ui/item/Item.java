@@ -23,6 +23,7 @@ import net.sothatsit.heads.util.Stringify;
 import net.sothatsit.heads.volatilecode.ItemNBT;
 import net.sothatsit.heads.volatilecode.reflection.Version;
 
+@SuppressWarnings("deprecation")
 public final class Item {
 
 	private final Material type;
@@ -205,6 +206,7 @@ public final class Item {
 			return new Item(type, 1, data, null, null, false);
 		}
 		return new Item(type, 1, (short) 0, null, null, false);
+		// TODO: Needs manual testing on 1.13.
 	}
 
 	public static Item create(ItemStack itemStack) {
@@ -361,6 +363,7 @@ public final class Item {
 		return Material.matchMaterial(typeName, true);
 	}
 
+	// Need to be kept, will look for an alternative in the future.
 	public static Material fromLegacyType(Material legacyType, byte data) {
 		return Bukkit.getUnsafe().fromLegacy(new MaterialData(legacyType, data));
 	}
