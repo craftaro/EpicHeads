@@ -93,6 +93,7 @@ public class GetCommand extends AbstractCommand {
 			Lang.Command.Get.adding(name).send(player);
 
 			player.getInventory().addItem(head.getItemStack());
+			player.updateInventory();
 		}
 	}
 }
