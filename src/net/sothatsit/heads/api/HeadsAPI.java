@@ -21,7 +21,6 @@ public class HeadsAPI {
 
 		private Head(CacheHead head) {
 			Checks.ensureNonNull(head, "head");
-
 			this.head = head;
 		}
 
@@ -63,11 +62,9 @@ public class HeadsAPI {
 
 		private static List<Head> fromCacheHeads(List<CacheHead> heads) {
 			ImmutableList.Builder<Head> converted = ImmutableList.builder();
-
 			for (CacheHead head : heads) {
 				converted.add(Head.fromCacheHead(head));
 			}
-
 			return converted.build();
 		}
 
@@ -75,17 +72,14 @@ public class HeadsAPI {
 
 	public static Head getHead(int id) {
 		CacheHead head = Heads.getCache().findHead(id);
-
 		if (head == null)
 			return null;
-
 		return new Head(head);
 	}
 
 	@Deprecated
 	public static List<Head> searchHeads(String query) {
 		List<CacheHead> search = Heads.getCache().searchHeads(query);
-
 		return Head.fromCacheHeads(search);
 	}
 
@@ -101,13 +95,11 @@ public class HeadsAPI {
 
 	public static List<Head> getCategoryHeads(String category) {
 		List<CacheHead> categoryHeads = Heads.getCache().getCategoryHeads(category);
-
 		return Head.fromCacheHeads(categoryHeads);
 	}
 
 	public static List<Head> getAllHeads() {
 		List<CacheHead> heads = Heads.getCache().getHeads();
-
 		return Head.fromCacheHeads(heads);
 	}
 

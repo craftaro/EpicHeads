@@ -1,3 +1,6 @@
+updater:
+ old-version: '&cYou are running an outdated version of Heads (%version%).'
+ new-version: '&cYou are running the latest version of Heads (%version%).'
 currency:
   zero: "Free"
   non-zero: "%amount%"

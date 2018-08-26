@@ -46,6 +46,7 @@ import net.sothatsit.heads.util.Clock;
 import net.sothatsit.heads.volatilecode.injection.ProtocolHackFixer;
 import net.sothatsit.heads.volatilecode.reflection.Version;
 import net.sothatsit.heads.volatilecode.reflection.craftbukkit.CommandMap;
+import net.sothatsit.heads.volatilecode.reflection.craftbukkit.CraftMetaItem;
 import net.sothatsit.heads.volatilecode.reflection.craftbukkit.CraftServer;
 
 public class Heads extends JavaPlugin implements Listener {
@@ -103,6 +104,8 @@ public class Heads extends JavaPlugin implements Listener {
 
 		Bukkit.getPluginManager().registerEvents(this, this);
 
+		CraftMetaItem.registerItems();
+
 		if (mainConfig.shouldCheckForUpdates()) {
 			checkForUpdates();
 		}
@@ -126,6 +129,7 @@ public class Heads extends JavaPlugin implements Listener {
 				if (!UpdateChecker.isNewerVersion(latestVersion))
 					return;
 
+				// Learn how to use LangMessage - included next update.
 				warning("A newer version of Heads, Heads v" + latestVersion + ", is available for download");
 				warning("You are currently using Heads v" + currentVersion);
 			} catch (IOException e) {
