@@ -72,13 +72,9 @@ public class Heads extends JavaPlugin implements Listener {
 			Bukkit.getPluginManager().disablePlugin(this);
 			return;
 		}
-
 		instance = this;
-
 		Clock timer = Clock.start();
-
 		loadCache();
-
 		try {
 			legacyIDs = LegacyIDs.readResource("legacy-ids.txt");
 		} catch (IOException exception) {
@@ -86,37 +82,27 @@ public class Heads extends JavaPlugin implements Listener {
 			severe("Unable to load legacy IDs to perform conversion from older Spigot versions");
 			exception.printStackTrace();
 		}
-
 		this.menus = new Menus();
 		this.menus.reload();
-
 		this.oldMenuConfig = new MenuConfig(getVersionedConfig("menus.yml"));
 		this.langConfig = new LangConfig();
 		this.mainConfig = new MainConfig();
 		this.economy = hookEconomy();
-
 		ProtocolHackFixer.fix();
-
 		registerCommands();
 		tryHookBlockStore();
-
 		new HeadNamer().registerEvents();
-
 		Bukkit.getPluginManager().registerEvents(this, this);
-
 		CraftMetaItem.registerItems();
-
 		if (mainConfig.shouldCheckForUpdates()) {
 			checkForUpdates();
 		}
-
 		info("Heads plugin enabled with " + cache.getHeadCount() + " heads " + timer);
 	}
 
 	@Override
 	public void onDisable() {
 		instance = null;
-
 		unregisterCommands();
 	}
 
@@ -125,10 +111,8 @@ public class Heads extends JavaPlugin implements Listener {
 			try {
 				String currentVersion = UpdateChecker.getCurrentVersion();
 				String latestVersion = UpdateChecker.getLatestVersion();
-
 				if (!UpdateChecker.isNewerVersion(latestVersion))
 					return;
-
 				// Learn how to use LangMessage - included next update.
 				warning("A newer version of Heads, Heads v" + latestVersion + ", is available for download");
 				warning("You are currently using Heads v" + currentVersion);
@@ -142,25 +126,19 @@ public class Heads extends JavaPlugin implements Listener {
 		if (commandsRegistered) {
 			unregisterCommands();
 		}
-
 		SimpleCommandMap commandMap = CraftServer.get().getCommandMap();
-
 		RuntimeCommand heads = new RuntimeCommand(mainConfig.getHeadCommand());
 		heads.setExecutor(new HeadsCommand());
 		heads.setDescription(mainConfig.getHeadDescription());
 		heads.setAliases(Arrays.asList(mainConfig.getHeadAliases()));
-
 		commandMap.register("heads", heads);
-
 		commandsRegistered = true;
 	}
 
 	private void unregisterCommands() {
 		SimpleCommandMap commandMap = CraftServer.get().getCommandMap();
 		Map<String, Command> map = CommandMap.getCommandMap(commandMap);
-
 		map.values().removeIf(command -> command instanceof RuntimeCommand);
-
 		commandsRegistered = false;
 	}
 
@@ -169,39 +147,29 @@ public class Heads extends JavaPlugin implements Listener {
 		menus.reload();
 		langConfig.reload();
 		mainConfig.reload();
-
 		registerCommands();
-
 		economy = hookEconomy();
-
 		tryHookBlockStore();
 	}
 
 	public File getCacheFile() {
 		if (!getDataFolder().exists() && !getDataFolder().mkdirs())
 			throw new RuntimeException("Unable to create the data folder to save plugin files");
-
 		if (!getDataFolder().isDirectory())
 			throw new RuntimeException("plugins/Heads should be a directory, yet there is a file with the same name");
-
 		return new File(getDataFolder(), "heads.cache");
 	}
 
 	private CacheFile loadCache() {
 		File file = getCacheFile();
 		FileConfigFile legacyConfig = new FileConfigFile("cache.yml");
-
 		boolean requiresWrite = false;
-
 		if (!file.exists()) {
 			requiresWrite = true;
-
 			if (legacyConfig.getFile().exists()) {
 				Clock timer = Clock.start();
-
 				LegacyCacheConfig legacy = new LegacyCacheConfig(legacyConfig);
 				cache = CacheFileConverter.convertToCacheFile("main-cache", legacy);
-
 				info("Converted legacy yaml cache file to new binary file " + timer);
 			} else {
 				cache = new CacheFile("main-cache");
@@ -209,9 +177,7 @@ public class Heads extends JavaPlugin implements Listener {
 		} else {
 			try {
 				Clock timer = Clock.start();
-
 				cache = CacheFile.read(file);
-
 				info("Loaded cache file " + timer);
 			} catch (IOException e) {
 				severe("Unable to read heads.cache file");
@@ -232,7 +198,6 @@ public class Heads extends JavaPlugin implements Listener {
 
 	public void saveCache() {
 		File file = getCacheFile();
-
 		try {
 			Clock timer = Clock.start();
 
