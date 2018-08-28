@@ -1,7 +1,7 @@
 main: net.sothatsit.heads.Heads
 author: Marido
 name: Heads
-version: 2.0.6
+version: 2.0.7
 api-version: 1.13
 softdepend: [Vault, PlayerPoints, BlockStore]
 loadbefore: [DeluxeMenus]

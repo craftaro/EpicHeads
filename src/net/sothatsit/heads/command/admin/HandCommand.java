@@ -61,7 +61,7 @@ public class HandCommand extends AbstractCommand {
 
 		Player player = (Player) sender;
 
-		ItemStack hand = player.getInventory().getItemInMainHand();
+		ItemStack hand = player.getInventory().getItemInHand();
 
 		if (!Items.isSkull(hand)) {
 			Lang.Command.Hand.notSkull().send(sender);
