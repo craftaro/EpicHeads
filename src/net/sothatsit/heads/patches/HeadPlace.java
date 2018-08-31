@@ -1,9 +1,17 @@
 package net.sothatsit.heads.patches;
 
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
+
+import net.sothatsit.heads.volatilecode.reflection.Version;
 
 public class HeadPlace implements Listener {
 
-	// Patch removed - issue was a client-side bug.	
+	@EventHandler
+	public void headPlace(BlockPlaceEvent event) {
+		if (Version.getVersion() == Version.v1_8) {
 
+		}
+	}
 }

@@ -111,11 +111,15 @@ public class Heads extends JavaPlugin implements Listener {
 			try {
 				String currentVersion = UpdateChecker.getCurrentVersion();
 				String latestVersion = UpdateChecker.getLatestVersion();
-				if (!UpdateChecker.isNewerVersion(latestVersion))
+				if (!UpdateChecker.isNewerVersion(latestVersion)) {
+					String newversion = Lang.Updater.newVersion().getSingle();
+					newversion = newversion.replaceAll("%version%", currentVersion);
+					severe(newversion);
 					return;
-				// Learn how to use LangMessage - included next update.
-				warning("A newer version of Heads, Heads v" + latestVersion + ", is available for download");
-				warning("You are currently using Heads v" + currentVersion);
+				}
+				String oldversion = Lang.Updater.oldVersion().getSingle();
+				oldversion = oldversion.replaceAll("%version%", currentVersion);
+				warning(oldversion);
 			} catch (IOException e) {
 				severe("There was an error checking for an update for Heads");
 			}
