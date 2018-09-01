@@ -1,0 +1,289 @@
+search-heads:
+  title: Cerca Teste
+  head:
+    type: skull_item
+    name: '&7%name%'
+    lore:
+    - '&8%category%'
+    damage: 3
+  head-cost:
+    type: skull_item
+    name: '&7%name%'
+    lore:
+    - '&8%category%'
+    - ''
+    - '&6Costo: &e%cost%'
+    damage: 3
+  head-no-perms:
+    type: skull_item
+    name: '&7%name%'
+    lore:
+    - '&8%category%'
+    - ''
+    - '&cNon hai il Permesso'
+    - '&cDi usare questa Testa'
+    damage: 3
+  filler:
+    type: stained_glass_pane
+    name: ' '
+    damage: 15
+  back:
+    type: redstone_block
+    name: '&cTorna al Menu Principale'
+  forwards:
+    type: arrow
+    name: '&7Salta una Pagina'
+  backwards:
+    type: arrow
+    name: '&7Pagina precedente'
+get-categories:
+  title: Categorie
+  head:
+    type: skull_item
+    name: '&6%category%'
+    lore:
+    - '&e%heads% Teste'
+    damage: 3
+get-heads:
+  title: '%category%'
+  head:
+    type: skull_item
+    name: '&7%name%'
+    lore:
+    - '&6Costo: &e%cost%'
+    damage: 3
+  filler:
+    type: stained_glass_pane
+    name: ' '
+    damage: 15
+  back:
+    type: redstone_block
+    name: '&cTorna al Menu principale'
+  forwards:
+    type: arrow
+    name: '&7Pagina successiva'
+  backwards:
+    type: arrow
+    name: '&7Pagina precedente'
+get-confirm:
+  title: Compra Testa
+  head:
+    type: skull_item
+    name: '&aAcquista %name% per $%cost%'
+    damage: 3
+  accept:
+    type: stained_clay
+    name: '&aAcquista %name% per $%cost%'
+    damage: 5
+  deny:
+    type: stained_clay
+    name: '&cAnnulla Acquisto'
+    damage: 14
+id-categories:
+  title: Categorie
+  head:
+    type: skull_item
+    name: '&6%category%'
+    lore:
+    - '&e%heads% Teste'
+    damage: 3
+id-heads:
+  title: '%category%'
+  head:
+    type: skull_item
+    name: '&7%name%'
+    lore:
+    - '&6ID&8: &a%id%'
+    damage: 3
+  filler:
+    type: stained_glass_pane
+    name: ' '
+    damage: 15
+  back:
+    type: redstone_block
+    name: '&cTorna al Menu principale'
+  forwards:
+    type: arrow
+    name: '&7Pagina successiva'
+  backwards:
+    type: arrow
+    name: '&7Pagina precedente'
+remove-categories:
+  title: Categorie
+  head:
+    type: skull_item
+    name: '&6%category%'
+    lore:
+    - '&e%heads% Teste'
+    damage: 3
+remove-heads:
+  title: '%category%'
+  head:
+    type: skull_item
+    name: '&cRimuovi %name%'
+    damage: 3
+  filler:
+    type: stained_glass_pane
+    name: ' '
+    damage: 15
+  back:
+    type: redstone_block
+    name: '&cTorna al Menu principale'
+  forwards:
+    type: arrow
+    name: '&7Pagina successiva'
+  backwards:
+    type: arrow
+    name: '&7Pagina precedente'
+remove-confirm:
+  title: Rimuovi testa
+  head:
+    type: skull_item
+    name: '&cRimuovi %name%'
+    damage: 3
+  accept:
+    type: stained_clay
+    name: '&cRimuovi %name%'
+    damage: 5
+  deny:
+    type: stained_clay
+    name: '&aNon rimuovere %name%'
+    damage: 14
+rename-categories:
+  title: Categorie
+  head:
+    type: skull_item
+    name: '&6%category%'
+    lore:
+    - '&e%heads% Teste'
+    damage: 3
+rename-heads:
+  title: '%category%'
+  head:
+    type: skull_item
+    name: '&aRinomina %name%'
+    damage: 3
+  filler:
+    type: stained_glass_pane
+    name: ' '
+    damage: 15
+  back:
+    type: redstone_block
+    name: '&cTorna al Menu principale'
+  forwards:
+    type: arrow
+    name: '&7Pagina successiva'
+  backwards:
+    type: arrow
+    name: '&7Pagina precedente'
+rename-confirm:
+  title: Rename Head
+  head:
+    type: skull_item
+    name: '&aRinomina %name% in %newname%'
+    damage: 3
+  accept:
+    type: stained_clay
+    name: '&aRinomina %name% in %newname%'
+    damage: 5
+  deny:
+    type: stained_clay
+    name: '&aNon rinominare %name%'
+    damage: 14
+cost-categories:
+  title: Categories
+  head:
+    type: skull_item
+    name: '&6%category%'
+    lore:
+    - '&e%heads% Teste'
+    damage: 3
+cost-heads:
+  title: '%category%'
+  head:
+    type: skull_item
+    name: '&aImposta il costo di %name%'
+    damage: 3
+  filler:
+    type: stained_glass_pane
+    name: ' '
+    damage: 15
+  back:
+    type: redstone_block
+    name: '&cTorna al Menu principale'
+  forwards:
+    type: arrow
+    name: '&7Pagina successiva'
+  backwards:
+    type: arrow
+    name: '&7Pagina precedente'
+cost-confirm:
+  title: Imposta il Costo di una Testa
+  head:
+    type: skull_item
+    name: '&aImposta il Costo di %name%'
+    lore:
+    - '&7In &6%newcost%'
+    damage: 3
+  accept:
+    type: stained_clay
+    name: '&aImposta il Costo di %name%'
+    lore:
+    - '&7in &6%newcost%'
+    damage: 5
+  deny:
+    type: stained_clay
+    name: '&aNon impostare il Costo di %name%'
+    damage: 14
+category-cost-categories:
+  title: Categories
+  head:
+    type: skull_item
+    name: '&7Imposta il costo di &6%category%'
+    lore:
+    - '&e%heads% Teste'
+    damage: 3
+category-cost-confirm:
+  title: Imposta il Costo della Categoria
+  head:
+    type: skull_item
+    name: '&aImposta il Costo di %category%'
+    lore:
+    - '&7in &6%newcost%'
+    damage: 3
+  accept:
+    type: stained_clay
+    name: '&aImposta il Costo di %category%'
+    lore:
+    - '&7in &6%newcost%'
+    damage: 5
+  deny:
+    type: stained_clay
+    name: '&aNon impostare il Costo di %category%'
+    damage: 14
+category-cost-remove-categories:
+  title: Categorie
+  head:
+    type: skull_item
+    name: '&7Ripristina il Costo di &6%category%'
+    lore:
+    - '&e%heads% Teste'
+    damage: 3
+category-cost-remove-confirm:
+  title: Imposta il Costo della Categoria
+  head:
+    type: skull_item
+    name: '&aRipristina il Costo di %category%'
+    lore:
+    - '&7in &6%newcost%'
+    damage: 3
+  accept:
+    type: stained_clay
+    name: '&aRipristina il Costo di %category%'
+    lore:
+    - '&7in &6%newcost%'
+    damage: 5
+  deny:
+    type: stained_clay
+    name: '&aNon impostare il Costo di %category%'
+    damage: 14

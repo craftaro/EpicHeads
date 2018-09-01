@@ -1,0 +1,45 @@
+hide-no-perm-categories: true
+free-in-creative: false
+check-for-updates: true
+economy:
+   enabled: false
+   default-head-cost: 0
+   vault-eco:
+      enabled: true
+   item-eco:
+      enabled: false
+      item:
+         type: skull_item
+         damage: 3
+         name: '&6Player Head Token'
+         lore:
+         - '&8Utilizza in /heads!'
+   player-points-eco:
+      enabled: false
+breaking-head-names:
+   enabled: true
+   attempt-hook-blockstore: true
+   similar-heads-in-cache: true
+   default-name: 'Decoration Head'
+commands:
+   heads:
+      label: 'heads'
+      aliases:
+      - 'head'
+      description: 'Ottieni Teste fantastiche'
+      sub-commands:
+         # open menu is when no arguments are supplied
+         get: 'get'
+         search: 'search'
+         random: 'random'
+         help: 'help'
+         add: 'add'
+         hand: 'hand'
+         remove: 'remove'
+         rename: 'rename'
+         give: 'give'
+         cost: 'cost'
+         category-cost: 'categorycost'
+         item-eco: 'itemeco'
+         id: 'id'
+         reload: 'reload'
