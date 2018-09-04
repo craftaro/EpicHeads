@@ -1,59 +1,59 @@
-main: nl.marido.heads.Heads
+main: nl.marido.deluxeheads.DeluxeHeads
 author: Marido
-name: Heads
-version: 2.0.9
+name: DeluxeHeads
+version: 2.1.0
 api-version: 1.13
 softdepend: [Vault, PlayerPoints, BlockStore]
 loadbefore: [DeluxeMenus]
 permissions:
-   heads.reload:
+   deluxeheads.reload:
       description: 'Reload the config files'
       default: op
-   heads.menu:
+   deluxeheads.menu:
       description: 'Open the head menu'
       default: op
-   heads.get:
-      description: 'Use the /heads get <name> command'
+   deluxeheads.get:
+      description: 'Use the /deluxeheads get <name> command'
       default: op
-   heads.search:
-      description: 'Use the /heads search <search query> command'
+   deluxeheads.search:
+      description: 'Use the /deluxeheads search <search query> command'
       default: op
-   heads.hat:
-      description: 'Use the /heads hat command'
+   deluxeheads.hat:
+      description: 'Use the /deluxeheads hat command'
       default: true
-   heads.add:
+   deluxeheads.add:
       description: 'Add heads to the cache'
       default: op
-   heads.hand:
+   deluxeheads.hand:
       description: 'Add heads from your hand into the cache'
       default: op
-   heads.random:
+   deluxeheads.random:
       description: 'Get a random head from the cache'
       default: op
-   heads.remove:
+   deluxeheads.remove:
       description: 'Remove heads from the cache'
       default: op
-   heads.rename:
+   deluxeheads.rename:
       description: 'Rename heads in the cache'
       default: op
-   heads.id:
+   deluxeheads.id:
       description: 'Get a heads id'
       default: op
-   heads.give:
+   deluxeheads.give:
       description: 'Give players heads'
       default: op
-   heads.cost:
+   deluxeheads.cost:
       description: 'Set heads costs'
       default: op
-   heads.category-cost:
+   deluxeheads.category-cost:
       description: 'Set heads costs by category'
       default: op
-   heads.bypasscost:
+   deluxeheads.bypasscost:
       description: 'Bypass paying for heads'
       default: op
-   heads.category.*:
+   deluxeheads.category.*:
       description: 'Permission for all categories'
       default: true
-   heads.item-eco:
+   deluxeheads.item-eco:
       description: 'Permission to set, get and give the economy item'
       default: op

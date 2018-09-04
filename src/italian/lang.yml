@@ -36,7 +36,7 @@ menu:
       open: '&7Clicca su una Testa per ottenere il suo ID'
       clicked: '&7La Testa &6%name% &7possiede l''ID &6%id%'
 command:
-   unknown-command: '&cComando sconosciuto &4/heads %command%'
+   unknown-command: '&cComando sconosciuto &4/deluxeheads %command%'
    errors:
       must-be-player: '&cDevi essere un Player per utilizzare questo Comando.'
       no-permission: '&cNon hai il Permesso per eseguire questo Comando.'
@@ -50,15 +50,15 @@ command:
       - '&6%command%'
       - '&7   - &5%description%'
       footer:
-      - '&8&m&l---&e Vedi /heads help %next-page% &8&m&l---'
+      - '&8&m&l---&e Vedi /deluxeheads help %next-page% &8&m&l---'
       unknown-page: '&cPagina sconosciuta &4%page%&c, le pagine devono essere tra &41 &ce &4%pages%'
       help:
-         command: '/heads help [pagina]'
+         command: '/deluxeheads help [pagina]'
          description: 'Apri il Menu di Aiuto'
    reload:
       reloaded: '&7Config Ricaricata'
       help:
-         command: '/heads reload'
+         command: '/deluxeheads reload'
          description: 'Ricarica i File di Configurazione di Heads'
    get:
       head-name: '&7Testa di %name%'
@@ -69,13 +69,13 @@ command:
       - '&cImpossibile trovare le Texture di &4%name%'
       - '&4I Server di Autenticazione potrebbero essere offline, oppure il giocatore richiesto non esiste.'
       help:
-         command: '/heads get <player name>'
+         command: '/deluxeheads get <player name>'
          description: 'Ottieni la Testa di un Player'
    search:
       found: '&7Trovate &6%heads% Teste &7con il Nome &6%query%'
       none-found: '&cNon ho trovato Teste che coincidono con &4%query%'
       help:
-         command: '/heads search <search query>'
+         command: '/deluxeheads search <search query>'
          description: 'Trova Teste interessanti'
    random:
       no-heads: '&cNon ci sono Teste nella Cache del Plugin'
@@ -84,7 +84,7 @@ command:
       retrieve: '&7Hai ricevuto casualmente la Testa di &6%name%'
       give: '&7Ho dato la Testa di &6%name% &7a &6%player%'
       help:
-         command: '/heads random [player]'
+         command: '/deluxeheads random [player]'
          description: 'Ottieni o Dai una Testa casuale'
    add:
       not-supported: '&cOttenere le Textures delle Teste non è possibile nelle versioni Spigot inferiori alla 1.8.'
@@ -97,7 +97,7 @@ command:
       - '&4I Server di Autenticazione potrebbero essere offline, oppure il giocatore richiesto non esiste.'
       added: '&7Aggiunta la Testa di &6%name%&7 alla Categoria &6%category%'
       help:
-         command: '/heads add <player-name> <category> [head name]'
+         command: '/deluxeheads add <player-name> <category> [head name]'
          description: 'Aggiungi una Nuova Testa nel Menu'
    hand:
       not-supported: '&cOttenere le Textures delle Teste non è possibile nelle versioni Spigot inferiori alla 1.8.'
@@ -113,7 +113,7 @@ command:
       - '&4The authentication servers may be down, or the player does not exist.'
       adding: '&7Aggiunta la Testa di &6%name%&7 alla Categoria &6%category%'
       help:
-         command: '/heads hand <category> <head name>'
+         command: '/deluxeheads hand <category> <head name>'
          description: 'Aggiungi una nuova Testa in una Categoria'
    give:
       cant-find-player: '&cIl player &4%name% &cnon è stato trovato.'
@@ -121,54 +121,54 @@ command:
       give: '&7Hai dato &6%amount% &7delle Teste di &6%head% &7a &6%name%'
       invalid-amount: 'Il numero deve essere più grande di 0 > Hai inserito &4%number%'
       help:
-         command: '/heads give <head id> <player> <amount>'
+         command: '/deluxeheads give <head id> <player> <amount>'
          description: 'Dai una Testa ad un Player'
    remove:
       help:
-         command: '/heads remove'
+         command: '/deluxeheads remove'
          description: 'Rimuovi una Testa dal Menu'
    rename:
       help:
-         command: '/heads rename <new name>'
+         command: '/deluxeheads rename <new name>'
          description: 'Rinomina una Testa nel Menu'
    cost:
       help:
-         command: '/heads cost <new cost>'
+         command: '/deluxeheads cost <new cost>'
          description: 'Imposta il Costo di una Testa nel Menu'
    category-cost:
       help:
-         command: '/heads categorycost <reset : new cost>'
+         command: '/deluxeheads categorycost <reset : new cost>'
          description: 'Imposta il Costo delle Teste con una Categoria'
    open-menu:
       help:
-         command: '/heads'
+         command: '/deluxeheads'
          description: 'Apri il Menu delle Teste'
    id:
       help:
-         command: '/heads id'
+         command: '/deluxeheads id'
          description: 'Ottieni l''ID di una Testa'
       hold-skull: '&cPer favore tieni in mano la Testa di un Player'
       unknown-head: '&7Impossibile trovare la Testa &7%head%'
       found-id: "&7La Testa che stai tenendo in mano con il Nome &6%name% &7possiede l''ID &6%id%"
    item-eco:
       help:
-         command: '/heads itemeco <get:set:give>'
+         command: '/deluxeheads itemeco <get:set:give>'
          description: 'Edita l''economia delle Teste'
       set:
          set: '&7L''economia delle Teste è stata impostata sull''item che stai tenendo in Mano'
          no-item: '&cDevi tenere in mano un''item per utilizzare questa Funzione!'
          help:
-            command: '/heads itemeco set'
+            command: '/deluxeheads itemeco set'
             description: 'Imposta l''item dell''economia'
       get:
          got: '&7Hai ricevuto &6%amount% &7Heads Tokens'
          help:
-            command: '/heads itemeco get [amount]'
+            command: '/deluxeheads itemeco get [amount]'
             description: 'Ottien l''economy Item delle Teste'
       give:
          given: '&6%amount% &7Heads token items sono stati a &6%player%'
          got: '&7Hai ricevuto &6%amount% &7Heads token Items'
          unknown-player: '&cImpossibile trovare il Player &4%player%'
          help:
-            command: '/heads itemeco give <player> [amount]'
+            command: '/deluxeheads itemeco give <player> [amount]'
             description: 'Dai l''economy item ad un Player'

@@ -12,7 +12,7 @@ economy:
          type: player_head
          name: '&6Player Head Token'
          lore:
-         - '&8Use in /heads!'
+         - '&8Use in /deluxeheads!'
    player-points-eco:
       enabled: false
 breaking-head-names:

@@ -1,6 +1,6 @@
 updater:
- old-version: '&cYou are running an outdated version of Heads (%version%).'
- new-version: '&cYou are running the latest version of Heads (%version%).'
+ old-version: '&cYou are running an outdated version of DeluxeHeads (%version%).'
+ new-version: '&cYou are running the latest version of DeluxeHeads (%version%).'
 currency:
   zero: "Free"
   non-zero: "%amount%"
@@ -36,7 +36,7 @@ menu:
       open: '&7Click a head to get its id'
       clicked: '&7The head &6%name% &7has the id &6%id%'
 command:
-   unknown-command: '&cUnknown command &4/heads %command%'
+   unknown-command: '&cUnknown command &4/deluxeheads %command%'
    errors:
       must-be-player: '&cYou must be a player to run this command.'
       no-permission: '&cYou do not have permission to run this command.'
@@ -45,20 +45,20 @@ command:
       number: '&cYou must enter a number > You entered &4%number%'
       negative: '&cYou must enter a positive number > You entered &4%number%'
    help:
-      header: '&8&m&l---&e&l Heads Help &7(&e%page% of %pages%&7) &8&m&l---'
+      header: '&8&m&l---&e&l DeluxeHeads Help &7(&e%page% of %pages%&7) &8&m&l---'
       line:
       - '&6%command%'
       - '&7   - &5%description%'
       footer:
-      - '&8&m&l---&e See /heads help %next-page% &8&m&l---'
+      - '&8&m&l---&e See /deluxeheads help %next-page% &8&m&l---'
       unknown-page: '&cUnknown page &4%page%&c, page must be between &41 &cand &4%pages%'
       help:
-         command: '/heads help [page]'
+         command: '/deluxeheads help [page]'
          description: 'Open the help menu'
    reload:
       reloaded: '&7Config Reloaded'
       help:
-         command: '/heads reload'
+         command: '/deluxeheads reload'
          description: 'Reload the Heads config files'
    get:
       head-name: '&7%name%s head'
@@ -69,13 +69,13 @@ command:
       - '&cUnable to find texture of player &4%name%'
       - '&cThe authentication servers may be down, or the player does not exist.'
       help:
-         command: '/heads get <player name>'
+         command: '/deluxeheads get <player name>'
          description: 'Get a players head'
    search:
       found: '&7Found &6%heads% heads &7matching &6%query%'
       none-found: '&cFound no heads matching &4%query%'
       help:
-         command: '/heads search <search query>'
+         command: '/deluxeheads search <search query>'
          description: 'Find useful heads'
    random:
       no-heads: '&cThere are no heads in the cache'
@@ -84,7 +84,7 @@ command:
       retrieve: '&7You have been randomly given the head &6%name%'
       give: '&7Given the head &6%name% &7to &6%player%'
       help:
-         command: '/heads random [player]'
+         command: '/deluxeheads random [player]'
          description: 'Get or give a random head'
    add:
       not-supported: '&cGetting head textures is not supported by spigot before 1.8'
@@ -97,7 +97,7 @@ command:
       - '&4The authentication servers may be down, or the player does not exist.'
       added: '&7Added &6%name%&7 head to category &6%category%'
       help:
-         command: '/heads add <player-name> <category> [head name]'
+         command: '/deluxeheads add <player-name> <category> [head name]'
          description: 'Add a new head to the menu'
    hand:
       not-supported: '&cGetting head textures is not supported by spigot before 1.8'
@@ -113,7 +113,7 @@ command:
       - '&4The authentication servers may be down, or the player does not exist.'
       adding: '&7Adding &6%name%&7 head to category &6%category%'
       help:
-         command: '/heads hand <category> <head name>'
+         command: '/deluxeheads hand <category> <head name>'
          description: 'Add a new head to the menu'
    give:
       cant-find-player: '&cCannot find the player &4%name%'
@@ -121,54 +121,54 @@ command:
       give: '&7Given &6%amount% &7of the head &6%head% &7to &6%name%'
       invalid-amount: 'The amount must be greater than 0 > You entered &4%number%'
       help:
-         command: '/heads give <head id> <player> <amount>'
+         command: '/deluxeheads give <head id> <player> <amount>'
          description: 'Give a head to a player'
    remove:
       help:
-         command: '/heads remove'
+         command: '/deluxeheads remove'
          description: 'Remove a head in the menu'
    rename:
       help:
-         command: '/heads rename <new name>'
+         command: '/deluxeheads rename <new name>'
          description: 'Rename a head in the menu'
    cost:
       help:
-         command: '/heads cost <new cost>'
+         command: '/deluxeheads cost <new cost>'
          description: 'Set a heads cost in the menu'
    category-cost:
       help:
-         command: '/heads categorycost <reset : new cost>'
+         command: '/deluxeheads categorycost <reset : new cost>'
          description: 'Set heads costs by category'
    open-menu:
       help:
-         command: '/heads'
+         command: '/deluxeheads'
          description: 'Open the heads menu'
    id:
       help:
-         command: '/heads id'
+         command: '/deluxeheads id'
          description: 'Get the ID for a player head'
       hold-skull: '&cPlease hold a player head'
       unknown-head: '&7Could not find the head &7%head%'
       found-id: "&7The head you're holding &6%name% &7has the ID &6%id%"
    item-eco:
       help:
-         command: '/heads itemeco <get:set:give>'
+         command: '/deluxeheads itemeco <get:set:give>'
          description: 'Manage the item economy'
       set:
          set: '&7Economy item set to the item in your hand'
          no-item: '&cYou must be holding the item you wish to set as the economy item'
          help:
-            command: '/heads itemeco set'
+            command: '/deluxeheads itemeco set'
             description: 'Set the economy item'
       get:
          got: '&7You have been given &6%amount% &7Heads token items'
          help:
-            command: '/heads itemeco get [amount]'
+            command: '/deluxeheads itemeco get [amount]'
             description: 'Get the economy item'
       give:
          given: '&6%amount% &7Heads token items given to &6%player%'
          got: '&7You have been given &6%amount% &7Heads token items'
          unknown-player: '&cUnable to find the player &4%player%'
          help:
-            command: '/heads itemeco give <player> [amount]'
+            command: '/deluxeheads itemeco give <player> [amount]'
             description: 'Give the economy item to a player'
