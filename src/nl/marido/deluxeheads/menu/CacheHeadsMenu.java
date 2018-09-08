@@ -5,9 +5,7 @@ import java.util.function.Function;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 
-import nl.marido.deluxeheads.DeluxeHeads;
 import nl.marido.deluxeheads.cache.CacheFile;
 import nl.marido.deluxeheads.cache.CacheHead;
 import nl.marido.deluxeheads.menu.ui.Bounds;
@@ -173,21 +171,6 @@ public class CacheHeadsMenu extends Element {
 			return Stringify.builder().entry("categoriesTemplate", categoriesTemplate).entry("headsTemplate", headsTemplate).toString();
 		}
 
-	}
-
-	@Deprecated
-	public static void openHeadsMenu(Player player) {
-		InventoryMenu inventory = new InventoryMenu(player, "Heads", 6);
-
-		CacheHeadsMenu menu = new CacheHeadsMenu(DeluxeHeads.getCache(), inventory, inventory.bounds, head -> {
-			player.sendMessage(head.getName());
-			return MenuResponse.NONE;
-		});
-
-		menu.setTemplate(DeluxeHeads.getMenus().getBrowseTemplate());
-
-		inventory.addElement(menu);
-		inventory.open();
 	}
 
 }

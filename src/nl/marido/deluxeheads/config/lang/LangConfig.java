@@ -20,7 +20,6 @@ public class LangConfig {
 
 	public LangConfig() {
 		this.configFile = new FileConfigFile("lang.yml");
-
 		reload();
 	}
 

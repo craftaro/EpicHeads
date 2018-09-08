@@ -206,7 +206,6 @@ public final class Item {
 			return new Item(type, 1, data, null, null, false);
 		}
 		return new Item(type, 1, (short) 0, null, null, false);
-		// TODO: Needs manual testing on 1.13.
 	}
 
 	public static Item create(ItemStack itemStack) {
@@ -261,7 +260,7 @@ public final class Item {
 			int typeId = section.getInt("type");
 			String convertedType = DeluxeHeads.getLegacyIDs().fromId(typeId);
 
-			if (convertedType == null) {
+			if (convertedType == null || convertedType.isEmpty()) {
 				DeluxeHeads.warning("Invalid type of item " + section.getCurrentPath() + ", " + "unknown type id " + typeId);
 				return;
 			}

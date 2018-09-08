@@ -3,66 +3,73 @@ package nl.marido.deluxeheads.config.lang;
 import java.util.Arrays;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import nl.marido.deluxeheads.util.ArrayUtils;
 
 public final class LangMessage {
-    
-    private final String[] messages;
-    private final Placeholder[] placeholders;
 
-    public LangMessage(String... messages) {
-        this(messages, new Placeholder[0]);
-    }
+	private final String[] messages;
+	private final Placeholder[] placeholders;
 
-    private LangMessage(String[] messages, Placeholder[] placeholders) {
-        this.messages = messages;
-        this.placeholders = placeholders;
-    }
+	public LangMessage(String... messages) {
+		this(messages, new Placeholder[0]);
+	}
 
-    public LangMessage with(Placeholder... placeholders) {
-        return new LangMessage(messages, ArrayUtils.append(this.placeholders, placeholders));
-    }
+	private LangMessage(String[] messages, Placeholder[] placeholders) {
+		this.messages = messages;
+		this.placeholders = placeholders;
+	}
 
-    public LangMessage with(String key, Object value) {
-        return with(new Placeholder(key, value));
-    }
+	public LangMessage with(Placeholder... placeholders) {
+		return new LangMessage(messages, ArrayUtils.append(this.placeholders, placeholders));
+	}
 
-    public int getLineCount() {
-        return messages.length;
-    }
+	public LangMessage with(String key, Object value) {
+		return with(new Placeholder(key, value));
+	}
 
-    public boolean isEmpty() {
-        return getLineCount() == 0;
-    }
+	public int getLineCount() {
+		return messages.length;
+	}
 
-    @Override
-    public String toString() {
-        return getSingle();
-    }
+	public boolean isEmpty() {
+		return getLineCount() == 0;
+	}
 
-    public String getSingle() {
-        return (isEmpty() ? "" : get()[0]);
-    }
-    
-    public String[] get() {
-        return Placeholder.applyAll(Placeholder.colourAll(messages), placeholders);
-    }
+	@Override
+	public String toString() {
+		return getSingle();
+	}
 
-    public void send(CommandSender sender) {
-        for (String message : get()) {
-            sender.sendMessage(message);
-        }
-    }
+	public String getSingle() {
+		return (isEmpty() ? "" : get()[0]);
+	}
 
-    public Object getConfigSaveValue() {
-        if(isEmpty())
-            return "";
+	public String[] get() {
+		return Placeholder.applyAll(Placeholder.colourAll(messages), placeholders);
+	}
 
-        if(getLineCount() == 1)
-            return messages[0];
+	public void send(CommandSender sender) {
+		for (String message : get()) {
+			sender.sendMessage(message);
+		}
+	}
 
-        return Arrays.asList(messages);
-    }
-    
+	public void send(Player player) {
+		for (String message : get()) {
+			player.sendMessage(message);
+		}
+	}
+
+	public Object getConfigSaveValue() {
+		if (isEmpty())
+			return "";
+
+		if (getLineCount() == 1)
+			return messages[0];
+
+		return Arrays.asList(messages);
+	}
+
 }
