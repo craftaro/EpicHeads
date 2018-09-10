@@ -46,7 +46,6 @@ import nl.marido.deluxeheads.util.Clock;
 import nl.marido.deluxeheads.volatilecode.injection.ProtocolHackFixer;
 import nl.marido.deluxeheads.volatilecode.reflection.Version;
 import nl.marido.deluxeheads.volatilecode.reflection.craftbukkit.CommandMap;
-import nl.marido.deluxeheads.volatilecode.reflection.craftbukkit.CraftMetaItem;
 import nl.marido.deluxeheads.volatilecode.reflection.craftbukkit.CraftServer;
 
 public class DeluxeHeads extends JavaPlugin implements Listener {
@@ -93,7 +92,6 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 		tryHookBlockStore();
 		new HeadNamer().registerEvents();
 		Bukkit.getPluginManager().registerEvents(this, this);
-		CraftMetaItem.registerItems();
 		if (mainConfig.shouldCheckForUpdates()) {
 			checkForUpdates();
 		}
