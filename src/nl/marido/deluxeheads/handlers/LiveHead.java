@@ -1,10 +1,11 @@
-package nl.marido.deluxeheads;
+package nl.marido.deluxeheads.handlers;
 
 import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import nl.marido.deluxeheads.DeluxeHeads;
 import nl.marido.deluxeheads.api.DeluxeHeadsAPI.Head;
 
 public class LiveHead {

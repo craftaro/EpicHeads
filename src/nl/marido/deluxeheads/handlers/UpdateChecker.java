@@ -1,4 +1,4 @@
-package nl.marido.deluxeheads;
+package nl.marido.deluxeheads.handlers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,9 +6,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
+import nl.marido.deluxeheads.DeluxeHeads;
+
 public class UpdateChecker {
 
-	private static final String versionURL = "https://api.spigotmc.org/legacy/update.php?resource=13402";
+	private static String versionURL = "https://api.spigotmc.org/legacy/update.php?resource=13402";
 
 	public static String getCurrentVersion() {
 		return DeluxeHeads.getInstance().getDescription().getVersion();

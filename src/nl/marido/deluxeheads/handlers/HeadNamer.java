@@ -1,4 +1,4 @@
-package nl.marido.deluxeheads;
+package nl.marido.deluxeheads.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +27,7 @@ import org.bukkit.plugin.RegisteredListener;
 import com.mojang.authlib.GameProfile;
 
 import net.sothatsit.blockstore.BlockStoreApi;
+import nl.marido.deluxeheads.DeluxeHeads;
 import nl.marido.deluxeheads.cache.CacheHead;
 import nl.marido.deluxeheads.volatilecode.ItemNBT;
 import nl.marido.deluxeheads.volatilecode.Items;

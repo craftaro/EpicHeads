@@ -40,6 +40,9 @@ import nl.marido.deluxeheads.economy.ItemEconomy;
 import nl.marido.deluxeheads.economy.NoEconomy;
 import nl.marido.deluxeheads.economy.PlayerPointsEconomy;
 import nl.marido.deluxeheads.economy.VaultEconomy;
+import nl.marido.deluxeheads.handlers.HeadNamer;
+import nl.marido.deluxeheads.handlers.LegacyIDs;
+import nl.marido.deluxeheads.handlers.UpdateChecker;
 import nl.marido.deluxeheads.menu.ui.InventoryMenu;
 import nl.marido.deluxeheads.oldmenu.ClickInventory;
 import nl.marido.deluxeheads.util.Clock;
@@ -110,12 +113,12 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 				String currentVersion = UpdateChecker.getCurrentVersion();
 				String latestVersion = UpdateChecker.getLatestVersion();
 				if (!UpdateChecker.isNewerVersion(latestVersion)) {
-					String newversion = Lang.Updater.newVersion().getSingle();
+					String newversion = Lang.Updater.newVersion().toString();
 					newversion = newversion.replaceAll("%version%", currentVersion);
 					severe(newversion);
 					return;
 				}
-				String oldversion = Lang.Updater.oldVersion().getSingle();
+				String oldversion = Lang.Updater.oldVersion().toString();
 				oldversion = oldversion.replaceAll("%version%", currentVersion);
 				warning(oldversion);
 			} catch (IOException e) {

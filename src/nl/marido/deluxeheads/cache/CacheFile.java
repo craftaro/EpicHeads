@@ -22,7 +22,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import nl.marido.deluxeheads.DeluxeHeads;
-import nl.marido.deluxeheads.Search;
+import nl.marido.deluxeheads.handlers.Search;
 import nl.marido.deluxeheads.util.Checks;
 import nl.marido.deluxeheads.util.IOUtils;
 

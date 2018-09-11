@@ -1,4 +1,4 @@
-package nl.marido.deluxeheads;
+package nl.marido.deluxeheads.handlers;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,6 +14,7 @@ import java.util.Map;
 
 import org.bukkit.Material;
 
+import nl.marido.deluxeheads.DeluxeHeads;
 import nl.marido.deluxeheads.util.Checks;
 
 public class LegacyIDs {
