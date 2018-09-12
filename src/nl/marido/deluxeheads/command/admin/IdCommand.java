@@ -24,7 +24,7 @@ public class IdCommand extends AbstractCommand {
 
 	@Override
 	public String getPermission() {
-		return "heads.id";
+		return "deluxeheads.id";
 	}
 
 	@Override

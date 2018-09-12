@@ -20,7 +20,7 @@ public class AddCommand extends AbstractCommand {
 
 	@Override
 	public String getPermission() {
-		return "heads.add";
+		return "deluxeheads.add";
 	}
 
 	@Override

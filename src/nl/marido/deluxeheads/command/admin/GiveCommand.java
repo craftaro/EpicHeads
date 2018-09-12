@@ -22,7 +22,7 @@ public class GiveCommand extends AbstractCommand {
 
 	@Override
 	public String getPermission() {
-		return "heads.give";
+		return "deluxeheads.give";
 	}
 
 	@Override

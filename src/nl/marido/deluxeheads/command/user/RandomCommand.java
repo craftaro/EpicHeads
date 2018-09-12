@@ -24,7 +24,7 @@ public class RandomCommand extends AbstractCommand {
 
 	@Override
 	public String getPermission() {
-		return "heads.random";
+		return "deluxeheads.random";
 	}
 
 	@Override

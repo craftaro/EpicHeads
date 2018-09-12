@@ -21,7 +21,7 @@ public class ItemEcoCommand extends AbstractCommand {
 
 	@Override
 	public String getPermission() {
-		return "heads.item-eco";
+		return "deluxeheads.item-eco";
 	}
 
 	@Override

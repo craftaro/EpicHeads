@@ -25,7 +25,7 @@ public class HandCommand extends AbstractCommand {
 
 	@Override
 	public String getPermission() {
-		return "heads.hand";
+		return "deluxeheads.hand";
 	}
 
 	@Override

@@ -26,7 +26,7 @@ public class GetCommand extends AbstractCommand {
 
 	@Override
 	public String getPermission() {
-		return "heads.get";
+		return "deluxeheads.get";
 	}
 
 	@Override

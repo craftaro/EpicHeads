@@ -19,7 +19,7 @@ public class SearchCommand extends AbstractCommand {
 
 	@Override
 	public String getPermission() {
-		return "heads.search";
+		return "deluxeheads.search";
 	}
 
 	@Override

@@ -18,7 +18,7 @@ public class OpenMenuCommand extends AbstractCommand {
 
 	@Override
 	public String getPermission() {
-		return "heads.menu";
+		return "deluxeheads.menu";
 	}
 
 	@Override

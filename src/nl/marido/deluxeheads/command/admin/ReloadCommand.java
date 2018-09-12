@@ -17,7 +17,7 @@ public class ReloadCommand extends AbstractCommand {
 
 	@Override
 	public String getPermission() {
-		return "heads.reload";
+		return "deluxeheads.reload";
 	}
 
 	@Override
