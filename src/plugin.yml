@@ -1,7 +1,7 @@
-main: nl.marido.deluxeheads.DeluxeHeads
-author: Marido
 name: DeluxeHeads
+main: nl.marido.deluxeheads.DeluxeHeads
 description: Enhance your server with over 17,000 awesome unique heads with amazing features.
+author: Marido
 version: 2.1.7
 api-version: 1.13
 softdepend: [Vault, PlayerPoints, BlockStore]
