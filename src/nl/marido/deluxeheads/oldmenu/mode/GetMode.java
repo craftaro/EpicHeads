@@ -44,7 +44,7 @@ public class GetMode extends BaseMode {
 
 	@Override
 	public boolean canOpenCategory(String category) {
-		if (getPlayer().hasPermission("heads.category." + category.toLowerCase().replace(' ', '_'))) {
+		if (getPlayer().hasPermission("deluxeheads.category." + category.toLowerCase().replace(' ', '_'))) {
 			return true;
 		} else {
 			Lang.Menu.Get.categoryPermission(category).send(getPlayer());

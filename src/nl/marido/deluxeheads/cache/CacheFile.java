@@ -21,6 +21,8 @@ import java.util.function.Consumer;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.bukkit.scheduler.BukkitRunnable;
+
 import nl.marido.deluxeheads.DeluxeHeads;
 import nl.marido.deluxeheads.handlers.Search;
 import nl.marido.deluxeheads.util.Checks;
@@ -97,12 +99,13 @@ public final class CacheFile implements Mod {
 
 	public void searchHeadsAsync(String query, Consumer<List<CacheHead>> onResult) {
 		List<CacheHead> headsCopy = new ArrayList<>(heads);
+		new BukkitRunnable() {
+			public void run() {
+				List<CacheHead> matches = Search.searchHeads(query, headsCopy, 0.4d);
 
-		DeluxeHeads.async(() -> {
-			List<CacheHead> matches = Search.searchHeads(query, headsCopy, 0.4d);
-
-			DeluxeHeads.sync(() -> onResult.accept(matches));
-		});
+				DeluxeHeads.sync(() -> onResult.accept(matches));
+			}
+		}.runTaskAsynchronously(DeluxeHeads.getInstance());
 	}
 
 	public CacheHead findHead(int id) {

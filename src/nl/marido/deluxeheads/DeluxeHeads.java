@@ -20,6 +20,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import nl.marido.deluxeheads.cache.CacheFile;
 import nl.marido.deluxeheads.cache.CacheHead;
@@ -108,23 +109,25 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 	}
 
 	private void checkForUpdates() {
-		async(() -> {
-			try {
-				String currentVersion = UpdateChecker.getCurrentVersion();
-				String latestVersion = UpdateChecker.getLatestVersion();
-				if (!UpdateChecker.isNewerVersion(latestVersion)) {
-					String newversion = Lang.Updater.newVersion().toString();
-					newversion = newversion.replaceAll("%version%", currentVersion);
-					severe(newversion);
-					return;
+		new BukkitRunnable() {
+			public void run() {
+				try {
+					String currentVersion = UpdateChecker.getCurrentVersion();
+					String latestVersion = UpdateChecker.getLatestVersion();
+					if (!UpdateChecker.isNewerVersion(latestVersion)) {
+						String newversion = Lang.Updater.newVersion().toString();
+						newversion = newversion.replaceAll("%version%", currentVersion);
+						severe(newversion);
+						return;
+					}
+					String oldversion = Lang.Updater.oldVersion().toString();
+					oldversion = oldversion.replaceAll("%version%", currentVersion);
+					warning(oldversion);
+				} catch (IOException e) {
+					severe("There was an error checking for an update for Heads");
 				}
-				String oldversion = Lang.Updater.oldVersion().toString();
-				oldversion = oldversion.replaceAll("%version%", currentVersion);
-				warning(oldversion);
-			} catch (IOException e) {
-				severe("There was an error checking for an update for Heads");
 			}
-		});
+		}.runTaskAsynchronously(DeluxeHeads.getInstance());
 	}
 
 	private void registerCommands() {
@@ -419,10 +422,6 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 
 	public static void sync(Runnable task) {
 		Bukkit.getScheduler().runTask(instance, task);
-	}
-
-	public static void async(Runnable task) {
-		Bukkit.getScheduler().runTaskAsynchronously(instance, task);
 	}
 
 	public static FileConfigFile getVersionedConfig(String resource) {
