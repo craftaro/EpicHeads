@@ -44,7 +44,7 @@ public class CategorySelectMenu extends AbstractModedInventory {
 			Player player = this.getInvMode().getPlayer();
 
 			for (String category : cache.getCategories()) {
-				if (player.hasPermission("heads.category." + category.toLowerCase().replace(' ', '_'))) {
+				if (player.hasPermission("deluxeheads.category." + category.toLowerCase().replace(' ', '_'))) {
 					this.categories.add(category);
 				}
 			}

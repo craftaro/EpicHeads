@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,6 +23,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import net.md_5.bungee.api.ChatColor;
 import nl.marido.deluxeheads.cache.CacheFile;
 import nl.marido.deluxeheads.cache.CacheHead;
 import nl.marido.deluxeheads.cache.ModsFile;
@@ -55,6 +57,7 @@ import nl.marido.deluxeheads.volatilecode.reflection.craftbukkit.CraftServer;
 public class DeluxeHeads extends JavaPlugin implements Listener {
 
 	private static DeluxeHeads instance;
+	private static ConsoleCommandSender csender;
 	private CacheFile cache;
 	private MenuConfig oldMenuConfig;
 	private Menus menus;
@@ -68,10 +71,10 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 	@Override
 	public void onEnable() {
 		if (Version.isBelow(Version.v1_8)) {
-			System.err.println("------------------------------------------------------------");
-			System.err.println("    Heads no longer supports versions below MineCraft 1.8   ");
-			System.err.println("       Please switch to Heads version 1.15.1 or before      ");
-			System.err.println("------------------------------------------------------------");
+			print("&c-------------------------------------------------------------------");
+			print("&c    DeluxeHeads no longer supports versions below Minecraft 1.8.");
+			print("&c          Please switch to Heads version 1.15.1 or before.      ");
+			print("&c-------------------------------------------------------------------");
 			Bukkit.getPluginManager().disablePlugin(this);
 			return;
 		}
@@ -99,7 +102,7 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 		if (mainConfig.shouldCheckForUpdates()) {
 			checkForUpdates();
 		}
-		info("Heads plugin enabled with " + cache.getHeadCount() + " heads " + timer);
+		info("DeluxeHeads has been enabled with " + cache.getHeadCount() + " heads " + timer + ".");
 	}
 
 	@Override
@@ -117,14 +120,14 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 					if (!UpdateChecker.isNewerVersion(latestVersion)) {
 						String newversion = Lang.Updater.newVersion().toString();
 						newversion = newversion.replaceAll("%version%", currentVersion);
-						severe(newversion);
+						print(newversion);
 						return;
 					}
 					String oldversion = Lang.Updater.oldVersion().toString();
 					oldversion = oldversion.replaceAll("%version%", currentVersion);
-					warning(oldversion);
+					print(oldversion);
 				} catch (IOException e) {
-					severe("There was an error checking for an update for Heads");
+					print("&cThere was an error checking for an update for Heads");
 				}
 			}
 		}.runTaskAsynchronously(DeluxeHeads.getInstance());
@@ -422,6 +425,10 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 
 	public static void sync(Runnable task) {
 		Bukkit.getScheduler().runTask(instance, task);
+	}
+
+	public static void print(String info) {
+		csender.sendMessage(ChatColor.translateAlternateColorCodes('&', info));
 	}
 
 	public static FileConfigFile getVersionedConfig(String resource) {
