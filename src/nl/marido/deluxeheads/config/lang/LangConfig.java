@@ -41,7 +41,7 @@ public class LangConfig {
 
 		for (Entry<String, LangMessage> def : this.defaults.entrySet()) {
 			if (!this.messages.containsKey(def.getKey())) {
-				DeluxeHeads.warning("\"lang.yml\" is missing key \"" + def.getKey() + "\", adding it");
+				DeluxeHeads.print("\"lang.yml\" is missing key \"" + def.getKey() + "\", adding it");
 
 				config.set(def.getKey(), def.getValue().getConfigSaveValue());
 				this.messages.put(def.getKey(), def.getValue());
@@ -53,7 +53,7 @@ public class LangConfig {
 			this.configFile.save();
 		}
 
-		DeluxeHeads.info("Loaded Lang File with " + this.messages.size() + " messages " + timer);
+		DeluxeHeads.print("Loaded Lang File with " + this.messages.size() + " messages " + timer);
 	}
 
 	private Map<String, LangMessage> load(ConfigurationSection sec) {
@@ -74,7 +74,7 @@ public class LangConfig {
 			} else if (sec.isString(key)) {
 				map.put(pathKey, new LangMessage(sec.getString(key)));
 			} else {
-				DeluxeHeads.warning("Unable to load message at \"" + pathKey + "\", was not text or a list of text.");
+				DeluxeHeads.print("Unable to load message at \"" + pathKey + "\", was not text or a list of text.");
 			}
 		}
 

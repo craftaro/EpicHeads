@@ -183,7 +183,7 @@ public class HeadNamer implements Listener {
 			try {
 				listener.callEvent(event);
 			} catch (EventException exception) {
-				DeluxeHeads.severe("There was an exception calling BlockBreakEvent for " + listener.getPlugin().getName());
+				DeluxeHeads.print("There was an exception calling BlockBreakEvent for " + listener.getPlugin().getName());
 				exception.printStackTrace();
 			} finally {
 				countdown.countdown();

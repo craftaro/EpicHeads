@@ -71,22 +71,22 @@ public class MainConfig {
 
 		AtomicBoolean shouldSave = new AtomicBoolean(false);
 
-		loadCommandInfo(config, shouldSave);
+		loadCommandprint(config, shouldSave);
 		loadCategoryCosts(config, shouldSave);
 
 		if (config.isSet("hat-mode") && config.isBoolean("hat-mode") && config.getBoolean("hat-mode")) {
-			DeluxeHeads.severe("--------------------------------------------------");
-			DeluxeHeads.severe("Until further notice, hat mode is no longer supported");
-			DeluxeHeads.severe("in Heads past version 1.10.0, please downgrade or");
-			DeluxeHeads.severe("switch the plugin out of hat-mode in your config.yml");
-			DeluxeHeads.severe("--------------------------------------------------");
+			DeluxeHeads.print("--------------------------------------------------");
+			DeluxeHeads.print("Until further notice, hat mode is no longer supported");
+			DeluxeHeads.print("in Heads past version 1.10.0, please downgrade or");
+			DeluxeHeads.print("switch the plugin out of hat-mode in your config.yml");
+			DeluxeHeads.print("--------------------------------------------------");
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(DeluxeHeads.getInstance(), () -> {
-				DeluxeHeads.severe("--------------------------------------------------");
-				DeluxeHeads.severe("Until further notice, hat mode is no longer supported");
-				DeluxeHeads.severe("in Heads past version 1.10.0, please downgrade or");
-				DeluxeHeads.severe("switch the plugin out of hat-mode in your config.yml");
-				DeluxeHeads.severe("--------------------------------------------------");
+				DeluxeHeads.print("--------------------------------------------------");
+				DeluxeHeads.print("Until further notice, hat mode is no longer supported");
+				DeluxeHeads.print("in Heads past version 1.10.0, please downgrade or");
+				DeluxeHeads.print("switch the plugin out of hat-mode in your config.yml");
+				DeluxeHeads.print("--------------------------------------------------");
 
 				Bukkit.getPluginManager().disablePlugin(DeluxeHeads.getInstance());
 			});
@@ -113,7 +113,7 @@ public class MainConfig {
 		checkForUpdates = loadBoolean(config, "check-for-updates", true, shouldSave);
 
 		if (defaultHeadCost < 0) {
-			DeluxeHeads.info("\"economy.default-head-cost\" cannot be less than 0 in config.yml, defaulting to 0");
+			DeluxeHeads.print("\"economy.default-head-cost\" cannot be less than 0 in config.yml, defaulting to 0");
 			defaultHeadCost = 0;
 		}
 
@@ -121,10 +121,10 @@ public class MainConfig {
 			configFile.save();
 		}
 
-		DeluxeHeads.info("Loaded Main Config " + timer);
+		DeluxeHeads.print("Loaded Main Config " + timer);
 	}
 
-	private void loadCommandInfo(ConfigurationSection config, AtomicBoolean shouldSave) {
+	private void loadCommandprint(ConfigurationSection config, AtomicBoolean shouldSave) {
 		reloadLabel = loadString(config, "commands.heads.sub-commands.reload", "reload", shouldSave);
 		addLabel = loadString(config, "commands.heads.sub-commands.add", "add", shouldSave);
 		handLabel = loadString(config, "commands.heads.sub-commands.hand", "hand", shouldSave);
@@ -167,7 +167,7 @@ public class MainConfig {
 		if (config.isSet(key) && config.isString(key) && !config.getString(key).isEmpty())
 			return config.getString(key);
 
-		DeluxeHeads.warning("\"" + key + "\" not set or invalid in config.yml, resetting to \"" + defaultVal + "\"");
+		DeluxeHeads.print("\"" + key + "\" not set or invalid in config.yml, resetting to \"" + defaultVal + "\"");
 
 		config.set(key, defaultVal);
 		shouldSave.set(true);
@@ -179,7 +179,7 @@ public class MainConfig {
 		if (config.isSet(key) && config.isList(key))
 			return config.getStringList(key).toArray(new String[0]);
 
-		DeluxeHeads.warning("\"" + key + "\" not set or invalid in config.yml, resetting to " + Arrays.toString(defaultVal));
+		DeluxeHeads.print("\"" + key + "\" not set or invalid in config.yml, resetting to " + Arrays.toString(defaultVal));
 
 		config.set(key, Arrays.asList(defaultVal));
 		shouldSave.set(true);
@@ -191,7 +191,7 @@ public class MainConfig {
 		if (config.isSet(key) && config.isBoolean(key))
 			return config.getBoolean(key);
 
-		DeluxeHeads.warning("\"" + key + "\" not set or invalid in config.yml, resetting to " + defaultVal);
+		DeluxeHeads.print("\"" + key + "\" not set or invalid in config.yml, resetting to " + defaultVal);
 
 		config.set(key, defaultVal);
 		shouldSave.set(true);
@@ -203,7 +203,7 @@ public class MainConfig {
 		if (config.isSet(key) && (config.isInt(key) || config.isDouble(key)))
 			return config.getDouble(key);
 
-		DeluxeHeads.warning("\"" + key + "\" not set or invalid in config.yml, resetting to " + defaultVal);
+		DeluxeHeads.print("\"" + key + "\" not set or invalid in config.yml, resetting to " + defaultVal);
 
 		config.set(key, defaultVal);
 		shouldSave.set(true);
@@ -219,7 +219,7 @@ public class MainConfig {
 				return item;
 		}
 
-		DeluxeHeads.warning(key + " not set or invalid in config.yml, resetting to " + defaultItem);
+		DeluxeHeads.print(key + " not set or invalid in config.yml, resetting to " + defaultItem);
 
 		config.set(key, null);
 		defaultItem.save(config.createSection(key));
@@ -269,7 +269,7 @@ public class MainConfig {
 
 		configFile.save();
 
-		DeluxeHeads.info("Saved Main Config " + timer);
+		DeluxeHeads.print("Saved Main Config " + timer);
 	}
 
 	public void setItemEcoItem(Item item) {
@@ -290,7 +290,7 @@ public class MainConfig {
 
 		configFile.save();
 
-		DeluxeHeads.info("Saved Main Config " + timer);
+		DeluxeHeads.print("Saved Main Config " + timer);
 	}
 
 	public boolean isEconomyEnabled() {

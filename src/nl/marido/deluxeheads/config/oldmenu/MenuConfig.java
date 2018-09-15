@@ -48,7 +48,7 @@ public class MenuConfig {
 
 		for (String key : config.getKeys(false)) {
 			if (!config.isConfigurationSection(key)) {
-				DeluxeHeads.warning("Unknown use of value " + key + " in " + filename);
+				DeluxeHeads.print("Unknown use of value " + key + " in " + filename);
 				continue;
 			}
 
@@ -66,7 +66,7 @@ public class MenuConfig {
 
 			config.set(key, defaults.getConfigurationSection(key));
 
-			DeluxeHeads.warning(key + " was missing in " + filename + ", creating it");
+			DeluxeHeads.print(key + " was missing in " + filename + ", creating it");
 			shouldSave.set(true);
 		}
 
@@ -74,7 +74,7 @@ public class MenuConfig {
 			configFile.save();
 		}
 
-		DeluxeHeads.info("Loaded Menu Config with " + menus.size() + " Menus " + timer);
+		DeluxeHeads.print("Loaded Menu Config with " + menus.size() + " Menus " + timer);
 	}
 
 	private ConfigurationSection loadDefaults() {

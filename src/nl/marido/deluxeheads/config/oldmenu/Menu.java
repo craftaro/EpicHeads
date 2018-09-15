@@ -75,7 +75,7 @@ public class Menu {
 			return;
 		}
 
-		DeluxeHeads.warning("Unknown use of value \"" + key + "\" in menu \"" + section.getCurrentPath() + "\"");
+		DeluxeHeads.print("Unknown use of value \"" + key + "\" in menu \"" + section.getCurrentPath() + "\"");
 	}
 
 	public static Menu loadMenu(String filename, ConfigurationSection section, AtomicBoolean shouldSave) {

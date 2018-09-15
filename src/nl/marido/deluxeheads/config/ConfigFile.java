@@ -97,7 +97,7 @@ public abstract class ConfigFile {
 	}
 
 	private Item replaceInvalid(String key, Item replacement, AtomicBoolean requiresSave) {
-		DeluxeHeads.warning("\"" + key + "\" not set or invalid in " + getName() + ", replacing with " + replacement);
+		DeluxeHeads.print("\"" + key + "\" not set or invalid in " + getName() + ", replacing with " + replacement);
 
 		removeInvalid(key, requiresSave);
 		replacement.save(getConfig(), key);
@@ -108,7 +108,7 @@ public abstract class ConfigFile {
 	}
 
 	private <T> T replaceInvalid(String key, T replacement, AtomicBoolean requiresSave) {
-		DeluxeHeads.warning("\"" + key + "\" not set or invalid in " + getName() + ", replacing with " + replacement);
+		DeluxeHeads.print("\"" + key + "\" not set or invalid in " + getName() + ", replacing with " + replacement);
 
 		removeInvalid(key, requiresSave);
 		getConfig().set(key, replacement);

@@ -85,7 +85,7 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 			legacyIDs = LegacyIDs.readResource("legacy-ids.txt");
 		} catch (IOException exception) {
 			legacyIDs = LegacyIDs.EMPTY;
-			severe("Unable to load legacy IDs to perform conversion from older Spigot versions");
+			print("Unable to load legacy IDs to perform conversion from older Spigot versions");
 			exception.printStackTrace();
 		}
 		this.menus = new Menus();
@@ -102,7 +102,7 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 		if (mainConfig.shouldCheckForUpdates()) {
 			checkForUpdates();
 		}
-		info("DeluxeHeads has been enabled with " + cache.getHeadCount() + " heads " + timer + ".");
+		print("DeluxeHeads has been enabled with " + cache.getHeadCount() + " heads " + timer + ".");
 	}
 
 	@Override
@@ -181,7 +181,7 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 				Clock timer = Clock.start();
 				LegacyCacheConfig legacy = new LegacyCacheConfig(legacyConfig);
 				cache = CacheFileConverter.convertToCacheFile("main-cache", legacy);
-				info("Converted legacy yaml cache file to new binary file " + timer);
+				print("Converted legacy yaml cache file to new binary file " + timer);
 			} else {
 				cache = new CacheFile("main-cache");
 			}
@@ -189,9 +189,9 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 			try {
 				Clock timer = Clock.start();
 				cache = CacheFile.read(file);
-				info("Loaded cache file " + timer);
+				print("Loaded cache file " + timer);
 			} catch (IOException e) {
-				severe("Unable to read heads.cache file");
+				print("Unable to read heads.cache file");
 				throw new RuntimeException("There was an exception reading the heads.cache file", e);
 			}
 		}
@@ -201,7 +201,7 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 		}
 
 		if (legacyConfig.getFile().exists() && !legacyConfig.getFile().delete()) {
-			severe("Unable to delete legacy yaml cache file");
+			print("Unable to delete legacy yaml cache file");
 		}
 
 		return cache;
@@ -214,9 +214,9 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 
 			cache.write(file);
 
-			info("Saved cache file " + timer);
+			print("Saved cache file " + timer);
 		} catch (IOException e) {
-			severe("Unable to save the cache to heads.cache");
+			print("Unable to save the cache to heads.cache");
 			throw new RuntimeException("There was an exception saving the cache", e);
 		}
 	}
@@ -225,7 +225,7 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 		try {
 			return ModsFileHeader.readResource("cache.mods");
 		} catch (IOException e) {
-			severe("Unable to read header of cache.mods");
+			print("Unable to read header of cache.mods");
 			throw new RuntimeException("Unable to read header of cache.mods", e);
 		}
 	}
@@ -234,7 +234,7 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 		try {
 			return ModsFile.readResource("cache.mods");
 		} catch (IOException e) {
-			severe("Unable to read mods from cache.mods");
+			print("Unable to read mods from cache.mods");
 			throw new RuntimeException("Unable to read mods from cache.mods", e);
 		}
 	}
@@ -253,9 +253,9 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 		int newHeads = mods.installMods(cache);
 
 		if (newHeads > 0) {
-			info("Added " + newHeads + " new heads from " + newMods + " addons " + timer);
+			print("Added " + newHeads + " new heads from " + newMods + " addons " + timer);
 		} else {
-			info("Installed " + newMods + " addons " + timer);
+			print("Installed " + newMods + " addons " + timer);
 		}
 
 		return true;
@@ -280,7 +280,7 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 		}
 
 		if (economy == null || economy instanceof NoEconomy) {
-			severe("Economy enabled in config.yml yet Vault, PlayerPoints and Item economies disabled. " + "Player's will not be able to purchase heads.");
+			print("Economy enabled in config.yml yet Vault, PlayerPoints and Item economies disabled. " + "Player's will not be able to purchase heads.");
 
 			economy = (economy != null ? economy : new NoEconomy());
 		}
@@ -290,18 +290,18 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 
 	private Economy tryHookEconomy(Economy currentlyHooked, Economy toHook) {
 		if (currentlyHooked != null) {
-			warning(toHook.getName() + " economy is not the only economy enabled in the config.yml.");
+			print(toHook.getName() + " economy is not the only economy enabled in the config.yml.");
 
 			if (!(currentlyHooked instanceof NoEconomy))
 				return currentlyHooked;
 		}
 
 		if (!toHook.tryHook()) {
-			severe(toHook.getName() + " enabled in config.yml, yet Heads was unable to hook into it.");
+			print(toHook.getName() + " enabled in config.yml, yet Heads was unable to hook into it.");
 			return new NoEconomy();
 		}
 
-		info("Loaded " + toHook.getName() + " economy");
+		print("Loaded " + toHook.getName() + " economy");
 		return toHook;
 	}
 
@@ -314,13 +314,13 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 
 				apiClass.getDeclaredMethod("retrieveBlockMeta", Plugin.class, Location.class, Plugin.class, String.class, Consumer.class);
 
-				info("Hooked BlockStore");
+				print("Hooked BlockStore");
 
 				blockStoreAvailable = true;
 
 			} catch (ClassNotFoundException | NoSuchMethodException e) {
-				severe("Unable to hook BlockStore, the version of BlockStore you are " + "using may be outdated. Heads requires BlockStore v1.5.0.");
-				severe("Please update BlockStore and report this to Sothatsit if the problem persists.");
+				print("Unable to hook BlockStore, the version of BlockStore you are " + "using may be outdated. Heads requires BlockStore v1.5.0.");
+				print("Please update BlockStore and report this to Sothatsit if the problem persists.");
 			}
 		}
 	}
@@ -411,24 +411,13 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 		return instance.blockStoreAvailable;
 	}
 
-	public static void info(String info) {
-		instance.getLogger().info(info);
-	}
-
-	public static void warning(String warning) {
-		instance.getLogger().warning(warning);
-	}
-
-	public static void severe(String severe) {
-		instance.getLogger().severe(severe);
-	}
-
 	public static void sync(Runnable task) {
 		Bukkit.getScheduler().runTask(instance, task);
 	}
 
-	public static void print(String info) {
-		csender.sendMessage(ChatColor.translateAlternateColorCodes('&', info));
+	public static void print(String print) {
+		if (print != null)
+			csender.sendMessage(ChatColor.translateAlternateColorCodes('&', print));
 	}
 
 	public static FileConfigFile getVersionedConfig(String resource) {

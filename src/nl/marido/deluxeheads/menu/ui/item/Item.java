@@ -23,7 +23,6 @@ import nl.marido.deluxeheads.util.Stringify;
 import nl.marido.deluxeheads.volatilecode.ItemNBT;
 import nl.marido.deluxeheads.volatilecode.reflection.Version;
 
-@SuppressWarnings("deprecation")
 public final class Item {
 
 	private final Material type;
@@ -261,7 +260,7 @@ public final class Item {
 			String convertedType = DeluxeHeads.getLegacyIDs().fromId(typeId);
 
 			if (convertedType == null || convertedType.isEmpty()) {
-				DeluxeHeads.warning("Invalid type of item " + section.getCurrentPath() + ", " + "unknown type id " + typeId);
+				DeluxeHeads.print("Invalid type of item " + section.getCurrentPath() + ", " + "unknown type id " + typeId);
 				return;
 			}
 
@@ -281,7 +280,7 @@ public final class Item {
 		}
 
 		if (type == null) {
-			DeluxeHeads.warning("Invalid type of item " + section.getCurrentPath() + ", could not find type " + typeName);
+			DeluxeHeads.print("Invalid type of item " + section.getCurrentPath() + ", could not find type " + typeName);
 			return;
 		}
 
@@ -294,7 +293,7 @@ public final class Item {
 			Material withoutData = fromLegacyType(legacyType, (byte) 0);
 			type = fromLegacyType(legacyType, byteData);
 			if (type == null) {
-				DeluxeHeads.warning("Invalid legacy type of item " + section.getCurrentPath() + ": " + "Could not convert " + legacyType + ":" + data + " to non-legacy format");
+				DeluxeHeads.print("Invalid legacy type of item " + section.getCurrentPath() + ": " + "Could not convert " + legacyType + ":" + data + " to non-legacy format");
 				return;
 			}
 
@@ -307,7 +306,7 @@ public final class Item {
 
 		String from = typeName + (typeData != null ? ":" + typeData : "");
 		String to = type.name().toLowerCase() + (section.isSet("damage") ? ":" + section.get("damage") : "");
-		DeluxeHeads.info("1.13 Update - " + from + " converted to " + to + " for " + filename + " -> " + section.getCurrentPath());
+		DeluxeHeads.print("1.13 Update - " + from + " converted to " + to + " for " + filename + " -> " + section.getCurrentPath());
 
 		shouldSave.set(true);
 	}
@@ -317,7 +316,7 @@ public final class Item {
 		updateLegacyTypes(filename, section, shouldSave);
 
 		if (!section.isSet("type") || !section.isString("type")) {
-			DeluxeHeads.warning("Invalid type of item " + section.getCurrentPath() + " in " + filename + ", " + "expected a type name");
+			DeluxeHeads.print("Invalid type of item " + section.getCurrentPath() + " in " + filename + ", " + "expected a type name");
 			return null;
 		}
 
@@ -325,21 +324,21 @@ public final class Item {
 		Material type = Material.matchMaterial(typeName);
 
 		if (type == null) {
-			DeluxeHeads.warning("Invalid type of item " + section.getCurrentPath() + ", " + "unknown material for type name " + typeName);
+			DeluxeHeads.print("Invalid type of item " + section.getCurrentPath() + ", " + "unknown material for type name " + typeName);
 			return null;
 		}
 
 		short damage = (short) section.getInt("damage", 0);
 
 		if (damage < 0) {
-			DeluxeHeads.warning("Invalid damage of item " + section.getCurrentPath() + ", " + "damage must be at least 0");
+			DeluxeHeads.print("Invalid damage of item " + section.getCurrentPath() + ", " + "damage must be at least 0");
 			return null;
 		}
 
 		int amount = section.getInt("amount", 1);
 
 		if (amount < 1) {
-			DeluxeHeads.warning("Invalid amount of item " + section.getCurrentPath() + ", " + "amount must be at least 1");
+			DeluxeHeads.print("Invalid amount of item " + section.getCurrentPath() + ", " + "amount must be at least 1");
 			return null;
 		}
 

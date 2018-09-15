@@ -18,7 +18,7 @@ public class Menus {
 		File menusFolder = new File(DeluxeHeads.getInstance().getDataFolder(), "menus");
 
 		if (!menusFolder.exists() && !menusFolder.mkdirs()) {
-			DeluxeHeads.severe("Unable to create the plugins/Heads/menus folder for Heads menu configuration");
+			DeluxeHeads.print("Unable to create the plugins/Heads/menus folder for Heads menu configuration");
 		}
 
 		browseConfig.load();
