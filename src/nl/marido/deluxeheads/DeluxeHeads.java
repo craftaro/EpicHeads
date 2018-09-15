@@ -70,6 +70,8 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 
 	@Override
 	public void onEnable() {
+		csender = this.getServer().getConsoleSender();
+		instance = this;
 		if (Version.isBelow(Version.v1_8)) {
 			print("&c-------------------------------------------------------------------");
 			print("&c    DeluxeHeads no longer supports versions below Minecraft 1.8.");
@@ -78,7 +80,6 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 			Bukkit.getPluginManager().disablePlugin(this);
 			return;
 		}
-		instance = this;
 		Clock timer = Clock.start();
 		loadCache();
 		try {
@@ -138,11 +139,11 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 			unregisterCommands();
 		}
 		SimpleCommandMap commandMap = CraftServer.get().getCommandMap();
-		RuntimeCommand heads = new RuntimeCommand(mainConfig.getHeadCommand());
+		RuntimeCommand heads = new RuntimeCommand("deluxeheads");
 		heads.setExecutor(new HeadsCommand());
 		heads.setDescription(mainConfig.getHeadDescription());
 		heads.setAliases(Arrays.asList(mainConfig.getHeadAliases()));
-		commandMap.register("heads", heads);
+		commandMap.register("deluxeheads", heads);
 		commandsRegistered = true;
 	}
 
@@ -167,7 +168,7 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 		if (!getDataFolder().exists() && !getDataFolder().mkdirs())
 			throw new RuntimeException("Unable to create the data folder to save plugin files");
 		if (!getDataFolder().isDirectory())
-			throw new RuntimeException("plugins/Heads should be a directory, yet there is a file with the same name");
+			throw new RuntimeException("plugins/DeluxeHeads should be a directory, yet there is a file with the same name");
 		return new File(getDataFolder(), "heads.cache");
 	}
 

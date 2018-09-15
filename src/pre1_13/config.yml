@@ -23,9 +23,9 @@ breaking-head-names:
    default-name: 'Decoration Head'
 commands:
    heads:
-      label: 'heads'
+      label: 'deluxeheads'
       aliases:
-      - 'head'
+      - 'heads'
       description: 'Get cool heads'
       sub-commands:
          # open menu is when no arguments are supplied
