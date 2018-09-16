@@ -97,7 +97,7 @@ public class MainConfig {
 		vaultEcoEnabled = loadBoolean(config, "economy.vault-eco.enabled", true, shouldSave);
 		itemEcoEnabled = loadBoolean(config, "economy.item-eco.enabled", false, shouldSave);
 
-		Item defaultItemEcoItem = Items.createSkull().name("&6Player Head Token").lore("&8Use in /heads!");
+		Item defaultItemEcoItem = Items.createSkull().name("&6Player Head Token").lore("&8Use in /deluxeheads!");
 
 		itemEcoItem = loadItem(config, "economy.item-eco.item", defaultItemEcoItem, shouldSave);
 
@@ -140,7 +140,7 @@ public class MainConfig {
 		searchLabel = loadString(config, "commands.heads.sub-commands.search", "search", shouldSave);
 		helpLabel = loadString(config, "commands.heads.sub-commands.help", "help", shouldSave);
 
-		headLabel = loadString(config, "commands.heads.label", "heads", shouldSave);
+		headLabel = loadString(config, "commands.heads.label", "deluxeheads", shouldSave);
 		headDescription = loadString(config, "commands.heads.description", "Get a cool head", shouldSave);
 		headAliases = loadStringArray(config, "commands.heads.aliases", new String[] { "head" }, shouldSave);
 	}

@@ -57,7 +57,7 @@ public class DeluxeHeadsAPI {
 		}
 
 		private static Head fromNameAndTexture(String name, String texture) {
-			return (texture == null ? null : fromCacheHead(new CacheHead(name, "HeadsAPI", texture)));
+			return (texture == null ? null : fromCacheHead(new CacheHead(name, "DeluxeHeadsAPI", texture)));
 		}
 
 		private static List<Head> fromCacheHeads(List<CacheHead> heads) {

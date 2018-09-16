@@ -57,7 +57,7 @@ import nl.marido.deluxeheads.volatilecode.reflection.craftbukkit.CraftServer;
 public class DeluxeHeads extends JavaPlugin implements Listener {
 
 	private static DeluxeHeads instance;
-	private static ConsoleCommandSender csender;
+	private static ConsoleCommandSender console;
 	private CacheFile cache;
 	private MenuConfig oldMenuConfig;
 	private Menus menus;
@@ -68,9 +68,12 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 	private boolean commandsRegistered = false;
 	private boolean blockStoreAvailable = false;
 
+	// Thank you for purchasing DeluxeHeads.
+	public static String user = "%%__USER__%%";
+
 	@Override
 	public void onEnable() {
-		csender = this.getServer().getConsoleSender();
+		console = this.getServer().getConsoleSender();
 		instance = this;
 		if (Version.isBelow(Version.v1_8)) {
 			print("&c-------------------------------------------------------------------");
@@ -139,7 +142,7 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 			unregisterCommands();
 		}
 		SimpleCommandMap commandMap = CraftServer.get().getCommandMap();
-		RuntimeCommand heads = new RuntimeCommand("deluxeheads");
+		RuntimeCommand heads = new RuntimeCommand(mainConfig.getHeadCommand());
 		heads.setExecutor(new HeadsCommand());
 		heads.setDescription(mainConfig.getHeadDescription());
 		heads.setAliases(Arrays.asList(mainConfig.getHeadAliases()));
@@ -343,7 +346,7 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 	}
 
 	public boolean isExemptFromCost(Player player) {
-		if (!mainConfig.isEconomyEnabled() || player.hasPermission("heads.bypasscost"))
+		if (!mainConfig.isEconomyEnabled() || player.hasPermission("deluxeheads.bypasscost"))
 			return true;
 
 		return mainConfig.isFreeInCreative() && player.getGameMode() == GameMode.CREATIVE;
@@ -373,7 +376,7 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 	}
 
 	public static String getCategoryPermission(String category) {
-		return "heads.category." + category.toLowerCase().replace(' ', '_');
+		return "deluxeheads.category." + category.toLowerCase().replace(' ', '_');
 	}
 
 	public static DeluxeHeads getInstance() {
@@ -418,7 +421,7 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 
 	public static void print(String print) {
 		if (print != null)
-			csender.sendMessage(ChatColor.translateAlternateColorCodes('&', print));
+			console.sendMessage(ChatColor.translateAlternateColorCodes('&', print));
 	}
 
 	public static FileConfigFile getVersionedConfig(String resource) {
