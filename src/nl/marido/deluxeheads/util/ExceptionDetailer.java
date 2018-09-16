@@ -26,7 +26,7 @@ public abstract class ExceptionDetailer {
 				try {
 					return appendInfo(exception, constructorStackTrace);
 				} catch (Exception e) {
-					new Exception("Exception appending info to exception", e).printStackTrace();
+					new Exception("Exception appending info to exception ", e).printStackTrace();
 
 					constructorStackTrace.printStackTrace();
 

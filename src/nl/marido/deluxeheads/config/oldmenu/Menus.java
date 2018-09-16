@@ -3,7 +3,6 @@ package nl.marido.deluxeheads.config.oldmenu;
 import nl.marido.deluxeheads.DeluxeHeads;
 import nl.marido.deluxeheads.oldmenu.InventoryType;
 
-@Deprecated
 public class Menus {
 
 	public static final String SPLIT = "-";

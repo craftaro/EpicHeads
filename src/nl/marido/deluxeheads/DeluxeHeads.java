@@ -77,8 +77,8 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 		instance = this;
 		if (Version.isBelow(Version.v1_8)) {
 			print("&c-------------------------------------------------------------------");
-			print("&c    DeluxeHeads no longer supports versions below Minecraft 1.8.");
-			print("&c          Please switch to Heads version 1.15.1 or before.      ");
+			print("&c    DeluxeHeads no longer supports versions below Minecraft 1.8.   ");
+			print("&c          Please switch to Heads version 1.15.1 or before.         ");
 			print("&c-------------------------------------------------------------------");
 			Bukkit.getPluginManager().disablePlugin(this);
 			return;

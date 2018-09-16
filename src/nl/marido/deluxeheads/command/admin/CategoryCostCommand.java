@@ -33,31 +33,25 @@ public class CategoryCostCommand extends AbstractCommand {
 			Lang.Command.Errors.mustBePlayer().send(sender);
 			return true;
 		}
-
 		if (args.length != 2) {
 			sendInvalidArgs(sender);
 			return true;
 		}
-
 		if (args[1].equalsIgnoreCase("reset")) {
 			InvModeType.CATEGORY_COST_REMOVE.open((Player) sender);
 			return true;
 		}
-
 		double cost;
-
 		try {
 			cost = Double.valueOf(args[1]);
 		} catch (NumberFormatException e) {
 			Lang.Command.Errors.number(args[1]).send(sender);
 			return true;
 		}
-
 		if (cost < 0) {
 			Lang.Command.Errors.negative(args[1]).send(sender);
 			return true;
 		}
-
 		InvModeType.CATEGORY_COST.open((Player) sender).asType(CategoryCostMode.class).setCost(cost);
 		return true;
 	}

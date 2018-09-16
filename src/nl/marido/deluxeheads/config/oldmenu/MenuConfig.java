@@ -10,7 +10,6 @@ import nl.marido.deluxeheads.DeluxeHeads;
 import nl.marido.deluxeheads.config.ConfigFile;
 import nl.marido.deluxeheads.util.Clock;
 
-@Deprecated
 public class MenuConfig {
 
 	private final ConfigurationSection defaults;
@@ -21,7 +20,6 @@ public class MenuConfig {
 	public MenuConfig(ConfigFile configFile) {
 		this.menus = new HashMap<>();
 		this.defaultMenus = new HashMap<>();
-
 		this.configFile = configFile;
 		this.defaults = loadDefaults();
 

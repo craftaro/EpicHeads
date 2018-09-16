@@ -12,7 +12,6 @@ import nl.marido.deluxeheads.DeluxeHeads;
 import nl.marido.deluxeheads.config.lang.Placeholder;
 import nl.marido.deluxeheads.menu.ui.item.Item;
 
-@Deprecated
 public class Menu {
 
 	private Function<String, Boolean> FILTER_ECONOMY_LINES_OUT = line -> !line.contains("%cost%");

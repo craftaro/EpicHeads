@@ -42,11 +42,9 @@ public final class Item {
 		Checks.ensureNonNull(type, "type");
 		Checks.ensureTrue(amount > 0, "amount must be greater than 0");
 		Checks.ensureTrue(damage >= 0, "damage must be greater than or equal to 0");
-
 		if (lore != null) {
 			Checks.ensureArrayNonNull(lore, "lore");
 		}
-
 		this.type = type;
 		this.amount = amount;
 		this.damage = damage;
