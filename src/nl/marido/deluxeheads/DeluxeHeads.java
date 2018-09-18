@@ -45,6 +45,7 @@ import nl.marido.deluxeheads.economy.PlayerPointsEconomy;
 import nl.marido.deluxeheads.economy.VaultEconomy;
 import nl.marido.deluxeheads.handlers.HeadNamer;
 import nl.marido.deluxeheads.handlers.LegacyIDs;
+import nl.marido.deluxeheads.handlers.MassiveStats;
 import nl.marido.deluxeheads.handlers.UpdateChecker;
 import nl.marido.deluxeheads.menu.ui.InventoryMenu;
 import nl.marido.deluxeheads.oldmenu.ClickInventory;
@@ -106,6 +107,7 @@ public class DeluxeHeads extends JavaPlugin implements Listener {
 		if (mainConfig.shouldCheckForUpdates()) {
 			checkForUpdates();
 		}
+		MassiveStats massive = new MassiveStats(this);
 		print("DeluxeHeads has been enabled with " + cache.getHeadCount() + " heads " + timer + ".");
 	}
 

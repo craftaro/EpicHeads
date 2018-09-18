@@ -3,7 +3,7 @@ main: nl.marido.deluxeheads.DeluxeHeads
 description: Enhance your server with over 17,000 awesome unique heads with amazing features.
 author: Marido
 website: https://marido.host/deluxeheads
-version: 2.2.2
+version: 2.2.3
 api-version: 1.13
 softdepend: [Vault, PlayerPoints, BlockStore]
 loadbefore: [DeluxeMenus]
