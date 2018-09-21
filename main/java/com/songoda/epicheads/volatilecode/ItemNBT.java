@@ -17,6 +17,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class ItemNBT {
@@ -87,10 +89,7 @@ public class ItemNBT {
 		return new ItemStack(com.songoda.epicheads.volatilecode.reflection.nms.Items.getItem("PLAYER_HEAD"), 1);
 	}
 
-	public static org.bukkit.inventory.ItemStack createHead(CacheHead head, String name) {
-		if (name == null) {
-			name = ChatColor.GRAY + head.getName();
-		}
+	public static org.bukkit.inventory.ItemStack createHead(CacheHead head) {
 
 		ItemStack nmsItemstack = createNMSSkull();
 		NBTTagCompound tag = nmsItemstack.getTag();
@@ -101,9 +100,14 @@ public class ItemNBT {
 			nmsItemstack.setTag(tag);
 		}
 
-		tag.set("display", createDisplayTag(name, new String[] { ChatColor.DARK_GRAY + head.getCategory() }));
+		org.bukkit.inventory.ItemStack itemStack = CraftItemStack.asBukkitCopy(applyNBT(head, nmsItemstack));
 
-		return CraftItemStack.asBukkitCopy(applyNBT(head, nmsItemstack));
+		ItemMeta meta = itemStack.getItemMeta();
+		meta.setLore(Arrays.asList(ChatColor.DARK_GRAY + head.getCategory()));
+
+		itemStack.setItemMeta(meta);
+
+		return itemStack;
 	}
 
 	public static org.bukkit.inventory.ItemStack createHead(GameProfile profile, String name) {

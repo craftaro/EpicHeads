@@ -113,11 +113,11 @@ public final class CacheHead implements Comparable<CacheHead> {
 	}
 
 	public ItemStack getItemStack() {
-		return ItemNBT.createHead(this, null);
+		return ItemNBT.createHead(this);
 	}
 
 	public ItemStack getItemStack(String name) {
-		return ItemNBT.createHead(this, name);
+		return ItemNBT.createHead(this);
 	}
 
 	public ItemStack addTexture(ItemStack itemStack) {
