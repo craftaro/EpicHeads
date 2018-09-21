@@ -21,7 +21,7 @@ public class Menus {
 	public static final MenusGroup ID = new MenusGroup("id");
 
 	public static Menu get(String name) {
-		return EpicHeads.getMenuConfig().getMenu(name);
+		return EpicHeads.getInstance().getMenuConfig().getMenu(name);
 	}
 
 	public static class MenusGroup {

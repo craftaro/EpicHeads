@@ -32,13 +32,19 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class HeadNamer implements Listener {
+	
+	private final EpicHeads instance;
+	
+	public HeadNamer(EpicHeads instance) {
+		this.instance = instance;
+	}
 
 	public void registerEvents() {
 		Bukkit.getPluginManager().registerEvents(this, EpicHeads.getInstance());
 	}
 
 	private boolean shouldUseBlockStore() {
-		return EpicHeads.getMainConfig().shouldUseBlockStore() && EpicHeads.isBlockStoreAvailable();
+		return instance.getMainConfig().shouldUseBlockStore() && instance.isBlockStoreAvailable();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -72,21 +78,21 @@ public class HeadNamer implements Listener {
 	}
 
 	private String findHeadName(Block block) {
-		if (EpicHeads.getMainConfig().shouldUseCacheNames()) {
+		if (instance.getMainConfig().shouldUseCacheNames()) {
 			GameProfile profile = getGameProfile(block);
 			String texture = TextureGetter.findTexture(profile);
-			CacheHead head = EpicHeads.getCache().findHeadByTexture(texture);
+			CacheHead head = instance.getCache().findHeadByTexture(texture);
 
 			if (head != null)
 				return ChatColor.GRAY + head.getName();
 		}
 
-		return ChatColor.GRAY + EpicHeads.getMainConfig().getDefaultHeadName();
+		return ChatColor.GRAY + instance.getMainConfig().getDefaultHeadName();
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockPlace(BlockPlaceEvent e) {
-		if (!EpicHeads.getMainConfig().isHeadNamesEnabled() || !shouldUseBlockStore() || !isHeadsHead(e.getItemInHand()))
+		if (!instance.getMainConfig().isHeadNamesEnabled() || !shouldUseBlockStore() || !isHeadsHead(e.getItemInHand()))
 			return;
 
 		ItemMeta meta = e.getItemInHand().getItemMeta();
@@ -94,12 +100,12 @@ public class HeadNamer implements Listener {
 		if (!meta.hasDisplayName())
 			return;
 
-		BlockStoreApi.setBlockMeta(e.getBlock(), EpicHeads.getInstance(), "name", meta.getDisplayName());
+		BlockStoreApi.setBlockMeta(e.getBlock(), instance, "name", meta.getDisplayName());
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockBreak(BlockBreakEvent e) {
-		if (!EpicHeads.getMainConfig().isHeadNamesEnabled())
+		if (!instance.getMainConfig().isHeadNamesEnabled())
 			return;
 
 		Block block = e.getBlock();
@@ -111,7 +117,7 @@ public class HeadNamer implements Listener {
 		e.setCancelled(true);
 
 		if (shouldUseBlockStore()) {
-			BlockStoreApi.retrieveBlockMeta(EpicHeads.getInstance(), block, EpicHeads.getInstance(), "name", metaValue -> {
+			BlockStoreApi.retrieveBlockMeta(instance, block, instance, "name", metaValue -> {
 				String newName;
 
 				if (metaValue instanceof String) {
@@ -163,13 +169,13 @@ public class HeadNamer implements Listener {
 		private final BlockBreakEvent event;
 		private final CountdownRunnable countdown;
 
-		public BlockBreakEventCaller(RegisteredListener listener, BlockBreakEvent event, CountdownRunnable countdown) {
+		BlockBreakEventCaller(RegisteredListener listener, BlockBreakEvent event, CountdownRunnable countdown) {
 			this.listener = listener;
 			this.event = event;
 			this.countdown = countdown;
 		}
 
-		public void scheduleTask() {
+		void scheduleTask() {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(listener.getPlugin(), this);
 		}
 
@@ -191,16 +197,16 @@ public class HeadNamer implements Listener {
 		private final AtomicInteger countdown;
 		private final Runnable runnable;
 
-		public CountdownRunnable(int count, Runnable runnable) {
+		CountdownRunnable(int count, Runnable runnable) {
 			this.countdown = new AtomicInteger(count);
 			this.runnable = runnable;
 		}
 
-		public void countdown() {
+		void countdown() {
 			if (countdown.decrementAndGet() != 0)
 				return;
 
-			EpicHeads.sync(runnable);
+			EpicHeads.getInstance().sync(runnable);
 		}
 	}
 

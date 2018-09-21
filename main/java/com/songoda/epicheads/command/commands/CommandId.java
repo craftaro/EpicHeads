@@ -32,7 +32,7 @@ public class CommandId extends AbstractCommand {
         }
 
         String texture = ItemNBT.getTextureProperty(hand);
-        CacheHead head = EpicHeads.getCache().findHeadByTexture(texture);
+        CacheHead head = EpicHeads.getInstance().getCache().findHeadByTexture(texture);
         if (head == null) {
             ItemMeta meta = hand.getItemMeta();
             String name = ChatColor.stripColor(meta.hasDisplayName() ? meta.getDisplayName() : "");

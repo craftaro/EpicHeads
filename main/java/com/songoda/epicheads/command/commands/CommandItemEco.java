@@ -54,7 +54,7 @@ public class CommandItemEco extends AbstractCommand {
 
         Item item = Item.create(itemStack).amount(1);
 
-        EpicHeads.getMainConfig().setItemEcoItem(item);
+        EpicHeads.getInstance().getMainConfig().setItemEcoItem(item);
 
         player.sendMessage(instance.getLocale().getMessage("command.itemeco.set"));
         return ReturnType.SUCCESS;
@@ -127,7 +127,7 @@ public class CommandItemEco extends AbstractCommand {
             int giveAmount = Math.min(64, amount);
             amount -= giveAmount;
 
-            ItemStack itemStack = EpicHeads.getMainConfig().getItemEconomyItem().amount(giveAmount).build();
+            ItemStack itemStack = EpicHeads.getInstance().getMainConfig().getItemEconomyItem().amount(giveAmount).build();
 
             if (player.getInventory().firstEmpty() != -1) {
                 player.getInventory().addItem(itemStack);

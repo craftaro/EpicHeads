@@ -49,7 +49,7 @@ public class Menu {
 	}
 
 	private Function<String, Boolean> getItemLoreFilter() {
-		return EpicHeads.getMainConfig().isEconomyEnabled() ? null : FILTER_ECONOMY_LINES_OUT;
+		return EpicHeads.getInstance().getMainConfig().isEconomyEnabled() ? null : FILTER_ECONOMY_LINES_OUT;
 	}
 
 	public void load(String filename, ConfigurationSection section, AtomicBoolean shouldSave) {

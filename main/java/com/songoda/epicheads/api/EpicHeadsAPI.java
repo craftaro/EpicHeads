@@ -69,7 +69,7 @@ public class EpicHeadsAPI {
 	}
 
 	public static Head getHead(int id) {
-		CacheHead head = EpicHeads.getCache().findHead(id);
+		CacheHead head = EpicHeads.getInstance().getCache().findHead(id);
 		if (head == null)
 			return null;
 		return new Head(head);
@@ -77,27 +77,27 @@ public class EpicHeadsAPI {
 
 	@Deprecated
 	public static List<Head> searchHeads(String query) {
-		List<CacheHead> search = EpicHeads.getCache().searchHeads(query);
+		List<CacheHead> search = EpicHeads.getInstance().getCache().searchHeads(query);
 		return Head.fromCacheHeads(search);
 	}
 
 	public static void searchHeads(String query, Consumer<List<Head>> onResult) {
-		EpicHeads.getCache().searchHeadsAsync(query, heads -> {
+		EpicHeads.getInstance().getCache().searchHeadsAsync(query, heads -> {
 			onResult.accept(Head.fromCacheHeads(heads));
 		});
 	}
 
 	public static Set<String> getCategories() {
-		return EpicHeads.getCache().getCategories();
+		return EpicHeads.getInstance().getCache().getCategories();
 	}
 
 	public static List<Head> getCategoryHeads(String category) {
-		List<CacheHead> categoryHeads = EpicHeads.getCache().getCategoryHeads(category);
+		List<CacheHead> categoryHeads = EpicHeads.getInstance().getCache().getCategoryHeads(category);
 		return Head.fromCacheHeads(categoryHeads);
 	}
 
 	public static List<Head> getAllHeads() {
-		List<CacheHead> heads = EpicHeads.getCache().getHeads();
+		List<CacheHead> heads = EpicHeads.getInstance().getCache().getHeads();
 		return Head.fromCacheHeads(heads);
 	}
 

@@ -23,12 +23,12 @@ public class CommandRandom extends AbstractCommand {
             return ReturnType.SYNTAX_ERROR;
         }
 
-        if (EpicHeads.getCache().getHeadCount() == 0) {
+        if (EpicHeads.getInstance().getCache().getHeadCount() == 0) {
             sender.sendMessage(instance.getLocale().getMessage("command.random.noheads"));
             return ReturnType.FAILURE;
         }
 
-        CacheHead random = EpicHeads.getCache().getRandomHead(RANDOM);
+        CacheHead random = EpicHeads.getInstance().getCache().getRandomHead(RANDOM);
 
         if (args.length == 1) {
             if (!(sender instanceof Player)) {

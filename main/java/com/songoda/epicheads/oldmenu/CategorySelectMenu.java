@@ -29,12 +29,12 @@ public class CategorySelectMenu extends AbstractModedInventory {
 
 	@Override
 	public void recreate() {
-		CacheFile cache = EpicHeads.getCache();
+		CacheFile cache = EpicHeads.getInstance().getCache();
 
 		this.heads = new HashMap<>();
 		this.categories = new ArrayList<>();
 
-		if (EpicHeads.getMainConfig().shouldHideNoPermCategories()) {
+		if (EpicHeads.getInstance().getMainConfig().shouldHideNoPermCategories()) {
 			Player player = this.getInvMode().getPlayer();
 
 			for (String category : cache.getCategories()) {

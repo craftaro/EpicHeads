@@ -64,8 +64,8 @@ public class CommandAdd extends AbstractCommand {
 
         CacheHead head = new CacheHead(name, category, texture);
 
-        EpicHeads.getCache().addHead(head);
-        EpicHeads.getInstance().saveCache();
+        instance.getCache().addHead(head);
+        instance.saveCache();
 
         sender.sendMessage(instance.getLocale().getMessage("command.add.added", name, category));
     }

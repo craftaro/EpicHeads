@@ -30,7 +30,7 @@ public class RemoveMode extends BaseMode {
 
 	@Override
 	public void onConfirm(InventoryClickEvent e, ConfirmMenu menu, CacheHead head) {
-		EpicHeads.getCache().removeHead(head);
+		EpicHeads.getInstance().getCache().removeHead(head);
 		EpicHeads.getInstance().saveCache();
 
 

@@ -27,7 +27,7 @@ public class SearchMode extends BaseMode {
 		if (!getPlayer().hasPermission("heads.category." + head.getCategory().toLowerCase().replace(' ', '_'))) {
 			return "head-no-perms";
 		} else {
-			return (head.hasCost() && EpicHeads.getMainConfig().isEconomyEnabled() ? "head-cost" : "head");
+			return (head.hasCost() && EpicHeads.getInstance().getMainConfig().isEconomyEnabled() ? "head-cost" : "head");
 		}
 	}
 

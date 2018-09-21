@@ -35,7 +35,7 @@ public class CategoryCostMode extends BaseMode {
 	}
 
 	public CacheHead getCategoryHead(String category) {
-		List<CacheHead> heads = EpicHeads.getCache().getCategoryHeads(category);
+		List<CacheHead> heads = EpicHeads.getInstance().getCache().getCategoryHeads(category);
 
 		return (heads.size() > 0 ? heads.get(0) : null);
 	}
@@ -56,7 +56,7 @@ public class CategoryCostMode extends BaseMode {
 	public void onConfirm(InventoryClickEvent e, ConfirmMenu menu, CacheHead head) {
 		EpicHeads.getInstance().getLocale().getMessage("interface.categorycost.setcost", head.getCategory(), cost);
 
-		EpicHeads.getMainConfig().setCategoryCost(head.getCategory(), cost);
+		EpicHeads.getInstance().getMainConfig().setCategoryCost(head.getCategory(), cost);
 	}
 
 	@Override

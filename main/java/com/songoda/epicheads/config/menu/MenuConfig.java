@@ -18,7 +18,7 @@ public class MenuConfig {
 	private final AtomicBoolean requiresSave;
 
 	public MenuConfig(String fileName) {
-		this(EpicHeads.getVersionedConfig(fileName));
+		this(EpicHeads.getInstance().getVersionedConfig(fileName));
 	}
 
 	public MenuConfig(ConfigFile config) {

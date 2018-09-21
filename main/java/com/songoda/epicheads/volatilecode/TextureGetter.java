@@ -34,7 +34,7 @@ public class TextureGetter {
 		}
 
 		TileEntitySkull.resolveTexture(name, profile -> {
-			EpicHeads.sync(() -> safeCallback.accept(findTexture(profile, true)));
+			EpicHeads.getInstance().sync(() -> safeCallback.accept(findTexture(profile, true)));
 
 			return true;
 		});

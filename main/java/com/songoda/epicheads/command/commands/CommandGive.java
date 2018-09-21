@@ -50,7 +50,7 @@ public class CommandGive extends AbstractCommand {
             return ReturnType.FAILURE;
         }
 
-        CacheHead head = EpicHeads.getCache().findHead(id);
+        CacheHead head = EpicHeads.getInstance().getCache().findHead(id);
 
         if (head == null) {
             sender.sendMessage(instance.getLocale().getMessage("command.give.cantfindhead", id));

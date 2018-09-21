@@ -56,7 +56,7 @@ public class MainConfig {
 	private String helpLabel;
 
 	public MainConfig() {
-		this.configFile = EpicHeads.getVersionedConfig("config.yml");
+		this.configFile = EpicHeads.getInstance().getVersionedConfig("config.yml");
 
 		reload();
 	}

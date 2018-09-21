@@ -87,7 +87,7 @@ public final class CacheFile implements Mod {
 			public void run() {
 				List<CacheHead> matches = Search.searchHeads(query, headsCopy, 0.4d);
 
-				EpicHeads.sync(() -> onResult.accept(matches));
+				EpicHeads.getInstance().sync(() -> onResult.accept(matches));
 			}
 		}.runTaskAsynchronously(EpicHeads.getInstance());
 	}

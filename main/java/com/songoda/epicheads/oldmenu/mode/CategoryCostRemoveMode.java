@@ -17,7 +17,7 @@ import java.util.List;
 
 public class CategoryCostRemoveMode extends BaseMode {
 
-	private final double newCost = EpicHeads.getMainConfig().getDefaultHeadCost();
+	private final double newCost = EpicHeads.getInstance().getMainConfig().getDefaultHeadCost();
 
 	public CategoryCostRemoveMode(Player player) {
 		super(player);
@@ -31,7 +31,7 @@ public class CategoryCostRemoveMode extends BaseMode {
 	}
 
 	public CacheHead getCategoryHead(String category) {
-		List<CacheHead> heads = EpicHeads.getCache().getCategoryHeads(category);
+		List<CacheHead> heads = EpicHeads.getInstance().getCache().getCategoryHeads(category);
 
 		return (heads.size() > 0 ? heads.get(0) : null);
 	}
@@ -52,7 +52,7 @@ public class CategoryCostRemoveMode extends BaseMode {
 	public void onConfirm(InventoryClickEvent e, ConfirmMenu menu, CacheHead head) {
 		e.getWhoClicked().sendMessage(EpicHeads.getInstance().getLocale().getMessage("interface.categorycost.removecost", newCost));
 
-		EpicHeads.getMainConfig().removeCategoryCost(head.getCategory());
+		EpicHeads.getInstance().getMainConfig().removeCategoryCost(head.getCategory());
 	}
 
 	@Override

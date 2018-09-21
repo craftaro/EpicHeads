@@ -69,7 +69,7 @@ public final class CacheHead implements Comparable<CacheHead> {
 	}
 
 	public String getPermission() {
-		return EpicHeads.getCategoryPermission(category);
+		return EpicHeads.getInstance().getCategoryPermission(category);
 	}
 
 	public String getTexture() {
@@ -93,7 +93,7 @@ public final class CacheHead implements Comparable<CacheHead> {
 	}
 
 	public double getCost() {
-		return (hasCost() ? cost : EpicHeads.getMainConfig().getCategoryCost(category));
+		return (hasCost() ? cost : EpicHeads.getInstance().getMainConfig().getCategoryCost(category));
 	}
 
 	public double getRawCost() {

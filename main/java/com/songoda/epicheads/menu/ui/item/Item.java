@@ -255,7 +255,7 @@ public final class Item {
 
 		if (section.isInt("type")) {
 			int typeId = section.getInt("type");
-			String convertedType = EpicHeads.getLegacyIDs().fromId(typeId);
+			String convertedType = EpicHeads.getInstance().getLegacyIDs().fromId(typeId);
 
 			if (convertedType == null || convertedType.isEmpty()) {
 				Methods.formatText("Invalid type of item " + section.getCurrentPath() + ", " + "unknown type id " + typeId);

@@ -98,7 +98,7 @@ public class EpicHeads extends JavaPlugin implements Listener {
 
 		ProtocolHackFixer.fix();
 		tryHookBlockStore();
-		new HeadNamer().registerEvents();
+		new HeadNamer(this).registerEvents();
 		Bukkit.getPluginManager().registerEvents(this, this);
 		console.sendMessage(Methods.formatText(getDescription().getName() + " has been enabled with " + cache.getHeadCount() + " heads " + timer + "."));
 		console.sendMessage(Methods.formatText("&a============================="));
@@ -301,7 +301,7 @@ public class EpicHeads extends JavaPlugin implements Listener {
 		}
 	}
 
-	public boolean isExemptFromCost(Player player) {
+	private boolean isExemptFromCost(Player player) {
 		if (!mainConfig.isEconomyEnabled() || player.hasPermission("EpicHeads.bypasscost"))
 			return true;
 
@@ -309,7 +309,6 @@ public class EpicHeads extends JavaPlugin implements Listener {
 	}
 
 	public boolean chargeForHead(Player player, CacheHead head) {
-		EpicHeads instance = EpicHeads.getInstance();
 		if (isExemptFromCost(player))
 			return true;
 
@@ -319,20 +318,20 @@ public class EpicHeads extends JavaPlugin implements Listener {
 			return true;
 
 		if (!economy.hasBalance(player, cost)) {
-			player.sendMessage(instance.getLocale().getMessage("interface.get.notenoughmoney", head.getName(), head.getCost()));
+			player.sendMessage(getLocale().getMessage("interface.get.notenoughmoney", head.getName(), head.getCost()));
 			return false;
 		}
 
 		if (!economy.takeBalance(player, cost)) {
-			player.sendMessage(instance.getLocale().getMessage("interface.get.transactionerror", head.getName(), head.getCost()));
+			player.sendMessage(getLocale().getMessage("interface.get.transactionerror", head.getName(), head.getCost()));
 			return false;
 		}
 
-		player.sendMessage(instance.getLocale().getMessage("interface.get.purchased", head.getName(), head.getCost()));
+		player.sendMessage(getLocale().getMessage("interface.get.purchased", head.getName(), head.getCost()));
 		return true;
 	}
 
-	public static String getCategoryPermission(String category) {
+	public String getCategoryPermission(String category) {
 		return "EpicHeads.category." + category.toLowerCase().replace(' ', '_');
 	}
 
@@ -341,39 +340,39 @@ public class EpicHeads extends JavaPlugin implements Listener {
 		return INSTANCE;
 	}
 
-	public static LegacyIDs getLegacyIDs() {
+	public LegacyIDs getLegacyIDs() {
 		return INSTANCE.legacyIDs;
 	}
 
-	public static MainConfig getMainConfig() {
+	public MainConfig getMainConfig() {
 		return INSTANCE.mainConfig;
 	}
 
-	public static CacheFile getCache() {
+	public CacheFile getCache() {
 		return INSTANCE.cache;
 	}
 
-	public static Menus getMenus() {
+	public Menus getMenus() {
 		return INSTANCE.menus;
 	}
 
-	public static MenuConfig getMenuConfig() {
+	public MenuConfig getMenuConfig() {
 		return INSTANCE.oldMenuConfig;
 	}
 
-	public static Economy getEconomy() {
+	public Economy getEconomy() {
 		return INSTANCE.economy;
 	}
 
-	public static boolean isBlockStoreAvailable() {
+	public boolean isBlockStoreAvailable() {
 		return INSTANCE.blockStoreAvailable;
 	}
 
-	public static void sync(Runnable task) {
+	public void sync(Runnable task) {
 		Bukkit.getScheduler().runTask(INSTANCE, task);
 	}
 
-	public static FileConfigFile getVersionedConfig(String resource) {
+	public FileConfigFile getVersionedConfig(String resource) {
 		if (Version.isBelow(Version.v1_13))
 			return new FileConfigFile(resource, "pre1_13/" + resource);
 

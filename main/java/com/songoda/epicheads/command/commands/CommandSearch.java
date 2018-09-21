@@ -27,7 +27,7 @@ public class CommandSearch extends AbstractCommand {
 
         String query = queryBuilder.toString().trim();
 
-        EpicHeads.getCache().searchHeadsAsync(query, matches -> {
+        EpicHeads.getInstance().getCache().searchHeadsAsync(query, matches -> {
             if (matches.size() == 0) {
 
                sender.sendMessage(instance.getLocale().getMessage("command.search.nonefound", query));

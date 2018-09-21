@@ -11,7 +11,7 @@ public class ItemEconomy implements Economy {
 		if (itemStack == null)
 			return false;
 		Item item = Item.create(itemStack).amount(1);
-		return item.equals(EpicHeads.getMainConfig().getItemEconomyItem());
+		return item.equals(EpicHeads.getInstance().getMainConfig().getItemEconomyItem());
 	}
 
 	@Override
