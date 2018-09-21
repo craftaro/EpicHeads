@@ -1,7 +1,6 @@
 ## EpicHeads
 Search over 17,000 unique, artistic heads which are perfect for builders and servers with the nice EpicHeads resource.</br>
-Quality, performance, and support are my priorities for this resource. Purchase it for $2.99 (sometimes cheaper with sales).
-> **Note:**  Please consider purchasing this resource on Spigot if you want to really support me.
+Quality, performance, and support are my priorities for this resource.
 </br>
 
 ## Developers
