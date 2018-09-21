@@ -1,0 +1,66 @@
+name: EpicHeads
+main: com.songoda.epicheads.EpicHeads
+description: Enhance your server with over 17,000 awesome unique heads with amazing features.
+author: Songoda
+version: 2.2.3
+api-version: 1.13
+softdepend: [Vault, PlayerPoints, BlockStore]
+loadbefore: [DeluxeMenus]
+commands:
+  EpicHeads:
+    description: The default EpicHeads command.
+    default: true
+    aliases: heads
+    ussage: /heads help
+permissions:
+   EpicHeads.reload:
+      description: 'Reload the config files'
+      default: op
+   EpicHeads.menu:
+      description: 'Open the head menu'
+      default: op
+   EpicHeads.get:
+      description: 'Use the /EpicHeads get <name> command'
+      default: op
+   EpicHeads.search:
+      description: 'Use the /EpicHeads search <search query> command'
+      default: op
+   EpicHeads.hat:
+      description: 'Use the /EpicHeads hat command'
+      default: true
+   EpicHeads.add:
+      description: 'Add heads to the cache'
+      default: op
+   EpicHeads.hand:
+      description: 'Add heads from your hand into the cache'
+      default: op
+   EpicHeads.random:
+      description: 'Get a random head from the cache'
+      default: op
+   EpicHeads.remove:
+      description: 'Remove heads from the cache'
+      default: op
+   EpicHeads.rename:
+      description: 'Rename heads in the cache'
+      default: op
+   EpicHeads.id:
+      description: 'Get a heads id'
+      default: op
+   EpicHeads.give:
+      description: 'Give players heads'
+      default: op
+   EpicHeads.cost:
+      description: 'Set heads costs'
+      default: op
+   EpicHeads.category-cost:
+      description: 'Set heads costs by category'
+      default: op
+   EpicHeads.bypasscost:
+      description: 'Bypass paying for heads'
+      default: op
+   EpicHeads.category.*:
+      description: 'Permission for all categories'
+      default: true
+   EpicHeads.item-eco:
+      description: 'Permission to set, get and give the economy item'
+      default: op
