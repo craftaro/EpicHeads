@@ -6,6 +6,7 @@ import com.songoda.epicheads.config.oldmenu.Menu;
 import com.songoda.epicheads.oldmenu.mode.InvMode;
 import com.songoda.epicheads.oldmenu.mode.SearchMode;
 import com.songoda.epicheads.util.ArrayUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -31,7 +32,7 @@ public class HeadMenu extends AbstractModedInventory {
     public void recreate() {
         Menu menu = getMenu();
         Player player = getInvMode().getPlayer();
-        
+
         int maxPage = (int) Math.ceil((double) heads.size() / 45d);
         
         page += maxPage;
@@ -50,11 +51,15 @@ public class HeadMenu extends AbstractModedInventory {
         }
         
         if (page != 0) {
-            contents[45] = menu.getItemStack("backwards", placeholders);
+            ItemStack back = menu.getItemStack("backwards", placeholders);
+            back.setAmount(page);
+            contents[47] = back;
         }
         
         if (page != maxPage - 1) {
-            contents[53] = menu.getItemStack("forwards", placeholders);
+            ItemStack forward = menu.getItemStack("forwards", placeholders);
+            forward.setAmount(page + 2);
+            contents[51] = forward;
         }
         
         if(!(getInvMode() instanceof SearchMode)) {
@@ -79,7 +84,7 @@ public class HeadMenu extends AbstractModedInventory {
                 contents[index] = head.addTexture(menu.getItemStack(id, holders));
             }
         }
-        
+
         getInventory().setContents(contents);
     }
     
@@ -94,7 +99,7 @@ public class HeadMenu extends AbstractModedInventory {
     public void forwardsPage() {
         if (page < getMaxPage() - 1) {
             page++;
-            
+
             recreate();
         }
     }
@@ -120,11 +125,11 @@ public class HeadMenu extends AbstractModedInventory {
     }
     
     public boolean isBackwards(int slot) {
-        return page > 0 && slot == 45;
+        return page > 0 && slot == 47;
     }
     
     public boolean isForwards(int slot) {
-        return page < getMaxPage() - 1 && slot == 53;
+        return page < getMaxPage() - 1 && slot == 51;
     }
     
     public boolean isBackToMenu(int slot) {
