@@ -24,7 +24,7 @@ public class SearchMode extends BaseMode {
 	}
 
 	public String getHeadId(CacheHead head) {
-		if (!getPlayer().hasPermission("heads.category." + head.getCategory().toLowerCase().replace(' ', '_'))) {
+		if (!getPlayer().hasPermission("epicheads.category." + head.getCategory().toLowerCase().replace(' ', '_'))) {
 			return "head-no-perms";
 		} else {
 			return (head.hasCost() && EpicHeads.getInstance().getMainConfig().isEconomyEnabled() ? "head-cost" : "head");
@@ -35,7 +35,7 @@ public class SearchMode extends BaseMode {
 	public void onHeadSelect(InventoryClickEvent e, HeadMenu menu, CacheHead head) {
 		Player player = getPlayer();
 
-		if (!player.hasPermission("heads.category." + head.getCategory().toLowerCase().replace(' ', '_'))) {
+		if (!player.hasPermission("epicheads.category." + head.getCategory().toLowerCase().replace(' ', '_'))) {
 			player.sendMessage(EpicHeads.getInstance().getLocale().getMessage("interface.search.nopermission", head.getCategory()));
 			return;
 		}
