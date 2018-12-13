@@ -2,7 +2,7 @@ name: EpicHeads
 main: com.songoda.epicheads.EpicHeads
 description: Enhance your server with over 17,000 awesome unique heads with amazing features.
 author: Songoda
-version: 2.2.4
+version: 2.3.3
 api-version: 1.13
 softdepend: [Vault, PlayerPoints, BlockStore]
 loadbefore: [DeluxeMenus]
