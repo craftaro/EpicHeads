@@ -12,7 +12,7 @@ import sun.management.Sensor;
 public class CommandItemEco extends AbstractCommand {
 
     public CommandItemEco(AbstractCommand parent) {
-        super("reload", parent, true);
+        super("itemeco", parent, true);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class CommandItemEco extends AbstractCommand {
         giveTokens(player, amount);
 
         player.sendMessage(instance.getLocale().getMessage("command.itemeco.get", amount));
-        sender.sendMessage(instance.getLocale().getMessage("command.itemeco.given", amount));
+        sender.sendMessage(instance.getLocale().getMessage("command.itemeco.given", amount).replace("%player%",player.getDisplayName()));
         return ReturnType.SUCCESS;
     }
 
