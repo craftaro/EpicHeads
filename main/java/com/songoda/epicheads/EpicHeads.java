@@ -33,10 +33,16 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.function.Consumer;
 
 public class EpicHeads extends JavaPlugin implements Listener {
@@ -87,6 +93,8 @@ public class EpicHeads extends JavaPlugin implements Listener {
 		Locale.saveDefaultLocale("en_US");
 		this.locale = Locale.getLocale(getConfig().getString("Locale", "en_US"));
 
+		this.update();
+
 		this.references = new References();
 		this.menus = new Menus();
 		this.menus.reload();
@@ -121,6 +129,36 @@ public class EpicHeads extends JavaPlugin implements Listener {
 		this.locale.reloadMessages();
 		this.economy = hookEconomy();
 		this.tryHookBlockStore();
+	}
+
+	private void update() {
+		try {
+			URL url = new URL("http://update.songoda.com/index.php?plugin=" + getDescription().getName() + "&version=" + getDescription().getVersion());
+			URLConnection urlConnection = url.openConnection();
+			InputStream is = urlConnection.getInputStream();
+			InputStreamReader isr = new InputStreamReader(is);
+
+			int numCharsRead;
+			char[] charArray = new char[1024];
+			StringBuilder sb = new StringBuilder();
+			while ((numCharsRead = isr.read(charArray)) > 0) {
+				sb.append(charArray, 0, numCharsRead);
+			}
+			String jsonString = sb.toString();
+			JSONObject json = (JSONObject) new JSONParser().parse(jsonString);
+
+			JSONArray files = (JSONArray) json.get("neededFiles");
+			for (Object o : files) {
+				JSONObject file = (JSONObject) o;
+
+				if ("locale".equals(file.get("type"))) {
+					InputStream in = new URL((String) file.get("link")).openStream();
+					Locale.saveDefaultLocale(in, (String) file.get("name"));
+				}
+			}
+		} catch (Exception e) {
+			Bukkit.getLogger().warning("Failed to update.");
+		}
 	}
 
 	public File getCacheFile() {

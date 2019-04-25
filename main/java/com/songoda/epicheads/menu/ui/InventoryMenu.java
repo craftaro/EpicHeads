@@ -26,7 +26,9 @@ public class InventoryMenu implements InventoryHolder {
 
 	private Container container;
 	private Inventory inventory;
+	private String title;
 	private Inventory newInventory;
+	private String newTitle;
 
 	public InventoryMenu(Player player, String title, int rows) {
 		Checks.ensureNonNull(player, "player");
@@ -83,10 +85,11 @@ public class InventoryMenu implements InventoryHolder {
 	public void setTitle(String title) {
 		Checks.ensureNonNull(title, "title");
 
-		if (inventory != null && title.equals(inventory.getTitle()))
+		if (inventory != null && title.equals(this.title))
 			return;
 
 		title = (title.length() > 32 ? title.substring(0, 32) : title);
+		this.title = title;
 
 		this.newInventory = Bukkit.createInventory(this, bounds.getVolume(), title);
 	}
@@ -96,6 +99,7 @@ public class InventoryMenu implements InventoryHolder {
 			return false;
 
 		inventory = newInventory;
+		title = newTitle;
 		newInventory = null;
 
 		return true;
