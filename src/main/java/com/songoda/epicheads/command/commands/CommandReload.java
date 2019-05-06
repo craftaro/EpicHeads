@@ -2,21 +2,21 @@ package com.songoda.epicheads.command.commands;
 
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.command.AbstractCommand;
-import com.songoda.epicheads.gui.GUIOverview;
+import com.songoda.epicheads.utils.Methods;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class CommandEpicHeads extends AbstractCommand {
+public class CommandReload extends AbstractCommand {
 
-    public CommandEpicHeads() {
-        super(true, false, "EpicHeads");
+    public CommandReload(AbstractCommand parent) {
+        super(parent, false, "reload");
     }
 
     @Override
     protected ReturnType runCommand(EpicHeads instance, CommandSender sender, String... args) {
-        new GUIOverview(instance, (Player)sender);
+        instance.reload();
+        sender.sendMessage(Methods.formatText(instance.getReferences().getPrefix() + "&7Configuration and Language files reloaded."));
         return ReturnType.SUCCESS;
     }
 
@@ -27,16 +27,16 @@ public class CommandEpicHeads extends AbstractCommand {
 
     @Override
     public String getPermissionNode() {
-        return "epicheads.menu";
+        return "epicheads.admin";
     }
 
     @Override
     public String getSyntax() {
-        return "/epicheads";
+        return "/epicheads reload";
     }
 
     @Override
     public String getDescription() {
-        return "Displays heads overview.";
+        return "Reload the Configuration and Language files.";
     }
 }

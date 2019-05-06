@@ -18,6 +18,11 @@ public class EPlayer {
         this.uuid = uuid;
     }
 
+    public EPlayer(UUID uuid, List<Integer> favorites) {
+        this.uuid = uuid;
+        this.favorites = favorites;
+    }
+
     public UUID getUuid() {
         return uuid;
     }

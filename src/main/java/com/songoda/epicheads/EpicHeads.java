@@ -5,11 +5,16 @@ import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.head.HeadManager;
 import com.songoda.epicheads.head.Tag;
 import com.songoda.epicheads.listeners.ItemListeners;
+import com.songoda.epicheads.players.EPlayer;
 import com.songoda.epicheads.players.PlayerManager;
 import com.songoda.epicheads.utils.Methods;
+import com.songoda.epicheads.utils.Metrics;
 import com.songoda.epicheads.utils.ServerVersion;
 import com.songoda.epicheads.utils.SettingsManager;
 import com.songoda.epicheads.utils.gui.AbstractGUI;
+import com.songoda.epicheads.utils.storage.Storage;
+import com.songoda.epicheads.utils.storage.StorageRow;
+import com.songoda.epicheads.utils.storage.types.StorageYaml;
 import com.songoda.epicheads.utils.updateModules.LocaleModule;
 import com.songoda.update.Plugin;
 import com.songoda.update.SongodaUpdate;
@@ -26,6 +31,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Optional;
+import java.util.UUID;
 
 public class EpicHeads extends JavaPlugin {
     private static CommandSender console = Bukkit.getConsoleSender();
@@ -40,6 +46,7 @@ public class EpicHeads extends JavaPlugin {
     private CommandManager commandManager;
 
     private Locale locale;
+    private Storage storage;
 
     public static EpicHeads getInstance() {
         return INSTANCE;
@@ -68,6 +75,7 @@ public class EpicHeads extends JavaPlugin {
         SongodaUpdate.load(plugin);
 
         this.references = new References();
+        this.storage = new StorageYaml(this);
 
         // Setup Managers
         this.headManager = new HeadManager();
@@ -84,15 +92,49 @@ public class EpicHeads extends JavaPlugin {
         // Load Heads
         loadHeads();
 
+        // Load Favorites
+        Bukkit.getScheduler().runTaskLater(this, this::loadData, 10);
+
+        int timeout = SettingsManager.Setting.AUTOSAVE.getInt() * 60 * 20;
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::saveToFile, timeout, timeout);
+
+        // Start Metrics
+        new Metrics(this);
+
         console.sendMessage(Methods.formatText("&a============================="));
     }
 
     @Override
     public void onDisable() {
+        this.storage.closeConnection();
+        this.saveToFile();
         console.sendMessage(Methods.formatText("&a============================="));
         console.sendMessage(Methods.formatText("&7EpicHeads " + this.getDescription().getVersion() + " by &5Songoda <3!"));
         console.sendMessage(Methods.formatText("&7Action: &cDisabling&7..."));
         console.sendMessage(Methods.formatText("&a============================="));
+    }
+
+    private void saveToFile() {
+        storage.doSave();
+    }
+
+    private void loadData() {
+        // Adding in favorites.
+        if (storage.containsGroup("")) {
+            for (StorageRow row : storage.getRowsByGroup("players")) {
+                if (row.get("uuid").asObject() == null)
+                    continue;
+
+                EPlayer player = new EPlayer(
+                        UUID.fromString(row.get("uuid").asString()),
+                        row.get("favorites").asIntList());
+
+                this.playerManager.addPlayer(player);
+            }
+        }
+
+        // Save data initially so that if the person reloads again fast they don't lose all their data.
+        this.saveToFile();
     }
 
 
@@ -213,4 +255,7 @@ public class EpicHeads extends JavaPlugin {
         return commandManager;
     }
 
+    public SettingsManager getSettingsManager() {
+        return settingsManager;
+    }
 }

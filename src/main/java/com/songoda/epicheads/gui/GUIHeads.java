@@ -5,13 +5,17 @@ import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.head.Tag;
 import com.songoda.epicheads.players.EPlayer;
 import com.songoda.epicheads.utils.AbstractChatConfirm;
+import com.songoda.epicheads.utils.SettingsManager;
 import com.songoda.epicheads.utils.gui.AbstractGUI;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -45,17 +49,16 @@ public class GUIHeads extends AbstractGUI {
     }
 
     private void updateTitle() {
-
-
         int numHeads = this.heads.size();
         if (numHeads == 0) {
-            player.sendMessage("No heads found.");
+            player.sendMessage(plugin.getReferences().getPrefix() + plugin.getLocale().getMessage("general.search.nonefound"));
             return;
         }
         Tag tag = heads.get(0).getTag();
 
         this.maxPage = (int) Math.floor(numHeads / 45.0);
-        init((query != null ? "Query: " + query : tag.getName()) + " (" + numHeads + ") Page " + (page + 1) + "/" + (maxPage + 1), 54);
+        init((query != null ? plugin.getLocale().getMessage("general.word.query") + ": " + query : tag.getName())
+                + " (" + numHeads + ") " + plugin.getLocale().getMessage("general.word.page") + " " + (page + 1) + "/" + (maxPage + 1), 54);
         constructGUI();
     }
 
@@ -67,7 +70,7 @@ public class GUIHeads extends AbstractGUI {
                 .collect(Collectors.toList());
 
         if (page - 2 > 0) {
-            createButton(0, Material.ARROW, "Back");
+            createButton(0, Material.ARROW, "&c" + plugin.getLocale().getMessage("general.word.page") + " " + (page - 2));
             registerClickable(0, ((player1, inventory1, cursor, slot, type) -> {
                 page -= 3;
                 updateTitle();
@@ -76,7 +79,7 @@ public class GUIHeads extends AbstractGUI {
         }
 
         if (page - 1 > 0) {
-            createButton(1, Material.ARROW, "Back");
+            createButton(1, Material.ARROW, "&c" + plugin.getLocale().getMessage("general.word.page") + " " + (page - 1));
             registerClickable(1, ((player1, inventory1, cursor, slot, type) -> {
                 page -= 2;
                 updateTitle();
@@ -85,7 +88,7 @@ public class GUIHeads extends AbstractGUI {
         }
 
         if (page != 0) {
-            createButton(2, Material.ARROW, "Back");
+            createButton(2, Material.ARROW, "&c" + plugin.getLocale().getMessage("general.word.page") + " " + page);
             registerClickable(2, ((player1, inventory1, cursor, slot, type) -> {
                 page--;
                 updateTitle();
@@ -93,16 +96,16 @@ public class GUIHeads extends AbstractGUI {
             inventory.getItem(2).setAmount(page);
         }
 
-        createButton(3, Material.COMPASS, "Create Search");
+        createButton(3, Material.COMPASS, plugin.getLocale().getMessage("gui.heads.search"));
 
-        createButton(4, Material.MAP, "Back To Categories");
+        createButton(4, Material.MAP, plugin.getLocale().getMessage("gui.heads.categories"));
         inventory.getItem(4).setAmount(page + 1);
 
         if (heads.size() > 1)
-            createButton(5, Material.COMPASS, "Refine Search");
+            createButton(5, Material.COMPASS, plugin.getLocale().getMessage("gui.heads.refine"));
 
         if (page != maxPage) {
-            createButton(6, Material.ARROW, "Next");
+            createButton(6, Material.ARROW, "&c" + plugin.getLocale().getMessage("general.word.page") + " " + (page + 2));
             registerClickable(6, ((player1, inventory1, cursor, slot, type) -> {
                 page++;
                 updateTitle();
@@ -111,7 +114,7 @@ public class GUIHeads extends AbstractGUI {
         }
 
         if (page + 1 < maxPage) {
-            createButton(7, Material.ARROW, "Next");
+            createButton(7, Material.ARROW, "&c" + plugin.getLocale().getMessage("general.word.page") + " " + (page + 3));
             registerClickable(7, ((player1, inventory1, cursor, slot, type) -> {
                 page += 2;
                 updateTitle();
@@ -120,7 +123,7 @@ public class GUIHeads extends AbstractGUI {
         }
 
         if (page + 2 < maxPage) {
-            createButton(8, Material.ARROW, "Next");
+            createButton(8, Material.ARROW, "&c" + plugin.getLocale().getMessage("general.word.page") + " " + (page + 4));
             registerClickable(8, ((player1, inventory1, cursor, slot, type) -> {
                 page += 3;
                 updateTitle();
@@ -135,9 +138,14 @@ public class GUIHeads extends AbstractGUI {
 
             if (head.getName() == null) continue;
 
-            ItemStack item = head.asItemStack(favorites.contains(head.getId()));
+            boolean free = (!player.hasPermission("epicheads.freeheads") &&
+                    (SettingsManager.Setting.FREE_IN_CREATIVE.getBoolean() && player.getGameMode() == GameMode.CREATIVE));
+
+            ItemStack item = head.asItemStack(favorites.contains(head.getId()), free);
 
             inventory.setItem(i + 9, item);
+
+            double cost = SettingsManager.Setting.PRICE.getDouble();
 
             registerClickable(i + 9, ((player1, inventory1, cursor, slot, type) -> {
                 if (type == ClickType.SHIFT_LEFT || type == ClickType.SHIFT_RIGHT) {
@@ -153,6 +161,23 @@ public class GUIHeads extends AbstractGUI {
                 ItemMeta meta = item.getItemMeta();
                 meta.setLore(new ArrayList<>());
                 item.setItemMeta(meta);
+
+
+                if (!player.hasPermission("epicheads.bypasscost") && free) {
+                    if (plugin.getServer().getPluginManager().getPlugin("Vault") != null) {
+                        RegisteredServiceProvider<Economy> rsp = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+                        net.milkbowl.vault.economy.Economy econ = rsp.getProvider();
+                        if (econ.has(player, cost)) {
+                            econ.withdrawPlayer(player, cost);
+                        } else {
+                            player.sendMessage(plugin.getLocale().getMessage("event.buyhead.cannotafford"));
+                            return;
+                        }
+                    } else {
+                        player.sendMessage("Vault is not installed.");
+                        return;
+                    }
+                }
 
                 player.getInventory().addItem(item);
             }));
@@ -170,7 +195,7 @@ public class GUIHeads extends AbstractGUI {
         if (heads.size() > 1) {
             registerClickable(5, ((player1, inventory1, cursor, slot, type) -> {
 
-                player.sendMessage("Refine your search...");
+                player.sendMessage(plugin.getReferences().getPrefix() + plugin.getLocale().getMessage("general.search.refine"));
                 AbstractChatConfirm abstractChatConfirm = new AbstractChatConfirm(player, event -> {
                     this.page = 0;
                     this.heads = this.heads.stream().filter(head -> head.getName().toLowerCase()
@@ -191,7 +216,7 @@ public class GUIHeads extends AbstractGUI {
     }
 
     public static void doSearch(Player player) {
-        player.sendMessage("Enter your query...");
+        player.sendMessage(EpicHeads.getInstance().getReferences().getPrefix() + EpicHeads.getInstance().getLocale().getMessage("general.search.global"));
         new AbstractChatConfirm(player, event -> {
             List<Head> heads = EpicHeads.getInstance().getHeadManager().getHeads().stream()
                     .filter(head -> head.getName().toLowerCase().contains(event.getMessage().toLowerCase()))

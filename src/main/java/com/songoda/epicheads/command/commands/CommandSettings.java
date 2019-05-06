@@ -2,21 +2,21 @@ package com.songoda.epicheads.command.commands;
 
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.command.AbstractCommand;
-import com.songoda.epicheads.gui.GUIOverview;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class CommandEpicHeads extends AbstractCommand {
+public class CommandSettings extends AbstractCommand {
 
-    public CommandEpicHeads() {
-        super(true, false, "EpicHeads");
+    public CommandSettings(AbstractCommand parent) {
+        super(parent, true, "settings");
     }
 
     @Override
     protected ReturnType runCommand(EpicHeads instance, CommandSender sender, String... args) {
-        new GUIOverview(instance, (Player)sender);
+        Player player = (Player) sender;
+        instance.getSettingsManager().openSettingsManager(player);
         return ReturnType.SUCCESS;
     }
 
@@ -27,16 +27,16 @@ public class CommandEpicHeads extends AbstractCommand {
 
     @Override
     public String getPermissionNode() {
-        return "epicheads.menu";
+        return "epicheads.admin";
     }
 
     @Override
     public String getSyntax() {
-        return "/epicheads";
+        return "/ehe settings";
     }
 
     @Override
     public String getDescription() {
-        return "Displays heads overview.";
+        return "Edit EpicHeads Settings.";
     }
 }

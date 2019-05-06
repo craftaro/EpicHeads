@@ -1,3 +1,30 @@
 #General Messages
 
 general.nametag.prefix = "&7[&6EpicHeads&7]"
+general.word.page = "Page"
+general.word.query = "Query"
+general.word.favorites = "Favorites"
+
+general.search.global = "&6Enter your search query."
+general.search.refine = "&6Enter a search term to refine your search.")
+general.search.nonefound = "&cNo heads founds.."
+
+general.head.staffpicked = "&8Staff Favorite";
+general.head.id = "&8ID: &7%id%"
+general.head.cost = "&8Cost: &7$%cost%";
+
+gui.heads.refine = "&9Refine Search"
+gui.heads.search = "&9Create Search"
+gui.heads.categories = "&cBack To Categories"
+
+gui.overview.title = "EpicHeads (%count% heads)"
+gui.overview.search = "&a&lSearch"
+gui.overview.headname = "&c&l%name%"
+gui.overview.headlore = "&e%count% heads"
+gui.overview.viewfavorites = "&6&lView Favorites"
+gui.overview.favoriteslore = "&8Shift click any head|&8to save as a favorite."
+gui.overview.discord = "&9&lDiscord"
+gui.overview.discordlore = "&8Add or request new heads|&8in our discord server."
+
+event.general.nopermission = "&cYou do not have permission to use that command."
+event.buyhead.cannotafford = "&cYou cannot afford this head."

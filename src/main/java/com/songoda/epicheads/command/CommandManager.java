@@ -2,6 +2,9 @@ package com.songoda.epicheads.command;
 
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.command.commands.CommandEpicHeads;
+import com.songoda.epicheads.command.commands.CommandHelp;
+import com.songoda.epicheads.command.commands.CommandReload;
+import com.songoda.epicheads.command.commands.CommandSettings;
 import com.songoda.epicheads.utils.Methods;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,10 +29,10 @@ public class CommandManager implements CommandExecutor {
         instance.getCommand("EpicHeads").setExecutor(this);
 
         AbstractCommand commandEpicHeads = addCommand(new CommandEpicHeads());
-/*
+
         addCommand(new CommandSettings(commandEpicHeads));
         addCommand(new CommandHelp(commandEpicHeads));
-        addCommand(new CommandReload(commandEpicHeads)); */
+        addCommand(new CommandReload(commandEpicHeads));
 
         for (AbstractCommand abstractCommand : commands) {
             if (abstractCommand.getParent() != null) continue;

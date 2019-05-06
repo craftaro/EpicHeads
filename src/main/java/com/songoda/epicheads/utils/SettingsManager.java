@@ -170,6 +170,11 @@ public class SettingsManager implements Listener {
 
     public enum Setting {
 
+        AUTOSAVE("Main.Auto Save Interval In Seconds", 15),
+        DISCORD("Main.Show Discord Button", true),
+        PRICE("Main.Head Cost", 24.99),
+        FREE_IN_CREATIVE("Main.Heads Free In Creative Mode", false),
+
         GLASS_TYPE_1("Interfaces.Glass Type 1", 7),
         GLASS_TYPE_2("Interfaces.Glass Type 2", 11),
         GLASS_TYPE_3("Interfaces.Glass Type 3", 3),
@@ -202,5 +207,8 @@ public class SettingsManager implements Listener {
 
         public char getChar() { return EpicHeads.getInstance().getConfig().getString(setting).charAt(0); }
 
+        public double getDouble() {
+            return EpicHeads.getInstance().getConfig().getDouble(setting);
+        }
     }
 }

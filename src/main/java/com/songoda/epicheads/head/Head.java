@@ -1,7 +1,9 @@
 package com.songoda.epicheads.head;
 
 
+import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.utils.Methods;
+import com.songoda.epicheads.utils.SettingsManager;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -47,19 +49,24 @@ public class Head {
     }
 
     public ItemStack asItemStack() {
-        return asItemStack(false);
+        return asItemStack(false, false);
     }
 
-    public ItemStack asItemStack(boolean favorite) {
+    public ItemStack asItemStack(boolean favorite) { return asItemStack(favorite, false); }
+
+    public ItemStack asItemStack(boolean favorite, boolean includeCost) {
         ItemStack item = Methods.addTexture(new ItemStack(Material.PLAYER_HEAD, 1, (byte) 3),
                 this.URL);
 
+        double cost = SettingsManager.Setting.PRICE.getDouble();
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(Methods.formatText((favorite ? "&6⭐ " : "") + "&9" + name));
         List<String> lore = new ArrayList<>();
         if (this.staffPicked == 1)
-            lore.add(Methods.formatText("&8Staff Favorite"));
-        lore.add(Methods.formatText("&8ID: &7" + this.id));
+            lore.add(Methods.formatText(EpicHeads.getInstance().getLocale().getMessage("general.head.staffpicked")));
+        lore.add(Methods.formatText(EpicHeads.getInstance().getLocale().getMessage("general.head.id", this.id)));
+        if (includeCost)
+            lore.add(EpicHeads.getInstance().getLocale().getMessage("general.head.cost", cost));
 
         meta.setLore(lore);
         item.setItemMeta(meta);
