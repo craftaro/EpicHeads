@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GUIOverview extends AbstractGUI {
     
@@ -63,16 +64,12 @@ public class GUIOverview extends AbstractGUI {
 
             Tag tag = plugin.getHeadManager().getTags().get(i);
 
-            player.sendMessage("epicheads.category." + tag.getName());
-
             if (!player.hasPermission("epicheads.category." + tag.getName())) continue;
-
-            TagInfo tagInfo = TagInfo.valueOf(tag.getName().toUpperCase());
 
             createButton(i + 10 + add, Methods.addTexture(new ItemStack(plugin.isServerVersionAtLeast(ServerVersion.V1_13)
                             ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3),
-                    tagInfo.getUrl()),
-                    plugin.getLocale().getMessage("gui.overview.headname", tagInfo.getName()),
+                    plugin.getHeadManager().getHeadsByTag(tag).get(0).getURL()),
+                    plugin.getLocale().getMessage("gui.overview.headname", Color.getRandomColor() + tag.getName()),
                     plugin.getLocale().getMessage("gui.overview.headlore", tag.getCount()));
 
             registerClickable(i + 10 + add, ((player1, inventory1, cursor, slot, type) ->
@@ -120,31 +117,28 @@ public class GUIOverview extends AbstractGUI {
 
     }
 
-    public enum TagInfo {
-        ALPHABET("&9&lAlphabet", "9c60da2944a177dd08268fbec04e40812d1d929650be66529b1ee5e1e7eca"),
-        HUMANS("&a&lHumans", "b7c224f0453e745c85966025e7767d592feea3ad4c69d2366d94d5e8c9a8c2ce"),
-        FOOD("&b&lFood", "f7b9f08ada4e8ba586a04ed2e9e25fe8b9d568a665243f9c603799a7c896736"),
-        MISC("&8&lMisc", "f5612dc7b86d71afc1197301c15fd979e9f39e7b1f41d8f1ebdf8115576e2e"),
-        ANIMALS("&d&lAnimals", "d8cdd4f285632c25d762ece25f4193b966c2641b15d9bdbc0a113023de76ab"),
-        GAMES("&b&lGames", "dba8d8e53d8a5a75770b62cce73db6bab701cc3de4a9b654d213d54af9615"),
-        MONSTERS("&c&lMonsters", "68d2183640218ab330ac56d2aab7e29a9790a545f691619e38578ea4a69ae0b6"),
-        INTERIOR("&6&lInterior", "ec6d9024fc5412e8e2664123732d2291dfc6bb175f72cf894096f7f313641fd4"),
-        BLOCKS("&9&lBlocks", "7788f5ddaf52c5842287b9427a74dac8f0919eb2fdb1b51365ab25eb392c47");
+    public enum Color {
+        C9("&9&l"),
+        CA("&a&l"),
+        CB("&b&l"),
+        C8("&8&l"),
+        CD("&d&l"),
+        CC("&c&l"),
+        C6("&6&l");
 
-        String name;
-        String url;
+        String color;
 
-        TagInfo(String name, String url) {
-            this.name = name;
-            this.url = url;
+        Color(String color) {
+            this.color = color;
         }
 
-        public String getName() {
-            return name;
+        public String getColor() {
+            return color;
         }
 
-        public String getUrl() {
-            return url;
+        public static String getRandomColor() {
+            Random random = new Random();
+            return values()[random.nextInt(values().length)].getColor();
         }
     }
 

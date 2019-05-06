@@ -22,16 +22,16 @@ public class HeadManager {
     }
 
     public Head getHead(String name) {
-        return registeredHeads.stream().filter(head -> head.getName().equals(name)).findFirst().orElse(null);
+        return getHeads().stream().filter(head -> head.getName().equals(name)).findFirst().orElse(null);
     }
 
     public List<Head> getHeadsByQuery(String query) {
-        List<Head> result = registeredHeads.stream().filter(head -> head.getName().contains(query)).collect(Collectors.toList());
+        List<Head> result = getHeads().stream().filter(head -> head.getName().contains(query)).collect(Collectors.toList());
 
         if (result.isEmpty()) {
             for (Tag tag : registeredTags) {
                 if (!tag.getName().equalsIgnoreCase(query)) continue;
-                return registeredHeads.stream().filter(head -> head.getTag() == tag).collect(Collectors.toList());
+                return getHeads().stream().filter(head -> head.getTag() == tag).collect(Collectors.toList());
 
             }
         }
@@ -39,11 +39,14 @@ public class HeadManager {
     }
 
     public List<Head> getHeadsByTag(Tag tag) {
-        return registeredHeads.stream().filter(head -> head.getTag() == tag).collect(Collectors.toList());
+        return getHeads().stream().filter(head -> head.getTag() == tag).collect(Collectors.toList());
     }
 
-    public Set<Head> getHeads() {
-        return Collections.unmodifiableSet(registeredHeads);
+    public List<Head> getHeads() {
+        return Collections.unmodifiableList(registeredHeads.stream()
+                .sorted(Comparator.comparing(Head::getName))
+                .sorted(Comparator.comparingInt(head -> (head.getStaffPicked() == 1 ? 0 : 1)))
+                .collect(Collectors.toList()));
     }
 
     public Tag addTag(Tag tag) {

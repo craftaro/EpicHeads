@@ -40,8 +40,6 @@ public class GUIHeads extends AbstractGUI {
 
         List<Integer> favorites = plugin.getPlayerManager().getPlayer(player).getFavorites();
         this.heads = heads.stream()
-                .sorted(Comparator.comparing(Head::getName))
-                .sorted(Comparator.comparingInt(head -> (head.getStaffPicked() == 1 ? 0 : 1)))
                 .sorted(Comparator.comparingInt(head -> (favorites.contains(head.getId()) ? 0 : 1)))
                 .collect(Collectors.toList());
 
