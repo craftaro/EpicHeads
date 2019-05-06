@@ -1,0 +1,13 @@
+name: EpicHeads
+description: EpicHeads
+main: com.songoda.epicheads.EpicHeads
+version: maven-version-number
+author: Songoda
+softdepend: [Vault]
+api-version: 1.13
+commands:
+  EpicHeads:
+    description: View information on this plugin.
+    default: true
+    aliases: [ehe, heads]
+    usage: /epicheads

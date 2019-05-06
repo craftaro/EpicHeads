@@ -1,6 +1,7 @@
 /bin/
 /.settings/
+/target/
 *.project
 *.classpath
 .idea
-target
+EpicHeads.iml
