@@ -3,10 +3,11 @@ package com.songoda.epicheads.listeners;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.utils.Methods;
+import com.songoda.epicheads.utils.ServerVersion;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -23,11 +24,12 @@ public class ItemListeners implements Listener {
     }
 
     @EventHandler
-    public void itemPickupEvent(EntityPickupItemEvent event) {
+    public void itemPickupEvent(PlayerPickupItemEvent event) {
 
         ItemStack item = event.getItem().getItemStack();
 
-        if (item.getType() != Material.PLAYER_HEAD || event.getItem().hasMetadata("EHE")) return;
+        if (item.getType() != (plugin.isServerVersionAtLeast(ServerVersion.V1_13) ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"))
+                || event.getItem().hasMetadata("EHE")) return;
 
         event.getItem().removeMetadata("EHE", plugin);
 
@@ -48,7 +50,7 @@ public class ItemListeners implements Listener {
             meta.setLore(new ArrayList<>());
             itemNew.setItemMeta(meta);
 
-            event.getItem().getWorld().dropItemNaturally(event.getEntity().getLocation().add(1, 1, 0), itemNew.clone());
+            event.getItem().getWorld().dropItemNaturally(event.getPlayer().getLocation().add(1, 1, 0), itemNew.clone());
 
             event.getItem().setItemStack(itemNew);
         }

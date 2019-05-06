@@ -3,6 +3,7 @@ package com.songoda.epicheads.gui;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Tag;
 import com.songoda.epicheads.utils.Methods;
+import com.songoda.epicheads.utils.ServerVersion;
 import com.songoda.epicheads.utils.SettingsManager;
 import com.songoda.epicheads.utils.gui.AbstractGUI;
 import org.bukkit.Material;
@@ -66,7 +67,8 @@ public class GUIOverview extends AbstractGUI {
 
             TagInfo tagInfo = TagInfo.valueOf(tag.getName().toUpperCase());
 
-            createButton(i + 10 + add, Methods.addTexture(new ItemStack(Material.PLAYER_HEAD, 1, (byte) 3),
+            createButton(i + 10 + add, Methods.addTexture(new ItemStack(plugin.isServerVersionAtLeast(ServerVersion.V1_13)
+                            ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3),
                     tagInfo.getUrl()),
                     plugin.getLocale().getMessage("gui.overview.headname", tagInfo.getName()),
                     plugin.getLocale().getMessage("gui.overview.headlore", tag.getCount()));
@@ -85,7 +87,8 @@ public class GUIOverview extends AbstractGUI {
             for (String line : parts2)
                 lore2.add(Methods.formatText(line));
 
-            createButton(41, Methods.addTexture(new ItemStack(Material.PLAYER_HEAD, 1, (byte) 3),
+            createButton(41, Methods.addTexture(new ItemStack(plugin.isServerVersionAtLeast(ServerVersion.V1_13)
+                            ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3),
                     "a3b183b148b9b4e2b158334aff3b5bb6c2c2dbbc4d67f76a7be856687a2b623"),
                     plugin.getLocale().getMessage("gui.overview.discord"),
                     lore2);
