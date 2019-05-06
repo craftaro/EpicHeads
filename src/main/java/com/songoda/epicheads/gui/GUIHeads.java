@@ -138,8 +138,8 @@ public class GUIHeads extends AbstractGUI {
 
             if (head.getName() == null) continue;
 
-            boolean free = (!player.hasPermission("epicheads.freeheads") &&
-                    (SettingsManager.Setting.FREE_IN_CREATIVE.getBoolean() && player.getGameMode() == GameMode.CREATIVE));
+            boolean free = player.hasPermission("epicheads.bypasscost")
+                    || (SettingsManager.Setting.FREE_IN_CREATIVE.getBoolean() && player.getGameMode() == GameMode.CREATIVE);
 
             ItemStack item = head.asItemStack(favorites.contains(head.getId()), free);
 
@@ -163,7 +163,7 @@ public class GUIHeads extends AbstractGUI {
                 item.setItemMeta(meta);
 
 
-                if (!player.hasPermission("epicheads.bypasscost") && free) {
+                if (!free) {
                     if (plugin.getServer().getPluginManager().getPlugin("Vault") != null) {
                         RegisteredServiceProvider<Economy> rsp = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
                         net.milkbowl.vault.economy.Economy econ = rsp.getProvider();

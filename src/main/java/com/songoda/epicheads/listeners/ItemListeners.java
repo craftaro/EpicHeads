@@ -50,8 +50,6 @@ public class ItemListeners implements Listener {
             meta.setLore(new ArrayList<>());
             itemNew.setItemMeta(meta);
 
-            event.getItem().getWorld().dropItemNaturally(event.getPlayer().getLocation().add(1, 1, 0), itemNew.clone());
-
             event.getItem().setItemStack(itemNew);
         }
     }

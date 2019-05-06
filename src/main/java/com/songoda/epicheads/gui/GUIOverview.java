@@ -63,7 +63,9 @@ public class GUIOverview extends AbstractGUI {
 
             Tag tag = plugin.getHeadManager().getTags().get(i);
 
-            if (!player.hasPermission("epicheads.category." + tag.getName())) return;
+            player.sendMessage("epicheads.category." + tag.getName());
+
+            if (!player.hasPermission("epicheads.category." + tag.getName())) continue;
 
             TagInfo tagInfo = TagInfo.valueOf(tag.getName().toUpperCase());
 
@@ -77,7 +79,7 @@ public class GUIOverview extends AbstractGUI {
                     new GUIHeads(plugin, player, null, plugin.getHeadManager().getHeadsByTag(tag))));
         }
 
-        createButton(39, Material.COMPASS, plugin.getLocale().getMessage("gui.overview.search"));
+        createButton(SettingsManager.Setting.DISCORD.getBoolean() ? 39 : 40, Material.COMPASS, plugin.getLocale().getMessage("gui.overview.search"));
 
 
         if (SettingsManager.Setting.DISCORD.getBoolean()) {
@@ -102,13 +104,15 @@ public class GUIOverview extends AbstractGUI {
                 new GUIHeads(plugin, player, plugin.getLocale().getMessage("general.word.favorites"),
                         plugin.getPlayerManager().getPlayer(player).getFavoritesAsHeads())));
 
-        registerClickable(39, ((player1, inventory1, cursor, slot, type) ->
+        registerClickable(SettingsManager.Setting.DISCORD.getBoolean() ? 39 : 40, ((player1, inventory1, cursor, slot, type) ->
                 GUIHeads.doSearch(player1)));
 
-        registerClickable(41, ((player1, inventory1, cursor, slot, type) -> {
-            player.sendMessage(Methods.formatText(plugin.getReferences().getPrefix() + "&9https://discord.gg/A9TRJQb"));
-            player.closeInventory();
-        }));
+        if (SettingsManager.Setting.DISCORD.getBoolean()) {
+            registerClickable(41, ((player1, inventory1, cursor, slot, type) -> {
+                player.sendMessage(Methods.formatText(plugin.getReferences().getPrefix() + "&9https://discord.gg/A9TRJQb"));
+                player.closeInventory();
+            }));
+        }
     }
 
     @Override

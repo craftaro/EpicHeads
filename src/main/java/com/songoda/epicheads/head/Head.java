@@ -55,7 +55,7 @@ public class Head {
 
     public ItemStack asItemStack(boolean favorite) { return asItemStack(favorite, false); }
 
-    public ItemStack asItemStack(boolean favorite, boolean includeCost) {
+    public ItemStack asItemStack(boolean favorite, boolean free) {
         EpicHeads plugin = EpicHeads.getInstance();
         ItemStack item = Methods.addTexture(new ItemStack(plugin.isServerVersionAtLeast(ServerVersion.V1_13)
                         ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3), this.URL);
@@ -67,7 +67,7 @@ public class Head {
         if (this.staffPicked == 1)
             lore.add(Methods.formatText(plugin.getLocale().getMessage("general.head.staffpicked")));
         lore.add(Methods.formatText(plugin.getLocale().getMessage("general.head.id", this.id)));
-        if (includeCost)
+        if (!free)
             lore.add(plugin.getLocale().getMessage("general.head.cost", cost));
 
         meta.setLore(lore);
