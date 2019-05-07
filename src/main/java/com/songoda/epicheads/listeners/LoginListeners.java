@@ -5,14 +5,10 @@ import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.head.HeadManager;
 import com.songoda.epicheads.head.Tag;
 import com.songoda.epicheads.utils.Methods;
-import com.songoda.epicheads.utils.ServerVersion;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Optional;
 
@@ -28,15 +24,9 @@ public class LoginListeners implements Listener {
     public void loginEvent(PlayerLoginEvent event) {
         HeadManager headManager = plugin.getHeadManager();
 
-        ItemStack item = new ItemStack(plugin.isServerVersionAtLeast(ServerVersion.V1_13)
-                ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3);
-
         Player player = event.getPlayer();
-        SkullMeta meta = (SkullMeta) item.getItemMeta();
-        meta.setOwningPlayer(player);
-        item.setItemMeta(meta);
 
-        String encodededStr = Methods.getEncodedTexture(item);
+        String encodededStr = Methods.getEncodedTexture(player);
         String url = Methods.getDecodedTexture(encodededStr);
 
 
