@@ -64,7 +64,7 @@ public class GUIOverview extends AbstractGUI {
 
             Tag tag = plugin.getHeadManager().getTags().get(i);
 
-            if (!player.hasPermission("epicheads.category." + tag.getName())) continue;
+            if (!player.hasPermission("epicheads.category." + tag.getName().replace(" ", "_"))) continue;
 
             createButton(i + 10 + add, Methods.addTexture(new ItemStack(plugin.isServerVersionAtLeast(ServerVersion.V1_13)
                             ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3),

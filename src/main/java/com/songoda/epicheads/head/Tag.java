@@ -1,13 +1,13 @@
 package com.songoda.epicheads.head;
 
+import com.songoda.epicheads.EpicHeads;
+
 public class Tag {
 
     private final String name;
-    private int count;
 
-    public Tag(String name, int count) {
+    public Tag(String name) {
         this.name = name;
-        this.count = count;
     }
 
     public String getName() {
@@ -15,10 +15,7 @@ public class Tag {
     }
 
     public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
+        return Math.toIntExact(EpicHeads.getInstance().getHeadManager()
+                .getHeads().stream().filter(head -> head.getTag() == this).count());
     }
 }

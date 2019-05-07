@@ -1,6 +1,7 @@
 package com.songoda.epicheads.utils.storage;
 
 import com.songoda.epicheads.EpicHeads;
+import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.players.EPlayer;
 import com.songoda.epicheads.utils.ConfigWrapper;
 
@@ -30,6 +31,13 @@ public abstract class Storage {
         for (EPlayer player : instance.getPlayerManager().getPlayers()) {
             prepareSaveItem("players", new StorageItem("uuid", player.getUuid().toString()),
                     new StorageItem("favorites", player.getFavorites()));
+        }
+
+        for (Head head : instance.getHeadManager().getLocalHeads()) {
+            prepareSaveItem("local", new StorageItem("url", head.getURL()),
+                    new StorageItem("name", head.getName()),
+                    new StorageItem("id", head.getId()),
+                    new StorageItem("category", head.getTag().getName()));
         }
     }
 
