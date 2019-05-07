@@ -36,7 +36,9 @@ public class LoginListeners implements Listener {
         meta.setOwningPlayer(player);
         item.setItemMeta(meta);
 
-        String url = Methods.getDecodedTexture(item);
+        String encodededStr = Methods.getEncodedTexture(item);
+        String url = Methods.getDecodedTexture(encodededStr);
+
 
         String tagStr = "Player Heads";
 

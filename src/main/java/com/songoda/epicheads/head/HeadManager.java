@@ -72,6 +72,10 @@ public class HeadManager {
         return Collections.unmodifiableList(localRegisteredHeads);
     }
 
+    public List<Head> getGlobalHeads() {
+        return new ArrayList<>(registeredHeads);
+    }
+
     public void removeLocalHead(Head head) {
         localRegisteredHeads.remove(head);
     }

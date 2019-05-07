@@ -36,7 +36,7 @@ public class Methods {
         return item;
     }
 
-    public static String getDecodedTexture(ItemStack item) {
+    public static String getEncodedTexture(ItemStack item) {
         try {
             SkullMeta localSkullMeta = (SkullMeta) item.getItemMeta();
             Field localField = localSkullMeta.getClass().getDeclaredField("profile");
@@ -45,13 +45,16 @@ public class Methods {
             Iterator localIterator = localGameProfile.getProperties().get("textures").iterator();
             if (localIterator.hasNext()) {
                 Property localProperty = (Property) localIterator.next();
-                byte[] decoded = Base64.getDecoder().decode(localProperty.getValue());
-                return StringUtils.substringBetween(new String(decoded), "texture/", "\"");
+                return localProperty.getValue();
             }
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String getDecodedTexture(String decoded) {
+        return StringUtils.substringBetween(new String(Base64.getDecoder().decode(decoded)), "texture/", "\"");
     }
 
     public static ItemStack getGlass() {

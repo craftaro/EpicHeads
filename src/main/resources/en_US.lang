@@ -28,3 +28,8 @@ gui.overview.discordlore = "&8Add or request new heads|&8in our discord server."
 
 event.general.nopermission = "&cYou do not have permission to use that command."
 event.buyhead.cannotafford = "&cYou cannot afford this head."
+
+command.give.notonline = "&cThe player &4%name% &ccould not be found."
+command.give.notfound = "&cThe head &4%name%&c could not be found."
+command.give.success = "&7You have been given &6%player% &7a head named &6%name%&7."
+command.give.receive = "&7You have been given a head named &6%name%&7."
