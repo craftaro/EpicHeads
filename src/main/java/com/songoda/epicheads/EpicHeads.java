@@ -5,6 +5,7 @@ import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.head.HeadManager;
 import com.songoda.epicheads.head.Tag;
 import com.songoda.epicheads.listeners.ItemListeners;
+import com.songoda.epicheads.listeners.LoginListeners;
 import com.songoda.epicheads.players.EPlayer;
 import com.songoda.epicheads.players.PlayerManager;
 import com.songoda.epicheads.utils.Methods;
@@ -85,6 +86,7 @@ public class EpicHeads extends JavaPlugin {
         // Register Listeners
         AbstractGUI.initializeListeners(this);
         Bukkit.getPluginManager().registerEvents(new ItemListeners(this), this);
+        Bukkit.getPluginManager().registerEvents(new LoginListeners(this), this);
 
         // Download Heads
         downloadHeads();
@@ -93,7 +95,7 @@ public class EpicHeads extends JavaPlugin {
         loadHeads();
 
         // Load Favorites
-        Bukkit.getScheduler().runTaskLater(this, this::loadData, 10);
+        loadData();
 
         int timeout = SettingsManager.Setting.AUTOSAVE.getInt() * 60 * 20;
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::saveToFile, timeout, timeout);
@@ -156,6 +158,8 @@ public class EpicHeads extends JavaPlugin {
 
     private boolean loadHeads() {
         try {
+            this.headManager.clear();
+
             JSONParser parser = new JSONParser();
             JSONArray jsonArray = (JSONArray) parser.parse(new FileReader(getDataFolder() + "/heads.json"));
 
@@ -165,7 +169,7 @@ public class EpicHeads extends JavaPlugin {
                 String tags = (String) jsonObject.get("tags");
                 Optional<Tag> tagOptional = headManager.getTags().stream().filter(t -> t.getName().equalsIgnoreCase(tags)).findFirst();
 
-                Tag tag = tagOptional.orElseGet(() -> new Tag(tags, -1));
+                Tag tag = tagOptional.orElseGet(() -> new Tag(tags));
 
                 Head head = new Head(Integer.parseInt((String) jsonObject.get("id")),
                         (String) jsonObject.get("name"),
@@ -181,8 +185,25 @@ public class EpicHeads extends JavaPlugin {
                 headManager.addHead(head);
             }
 
-            for (Tag tag : headManager.getTags()) {
-                tag.setCount(Math.toIntExact(headManager.getHeads().stream().filter(head -> head.getTag() == tag).count()));
+            if (storage.containsGroup("local")) {
+                for (StorageRow row : storage.getRowsByGroup("local")) {
+                    String tagStr = row.get("category").asString();
+
+                    Optional<Tag> tagOptional = headManager.getTags().stream()
+                            .filter(t -> t.getName().equalsIgnoreCase(tagStr)).findFirst();
+
+                    Tag tag = tagOptional.orElseGet(() -> new Tag(tagStr));
+
+                    Head head = new Head(row.get("id").asInt(),
+                            row.get("name").asString(),
+                            row.get("url").asString(),
+                            tag,
+                            (byte) 0);
+
+                    if (!tagOptional.isPresent())
+                        headManager.addTag(tag);
+                    headManager.addLocalHead(head);
+                }
             }
 
             System.out.println("loaded " + headManager.getHeads().size() + " Heads.");
@@ -229,10 +250,14 @@ public class EpicHeads extends JavaPlugin {
     }
 
     public void reload() {
+        saveToFile();
         locale.reloadMessages();
         references = new References();
         this.setupConfig();
         saveConfig();
+        saveToFile();
+        downloadHeads();
+        loadHeads();
     }
 
     public Locale getLocale() {
