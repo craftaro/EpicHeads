@@ -4,21 +4,29 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.songoda.epicheads.EpicHeads;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Base64;
-import java.util.Iterator;
 import java.util.UUID;
 
 public class Methods {
 
+    private static Class<?> clazzCraftPlayer;
+    private static Method methodGetProfile;
+
     public static ItemStack addTexture(ItemStack item, String headURL) {
         SkullMeta meta = (SkullMeta) item.getItemMeta();
+
+        if (headURL == null) return item;
 
         GameProfile profile = new GameProfile(UUID.nameUUIDFromBytes(headURL.getBytes()), null);
         byte[] encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"http://textures.minecraft.net/texture/%s\"}}}", new Object[]{headURL}).getBytes());
@@ -41,20 +49,36 @@ public class Methods {
             SkullMeta localSkullMeta = (SkullMeta) item.getItemMeta();
             Field localField = localSkullMeta.getClass().getDeclaredField("profile");
             localField.setAccessible(true);
-            GameProfile localGameProfile = (GameProfile) localField.get(localSkullMeta);
-            Iterator localIterator = localGameProfile.getProperties().get("textures").iterator();
-            if (localIterator.hasNext()) {
-                Property localProperty = (Property) localIterator.next();
-                return localProperty.getValue();
-            }
+            GameProfile profile = (GameProfile) localField.get(localSkullMeta);
+            Property property = profile.getProperties().get("textures").iterator().next();
+            return property.getValue();
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static String getDecodedTexture(String decoded) {
-        return StringUtils.substringBetween(new String(Base64.getDecoder().decode(decoded)), "texture/", "\"");
+    public static String getEncodedTexture(Player player) {
+        try {
+            if (clazzCraftPlayer == null) {
+                String ver = Bukkit.getServer().getClass().getPackage().getName().substring(23);
+                clazzCraftPlayer = Class.forName("org.bukkit.craftbukkit." + ver + ".entity.CraftPlayer");
+                methodGetProfile = clazzCraftPlayer.getMethod("getProfile");
+            }
+            Object craftPlayer = clazzCraftPlayer.cast(player);
+            Property property = ((GameProfile) methodGetProfile.invoke(craftPlayer)).getProperties().get("textures").iterator().next();
+            return property.getValue();
+        } catch (ClassNotFoundException
+                | NoSuchMethodException
+                | IllegalAccessException
+                | InvocationTargetException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String getDecodedTexture(String encoded) {
+        return StringUtils.substringBetween(new String(Base64.getDecoder().decode(encoded)), "texture/", "\"");
     }
 
     public static ItemStack getGlass() {
