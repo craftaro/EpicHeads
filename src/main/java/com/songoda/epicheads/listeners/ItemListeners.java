@@ -33,7 +33,8 @@ public class ItemListeners implements Listener {
 
         event.getItem().removeMetadata("EHE", plugin);
 
-        String url = Methods.getDecodedTexture(item);
+        String encodededStr = Methods.getEncodedTexture(item);
+        String url = Methods.getDecodedTexture(encodededStr);
 
         if (url == null) return;
         Optional<Head> optional = plugin.getHeadManager().getHeads().stream()
