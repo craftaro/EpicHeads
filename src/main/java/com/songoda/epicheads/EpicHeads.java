@@ -1,9 +1,9 @@
 package com.songoda.epicheads;
 
 import com.songoda.epicheads.command.CommandManager;
+import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.head.HeadManager;
-import com.songoda.epicheads.head.Tag;
 import com.songoda.epicheads.listeners.ItemListeners;
 import com.songoda.epicheads.listeners.LoginListeners;
 import com.songoda.epicheads.players.EPlayer;
@@ -159,6 +159,7 @@ public class EpicHeads extends JavaPlugin {
     private boolean loadHeads() {
         try {
             this.headManager.clear();
+            this.headManager.addCategory(new Category("Latest Pack", true));
 
             JSONParser parser = new JSONParser();
             JSONArray jsonArray = (JSONArray) parser.parse(new FileReader(getDataFolder() + "/heads.json"));
@@ -166,22 +167,23 @@ public class EpicHeads extends JavaPlugin {
             for (Object o : jsonArray) {
                 JSONObject jsonObject = (JSONObject) o;
 
-                String tags = (String) jsonObject.get("tags");
-                Optional<Tag> tagOptional = headManager.getTags().stream().filter(t -> t.getName().equalsIgnoreCase(tags)).findFirst();
+                String categoryStr = (String) jsonObject.get("tags");
+                Optional<Category> tagOptional = headManager.getTags().stream().filter(t -> t.getName().equalsIgnoreCase(categoryStr)).findFirst();
 
-                Tag tag = tagOptional.orElseGet(() -> new Tag(tags));
+                Category category = tagOptional.orElseGet(() -> new Category(categoryStr));
 
                 Head head = new Head(Integer.parseInt((String) jsonObject.get("id")),
                         (String) jsonObject.get("name"),
                         (String) jsonObject.get("url"),
-                        tag,
+                        category,
+                        (String) jsonObject.get("pack"),
                         Byte.parseByte((String) jsonObject.get("staff_picked")));
 
-                if (head.getName() == null ||
-                        head.getName().equals("null")) continue;
+                if (head.getName() == null || head.getName().equals("null")
+                        || head.getPack() != null && head.getPack().equals("null")) continue;
 
                 if (!tagOptional.isPresent())
-                    headManager.addTag(tag);
+                    headManager.addCategory(category);
                 headManager.addHead(head);
             }
 
@@ -189,19 +191,20 @@ public class EpicHeads extends JavaPlugin {
                 for (StorageRow row : storage.getRowsByGroup("local")) {
                     String tagStr = row.get("category").asString();
 
-                    Optional<Tag> tagOptional = headManager.getTags().stream()
+                    Optional<Category> tagOptional = headManager.getTags().stream()
                             .filter(t -> t.getName().equalsIgnoreCase(tagStr)).findFirst();
 
-                    Tag tag = tagOptional.orElseGet(() -> new Tag(tagStr));
+                    Category category = tagOptional.orElseGet(() -> new Category(tagStr));
 
                     Head head = new Head(row.get("id").asInt(),
                             row.get("name").asString(),
                             row.get("url").asString(),
-                            tag,
+                            category,
+                            null,
                             (byte) 0);
 
                     if (!tagOptional.isPresent())
-                        headManager.addTag(tag);
+                        headManager.addCategory(category);
                     headManager.addLocalHead(head);
                 }
             }

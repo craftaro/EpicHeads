@@ -2,7 +2,7 @@ package com.songoda.epicheads.gui;
 
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Head;
-import com.songoda.epicheads.head.Tag;
+import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.players.EPlayer;
 import com.songoda.epicheads.utils.AbstractChatConfirm;
 import com.songoda.epicheads.utils.SettingsManager;
@@ -52,10 +52,10 @@ public class GUIHeads extends AbstractGUI {
             player.sendMessage(plugin.getReferences().getPrefix() + plugin.getLocale().getMessage("general.search.nonefound"));
             return;
         }
-        Tag tag = heads.get(0).getTag();
+        Category category = heads.get(0).getCategory();
 
         this.maxPage = (int) Math.floor(numHeads / 45.0);
-        init((query != null ? plugin.getLocale().getMessage("general.word.query") + ": " + query : tag.getName())
+        init((query != null ? plugin.getLocale().getMessage("general.word.query") + ": " + query : category.getName())
                 + " (" + numHeads + ") " + plugin.getLocale().getMessage("general.word.page") + " " + (page + 1) + "/" + (maxPage + 1), 54);
         constructGUI();
     }

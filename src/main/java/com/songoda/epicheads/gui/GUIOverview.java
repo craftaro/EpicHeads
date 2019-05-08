@@ -1,7 +1,8 @@
 package com.songoda.epicheads.gui;
 
 import com.songoda.epicheads.EpicHeads;
-import com.songoda.epicheads.head.Tag;
+import com.songoda.epicheads.head.Category;
+import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.utils.Methods;
 import com.songoda.epicheads.utils.ServerVersion;
 import com.songoda.epicheads.utils.SettingsManager;
@@ -57,23 +58,27 @@ public class GUIOverview extends AbstractGUI {
         inventory.setItem(38, Methods.getBackgroundGlass(false));
         inventory.setItem(42, Methods.getBackgroundGlass(false));
 
-        List<Tag> tags = plugin.getHeadManager().getTags();
+        List<Category> tags = plugin.getHeadManager().getTags();
         int add = 0;
         for (int i = 0; i < tags.size(); i++) {
             if (i + add == 7 || i + add == 16) add = add + 2;
 
-            Tag tag = plugin.getHeadManager().getTags().get(i);
+            Category category = plugin.getHeadManager().getTags().get(i);
 
-            if (!player.hasPermission("epicheads.category." + tag.getName().replace(" ", "_"))) continue;
+            List<Head> heads = category.isLatestPack() ? plugin.getHeadManager().getLatestPack() : plugin.getHeadManager().getHeadsByTag(category);
+
+            Head firstHead = heads.get(0);
+
+            if (!player.hasPermission("epicheads.category." + category.getName().replace(" ", "_"))) continue;
 
             createButton(i + 10 + add, Methods.addTexture(new ItemStack(plugin.isServerVersionAtLeast(ServerVersion.V1_13)
                             ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3),
-                    plugin.getHeadManager().getHeadsByTag(tag).get(0).getURL()),
-                    plugin.getLocale().getMessage("gui.overview.headname", Color.getRandomColor() + tag.getName()),
-                    plugin.getLocale().getMessage("gui.overview.headlore", String.format("%,d", tag.getCount())));
+                    firstHead.getURL()),
+                    plugin.getLocale().getMessage("gui.overview.headname", Color.getRandomColor() + category.getName()),
+                    category.isLatestPack() ? plugin.getLocale().getMessage("gui.overview.packlore", firstHead.getPack()) : plugin.getLocale().getMessage("gui.overview.headlore", String.format("%,d", category.getCount())));
 
             registerClickable(i + 10 + add, ((player1, inventory1, cursor, slot, type) ->
-                    new GUIHeads(plugin, player, null, plugin.getHeadManager().getHeadsByTag(tag))));
+                    new GUIHeads(plugin, player, category.isLatestPack() ? category.getName() : null, heads)));
         }
 
         createButton(SettingsManager.Setting.DISCORD.getBoolean() ? 39 : 40, Material.COMPASS, plugin.getLocale().getMessage("gui.overview.search"));
@@ -92,7 +97,6 @@ public class GUIOverview extends AbstractGUI {
                     plugin.getLocale().getMessage("gui.overview.discord"),
                     lore2);
         }
-
     }
 
     @Override
