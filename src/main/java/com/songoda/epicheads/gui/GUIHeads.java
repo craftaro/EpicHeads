@@ -1,8 +1,8 @@
 package com.songoda.epicheads.gui;
 
 import com.songoda.epicheads.EpicHeads;
+import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.head.Head;
-import com.songoda.epicheads.head.Tag;
 import com.songoda.epicheads.players.EPlayer;
 import com.songoda.epicheads.utils.AbstractChatConfirm;
 import com.songoda.epicheads.utils.SettingsManager;
@@ -32,11 +32,13 @@ public class GUIHeads extends AbstractGUI {
     private int maxPage;
 
     private String query;
+    private final QueryTypes type;
 
-    public GUIHeads(EpicHeads plugin, Player player, String query, List<Head> heads) {
+    public GUIHeads(EpicHeads plugin, Player player, String query, QueryTypes type, List<Head> heads) {
         super(player);
         this.plugin = plugin;
         this.query = query;
+        this.type = type;
 
         List<Integer> favorites = plugin.getPlayerManager().getPlayer(player).getFavorites();
         this.heads = heads.stream()
@@ -52,11 +54,27 @@ public class GUIHeads extends AbstractGUI {
             player.sendMessage(plugin.getReferences().getPrefix() + plugin.getLocale().getMessage("general.search.nonefound"));
             return;
         }
-        Tag tag = heads.get(0).getTag();
+        Category category = heads.get(0).getCategory();
+
+        String name = null;
+
+        switch (type) {
+            case SEARCH:
+                name = plugin.getLocale().getMessage("general.word.query") + ": " + query;
+                break;
+            case CATEGORY:
+                name = category.getName();
+                break;
+            case FAVORITES:
+                name = plugin.getLocale().getMessage("general.word.favorites");
+                break;
+            case PACK:
+                name = plugin.getLocale().getMessage("general.phrase.latestpack");
+                break;
+        }
 
         this.maxPage = (int) Math.floor(numHeads / 45.0);
-        init((query != null ? plugin.getLocale().getMessage("general.word.query") + ": " + query : tag.getName())
-                + " (" + numHeads + ") " + plugin.getLocale().getMessage("general.word.page") + " " + (page + 1) + "/" + (maxPage + 1), 54);
+        init(name + " (" + numHeads + ") " + plugin.getLocale().getMessage("general.word.page") + " " + (page + 1) + "/" + (maxPage + 1), 54);
         constructGUI();
     }
 
@@ -220,7 +238,11 @@ public class GUIHeads extends AbstractGUI {
                     .filter(head -> head.getName().toLowerCase().contains(event.getMessage().toLowerCase()))
                     .collect(Collectors.toList());
             Bukkit.getScheduler().scheduleSyncDelayedTask(EpicHeads.getInstance(), () ->
-                    new GUIHeads(EpicHeads.getInstance(), player, event.getMessage(), heads), 0L);
+                    new GUIHeads(EpicHeads.getInstance(), player, event.getMessage(), QueryTypes.SEARCH, heads), 0L);
         });
+    }
+
+    public enum QueryTypes {
+        SEARCH, CATEGORY, FAVORITES, PACK
     }
 }

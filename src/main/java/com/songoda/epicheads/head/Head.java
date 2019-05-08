@@ -11,21 +11,24 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Head {
 
     private final int id;
     private final String name;
     private final String URL;
+    private final String pack;
     private final byte staffPicked;
 
-    private final Tag tag;
+    private final Category category;
 
-    public Head(int id, String name, String URL, Tag tag, byte staffPicked) {
+    public Head(int id, String name, String URL, Category category, String pack, byte staffPicked) {
         this.id = id;
         this.name = name;
         this.URL = URL;
-        this.tag = tag;
+        this.category = category;
+        this.pack = pack;
         this.staffPicked = staffPicked;
     }
 
@@ -37,12 +40,14 @@ public class Head {
         return name;
     }
 
+    public String getPack() { return pack; }
+
     public String getURL() {
         return URL;
     }
 
-    public Tag getTag() {
-        return tag;
+    public Category getCategory() {
+        return category;
     }
 
     public byte getStaffPicked() {
@@ -81,7 +86,8 @@ public class Head {
                 + "Id:\"" + id + "\","
                 + "Name:\"" + name + "\","
                 + "URL:\"" + URL + "\","
-                + "Tags:\"" + tag.getName() + "\","
+                + "Category:\"" + category.getName() + "\","
+                + "Pack:\"" + pack + "\","
                 + "StaffPicked:\"" + staffPicked + "\""
                 + "}";
     }

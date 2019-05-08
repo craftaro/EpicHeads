@@ -37,7 +37,7 @@ public abstract class Storage {
             prepareSaveItem("local", new StorageItem("url", head.getURL()),
                     new StorageItem("name", head.getName()),
                     new StorageItem("id", head.getId()),
-                    new StorageItem("category", head.getTag().getName()));
+                    new StorageItem("category", head.getCategory().getName()));
         }
     }
 

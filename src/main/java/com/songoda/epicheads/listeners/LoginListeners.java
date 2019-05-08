@@ -3,7 +3,7 @@ package com.songoda.epicheads.listeners;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.head.HeadManager;
-import com.songoda.epicheads.head.Tag;
+import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.utils.Methods;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,13 +32,13 @@ public class LoginListeners implements Listener {
 
         String tagStr = "Player Heads";
 
-        Optional<Tag> tagOptional = headManager.getTags()
+        Optional<Category> tagOptional = headManager.getTags()
                 .stream().filter(t -> t.getName().equalsIgnoreCase(tagStr)).findFirst();
 
-        Tag tag = tagOptional.orElseGet(() -> new Tag(tagStr));
+        Category tag = tagOptional.orElseGet(() -> new Category(tagStr));
 
         if (!tagOptional.isPresent())
-            headManager.addTag(tag);
+            headManager.addCategory(tag);
 
         Optional<Head> optional = headManager.getLocalHeads().stream()
                 .filter(h -> h.getName().equalsIgnoreCase(event.getPlayer().getName())).findFirst();
@@ -51,7 +51,7 @@ public class LoginListeners implements Listener {
             headManager.removeLocalHead(head);
         }
 
-        headManager.addLocalHeads(new Head(id, player.getName(), url, tag, (byte) 0));
+        headManager.addLocalHeads(new Head(id, player.getName(), url, tag, null, (byte) 0));
 
     }
 

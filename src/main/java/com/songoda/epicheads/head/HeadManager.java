@@ -8,7 +8,7 @@ public class HeadManager {
 
     private static final Set<Head> registeredHeads = new HashSet<>();
     private static final List<Head> localRegisteredHeads = new ArrayList<>();
-    private static final List<Tag> registeredTags = new ArrayList<>();
+    private static final List<Category> registeredTags = new ArrayList<>();
 
     public Head addHead(Head head) {
         registeredHeads.add(head);
@@ -43,17 +43,17 @@ public class HeadManager {
         List<Head> result = getHeads().stream().filter(head -> head.getName().contains(query)).collect(Collectors.toList());
 
         if (result.isEmpty()) {
-            for (Tag tag : registeredTags) {
+            for (Category tag : registeredTags) {
                 if (!tag.getName().equalsIgnoreCase(query)) continue;
-                return getHeads().stream().filter(head -> head.getTag() == tag).collect(Collectors.toList());
+                return getHeads().stream().filter(head -> head.getCategory() == tag).collect(Collectors.toList());
 
             }
         }
         return result;
     }
 
-    public List<Head> getHeadsByTag(Tag tag) {
-        return getHeads().stream().filter(head -> head.getTag() == tag).collect(Collectors.toList());
+    public List<Head> getHeadsByTag(Category tag) {
+        return getHeads().stream().filter(head -> head.getCategory() == tag).collect(Collectors.toList());
     }
 
     public List<Head> getHeads() {
@@ -76,16 +76,30 @@ public class HeadManager {
         return new ArrayList<>(registeredHeads);
     }
 
+    public List<Head> getLatestPack() {
+        List<Head> heads = getHeads().stream().sorted(Comparator.comparingInt(Head::getId)).filter(head -> head.getPack() != null).collect(Collectors.toList());
+
+        Collections.reverse(heads);
+
+        if (heads.isEmpty()) return new ArrayList<>();
+
+        String latestPack = heads.get(0).getPack();
+
+        heads = heads.stream().filter(head -> head.getPack().equals(latestPack)).collect(Collectors.toList());
+
+        return heads;
+    }
+
     public void removeLocalHead(Head head) {
         localRegisteredHeads.remove(head);
     }
 
-    public Tag addTag(Tag tag) {
-        registeredTags.add(tag);
-        return tag;
+    public Category addCategory(Category category) {
+        registeredTags.add(category);
+        return category;
     }
 
-    public List<Tag> getTags() {
+    public List<Category> getTags() {
         return Collections.unmodifiableList(registeredTags);
     }
 
