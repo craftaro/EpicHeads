@@ -70,7 +70,7 @@ public class GUIOverview extends AbstractGUI {
                             ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3),
                     plugin.getHeadManager().getHeadsByTag(tag).get(0).getURL()),
                     plugin.getLocale().getMessage("gui.overview.headname", Color.getRandomColor() + tag.getName()),
-                    plugin.getLocale().getMessage("gui.overview.headlore", tag.getCount()));
+                    plugin.getLocale().getMessage("gui.overview.headlore", String.format("%,d", tag.getCount())));
 
             registerClickable(i + 10 + add, ((player1, inventory1, cursor, slot, type) ->
                     new GUIHeads(plugin, player, null, plugin.getHeadManager().getHeadsByTag(tag))));
