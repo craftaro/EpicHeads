@@ -72,20 +72,20 @@ public class GUIOverview extends AbstractGUI {
             if (!player.hasPermission("epicheads.category." + category.getName().replace(" ", "_"))) continue;
 
             createButton(i + 10 + add, Methods.addTexture(new ItemStack(plugin.isServerVersionAtLeast(ServerVersion.V1_13)
-                            ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3),
-                    firstHead.getURL()),
+                            ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3), firstHead.getURL()),
                     plugin.getLocale().getMessage("gui.overview.headname", Color.getRandomColor() + category.getName()),
-                    category.isLatestPack() ? plugin.getLocale().getMessage("gui.overview.packlore", firstHead.getPack()) : plugin.getLocale().getMessage("gui.overview.headlore", String.format("%,d", category.getCount())));
+                    category.isLatestPack() ? plugin.getLocale().getMessage("gui.overview.packlore", firstHead.getPack())
+                            : plugin.getLocale().getMessage("gui.overview.headlore", String.format("%,d", category.getCount())));
 
             registerClickable(i + 10 + add, ((player1, inventory1, cursor, slot, type) ->
-                    new GUIHeads(plugin, player, category.isLatestPack() ? category.getName() : null, heads)));
+                    new GUIHeads(plugin, player, category.isLatestPack() ? category.getName() : null,
+                            category.isLatestPack() ? GUIHeads.QueryTypes.PACK : GUIHeads.QueryTypes.CATEGORY, heads)));
         }
 
         createButton(SettingsManager.Setting.DISCORD.getBoolean() ? 39 : 40, Material.COMPASS, plugin.getLocale().getMessage("gui.overview.search"));
 
 
         if (SettingsManager.Setting.DISCORD.getBoolean()) {
-
             ArrayList<String> lore2 = new ArrayList<>();
             String[] parts2 = plugin.getLocale().getMessage("gui.overview.discordlore").split("\\|");
             for (String line : parts2)
@@ -102,7 +102,7 @@ public class GUIOverview extends AbstractGUI {
     @Override
     protected void registerClickables() {
         registerClickable(4, ((player1, inventory1, cursor, slot, type) ->
-                new GUIHeads(plugin, player, plugin.getLocale().getMessage("general.word.favorites"),
+                new GUIHeads(plugin, player, null, GUIHeads.QueryTypes.FAVORITES,
                         plugin.getPlayerManager().getPlayer(player).getFavoritesAsHeads())));
 
         registerClickable(SettingsManager.Setting.DISCORD.getBoolean() ? 39 : 40, ((player1, inventory1, cursor, slot, type) ->
