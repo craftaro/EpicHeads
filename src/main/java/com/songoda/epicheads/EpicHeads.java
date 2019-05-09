@@ -129,7 +129,7 @@ public class EpicHeads extends JavaPlugin {
 
                 EPlayer player = new EPlayer(
                         UUID.fromString(row.get("uuid").asString()),
-                        row.get("favorites").asIntList());
+                        row.get("favorites").asStringList());
 
                 this.playerManager.addPlayer(player);
             }
