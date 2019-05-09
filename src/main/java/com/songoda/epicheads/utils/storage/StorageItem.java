@@ -59,4 +59,15 @@ public class StorageItem {
         }
         return list;
     }
+
+    public List<String> asStringList() {
+        List<String> list = new ArrayList<>();
+        if (object == null) return list;
+        String[] stack = ((String) object).split(";");
+        for (String item : stack) {
+            if (item.equals("")) continue;
+            list.add(item);
+        }
+        return list;
+    }
 }

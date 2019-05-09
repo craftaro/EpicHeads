@@ -40,9 +40,9 @@ public class GUIHeads extends AbstractGUI {
         this.query = query;
         this.type = type;
 
-        List<Integer> favorites = plugin.getPlayerManager().getPlayer(player).getFavorites();
+        List<String> favorites = plugin.getPlayerManager().getPlayer(player).getFavorites();
         this.heads = heads.stream()
-                .sorted(Comparator.comparingInt(head -> (favorites.contains(head.getId()) ? 0 : 1)))
+                .sorted(Comparator.comparingInt(head -> (favorites.contains(head.getURL()) ? 0 : 1)))
                 .collect(Collectors.toList());
 
         updateTitle();
@@ -147,7 +147,7 @@ public class GUIHeads extends AbstractGUI {
             inventory.getItem(8).setAmount(page + 4);
         }
 
-        List<Integer> favorites = plugin.getPlayerManager().getPlayer(player).getFavorites();
+        List<String> favorites = plugin.getPlayerManager().getPlayer(player).getFavorites();
 
         for (int i = 0; i < heads.size(); i++) {
             Head head = heads.get(i);
@@ -157,7 +157,7 @@ public class GUIHeads extends AbstractGUI {
             boolean free = player.hasPermission("epicheads.bypasscost")
                     || (SettingsManager.Setting.FREE_IN_CREATIVE.getBoolean() && player.getGameMode() == GameMode.CREATIVE);
 
-            ItemStack item = head.asItemStack(favorites.contains(head.getId()), free);
+            ItemStack item = head.asItemStack(favorites.contains(head.getURL()), free);
 
             inventory.setItem(i + 9, item);
 
@@ -166,10 +166,10 @@ public class GUIHeads extends AbstractGUI {
             registerClickable(i + 9, ((player1, inventory1, cursor, slot, type) -> {
                 if (type == ClickType.SHIFT_LEFT || type == ClickType.SHIFT_RIGHT) {
                     EPlayer ePlayer = plugin.getPlayerManager().getPlayer(player);
-                    if (!ePlayer.getFavorites().contains(head.getId()))
-                        ePlayer.addFavorite(head.getId());
+                    if (!ePlayer.getFavorites().contains(head.getURL()))
+                        ePlayer.addFavorite(head.getURL());
                     else
-                        ePlayer.removeFavorite(head.getId());
+                        ePlayer.removeFavorite(head.getURL());
                     updateTitle();
                     return;
                 }

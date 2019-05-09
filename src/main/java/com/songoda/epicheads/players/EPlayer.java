@@ -12,13 +12,13 @@ public class EPlayer {
 
     private final UUID uuid;
 
-    private List<Integer> favorites = new ArrayList<>();
+    private List<String> favorites = new ArrayList<>();
 
     public EPlayer(UUID uuid) {
         this.uuid = uuid;
     }
 
-    public EPlayer(UUID uuid, List<Integer> favorites) {
+    public EPlayer(UUID uuid, List<String> favorites) {
         this.uuid = uuid;
         this.favorites = favorites;
     }
@@ -27,21 +27,21 @@ public class EPlayer {
         return uuid;
     }
 
-    public List<Integer> getFavorites() {
+    public List<String> getFavorites() {
         return new ArrayList<>(favorites);
     }
 
     public List<Head> getFavoritesAsHeads() {
         return EpicHeads.getInstance().getHeadManager().getHeads().stream()
-                .filter(head -> favorites.contains(head.getId())).collect(Collectors.toList());
+                .filter(head -> favorites.contains(head.getURL())).collect(Collectors.toList());
     }
 
-    public void addFavorite(Integer integer) {
-        favorites.add(integer);
+    public void addFavorite(String url) {
+        favorites.add(url);
     }
 
-    public void removeFavorite(Integer integer) {
-        favorites.remove(integer);
+    public void removeFavorite(String url) {
+        favorites.remove(url);
     }
 
 }
