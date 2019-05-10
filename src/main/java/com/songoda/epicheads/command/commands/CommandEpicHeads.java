@@ -32,7 +32,7 @@ public class CommandEpicHeads extends AbstractCommand {
 
     @Override
     public String getSyntax() {
-        return "/epicheads";
+        return "/heads";
     }
 
     @Override

@@ -172,12 +172,20 @@ public class SettingsManager implements Listener {
 
         AUTOSAVE("Main.Auto Save Interval In Seconds", 15),
         DISCORD("Main.Show Discord Button", true),
-        PRICE("Main.Head Cost", 24.99),
         FREE_IN_CREATIVE("Main.Heads Free In Creative Mode", false),
 
         GLASS_TYPE_1("Interfaces.Glass Type 1", 7),
         GLASS_TYPE_2("Interfaces.Glass Type 2", 11),
         GLASS_TYPE_3("Interfaces.Glass Type 3", 3),
+
+        HEAD_COST("Economy.Head Cost", 24.99),
+        VAULT_ECONOMY("Economy.Use Vault Economy", true),
+        PLAYER_POINTS_ECONOMY("Economy.Use Player Points Economy", false),
+        ITEM_ECONOMY("Economy.Use Item Economy", false),
+        ITEM_TOKEN_TYPE("Economy.Item.Type", EpicHeads.getInstance().isServerVersionAtLeast(ServerVersion.V1_13) ? "PLAYER_HEAD" : "SKULL_ITEM"),
+        ITEM_TOKEN_ID("Economy.Item.Head ID", 14395),
+        ITEM_TOKEN_NAME("Economy.Item.Name", "&6Player Head Token"),
+        ITEM_TOKEN_LORE("Economy.Item.Lore", Arrays.asList("&8Use in /Heads!")),
 
         LANGUGE_MODE("System.Language Mode", "en_US");
 

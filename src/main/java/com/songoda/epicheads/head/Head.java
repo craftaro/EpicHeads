@@ -11,7 +11,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class Head {
 
@@ -65,7 +64,7 @@ public class Head {
         ItemStack item = Methods.addTexture(new ItemStack(plugin.isServerVersionAtLeast(ServerVersion.V1_13)
                         ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3), this.URL);
 
-        double cost = SettingsManager.Setting.PRICE.getDouble();
+        double cost = SettingsManager.Setting.HEAD_COST.getDouble();
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(Methods.formatText((favorite ? "&6⭐ " : "") + "&9" + name));
         List<String> lore = new ArrayList<>();

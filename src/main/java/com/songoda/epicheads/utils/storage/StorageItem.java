@@ -17,15 +17,6 @@ public class StorageItem {
         this.object = object;
     }
 
-    public StorageItem(String key, List<Integer> integers) {
-        String object = "";
-        for (Integer i : integers) {
-            object += i + ";";
-        }
-        this.key = key;
-        this.object = object;
-    }
-
     public String getKey() {
         return key;
     }
@@ -56,17 +47,6 @@ public class StorageItem {
         for (String item : stack) {
             if (item.equals("")) continue;
             list.add(Integer.valueOf(item));
-        }
-        return list;
-    }
-
-    public List<String> asStringList() {
-        List<String> list = new ArrayList<>();
-        if (object == null) return list;
-        String[] stack = ((String) object).split(";");
-        for (String item : stack) {
-            if (item.equals("")) continue;
-            list.add(item);
         }
         return list;
     }

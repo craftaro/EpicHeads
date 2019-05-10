@@ -15,7 +15,9 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.UUID;
 
 public class Methods {
@@ -79,6 +81,27 @@ public class Methods {
 
     public static String getDecodedTexture(String encoded) {
         return StringUtils.substringBetween(new String(Base64.getDecoder().decode(encoded)), "texture/", "\"");
+    }
+
+    public static ItemStack createToken(int amount) {
+        ItemStack itemStack = new ItemStack(Material.valueOf(SettingsManager.Setting.ITEM_TOKEN_TYPE.getString()));
+
+        if (itemStack.getType() == (EpicHeads.getInstance().isServerVersionAtLeast(ServerVersion.V1_13)
+                ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"))) {
+            itemStack = EpicHeads.getInstance().getHeadManager().getHeads().stream()
+                    .filter(head -> head.getId() == SettingsManager.Setting.ITEM_TOKEN_ID.getInt())
+                    .findFirst().get().asItemStack();
+        }
+        itemStack.setAmount(amount);
+
+        ItemMeta meta = itemStack.getItemMeta();
+        meta.setDisplayName(formatText(SettingsManager.Setting.ITEM_TOKEN_NAME.getString()));
+        List<String> lore = new ArrayList<>();
+        for (String line : SettingsManager.Setting.ITEM_TOKEN_LORE.getStringList())
+            lore.add(formatText(line));
+        meta.setLore(lore);
+        itemStack.setItemMeta(meta);
+        return itemStack;
     }
 
     public static ItemStack getGlass() {
