@@ -45,7 +45,7 @@ public class CommandBase64 extends AbstractCommand {
 
     @Override
     public String getSyntax() {
-        return "/epicheads base64";
+        return "/heads base64";
     }
 
     @Override

@@ -43,7 +43,7 @@ public class CommandHelp extends AbstractCommand {
 
     @Override
     public String getSyntax() {
-        return "/epicheads help";
+        return "/heads help";
     }
 
     @Override

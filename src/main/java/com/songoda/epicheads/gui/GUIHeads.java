@@ -1,13 +1,13 @@
 package com.songoda.epicheads.gui;
 
 import com.songoda.epicheads.EpicHeads;
+import com.songoda.epicheads.economy.Economy;
 import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.players.EPlayer;
 import com.songoda.epicheads.utils.AbstractChatConfirm;
 import com.songoda.epicheads.utils.SettingsManager;
 import com.songoda.epicheads.utils.gui.AbstractGUI;
-import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -161,7 +160,7 @@ public class GUIHeads extends AbstractGUI {
 
             inventory.setItem(i + 9, item);
 
-            double cost = SettingsManager.Setting.PRICE.getDouble();
+            double cost = SettingsManager.Setting.HEAD_COST.getDouble();
 
             registerClickable(i + 9, ((player1, inventory1, cursor, slot, type) -> {
                 if (type == ClickType.SHIFT_LEFT || type == ClickType.SHIFT_RIGHT) {
@@ -180,17 +179,16 @@ public class GUIHeads extends AbstractGUI {
 
 
                 if (!free) {
-                    if (plugin.getServer().getPluginManager().getPlugin("Vault") != null) {
-                        RegisteredServiceProvider<Economy> rsp = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-                        net.milkbowl.vault.economy.Economy econ = rsp.getProvider();
-                        if (econ.has(player, cost)) {
-                            econ.withdrawPlayer(player, cost);
+                    if (plugin.getEconomy() != null) {
+                        Economy economy = plugin.getEconomy();
+                        if (economy.hasBalance(player, cost)) {
+                            economy.withdrawBalance(player, cost);
                         } else {
                             player.sendMessage(plugin.getLocale().getMessage("event.buyhead.cannotafford"));
                             return;
                         }
                     } else {
-                        player.sendMessage("Vault is not installed.");
+                        player.sendMessage("Economy plugin not setup correctly...");
                         return;
                     }
                 }

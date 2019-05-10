@@ -35,3 +35,6 @@ command.give.notonline = "&cThe player &4%name% &ccould not be found."
 command.give.notfound = "&cThe head &4%name%&c could not be found."
 command.give.success = "&7You have been given &6%player% &7a head named &6%name%&7."
 command.give.receive = "&7You have been given a head named &6%name%&7."
+
+command.givetoken.success = "&7You gave &6%player% %amount% &7player head tokens."
+command.givetoken.receive = "&7You have been given &6%amount% &7player head tokens."

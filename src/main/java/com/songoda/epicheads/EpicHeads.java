@@ -1,6 +1,10 @@
 package com.songoda.epicheads;
 
 import com.songoda.epicheads.command.CommandManager;
+import com.songoda.epicheads.economy.Economy;
+import com.songoda.epicheads.economy.ItemEconomy;
+import com.songoda.epicheads.economy.PlayerPointsEconomy;
+import com.songoda.epicheads.economy.VaultEconomy;
 import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.head.HeadManager;
@@ -31,6 +35,7 @@ import org.json.simple.parser.ParseException;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -48,6 +53,7 @@ public class EpicHeads extends JavaPlugin {
 
     private Locale locale;
     private Storage storage;
+    private Economy economy;
 
     public static EpicHeads getInstance() {
         return INSTANCE;
@@ -88,6 +94,16 @@ public class EpicHeads extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ItemListeners(this), this);
         Bukkit.getPluginManager().registerEvents(new LoginListeners(this), this);
 
+        // Setup Economy
+        if (SettingsManager.Setting.VAULT_ECONOMY.getBoolean()
+                && getServer().getPluginManager().getPlugin("Vault") != null)
+            this.economy = new VaultEconomy(this);
+        else if (SettingsManager.Setting.PLAYER_POINTS_ECONOMY.getBoolean()
+                && getServer().getPluginManager().getPlugin("PlayerPoints") != null)
+            this.economy = new PlayerPointsEconomy(this);
+        else if (SettingsManager.Setting.ITEM_ECONOMY.getBoolean())
+            this.economy = new ItemEconomy(this);
+
         // Download Heads
         downloadHeads();
 
@@ -122,14 +138,14 @@ public class EpicHeads extends JavaPlugin {
 
     private void loadData() {
         // Adding in favorites.
-        if (storage.containsGroup("")) {
+        if (storage.containsGroup("players")) {
             for (StorageRow row : storage.getRowsByGroup("players")) {
                 if (row.get("uuid").asObject() == null)
                     continue;
 
                 EPlayer player = new EPlayer(
                         UUID.fromString(row.get("uuid").asString()),
-                        row.get("favorites").asStringList());
+                        (List<String>)row.get("favorites").asObject());
 
                 this.playerManager.addPlayer(player);
             }
@@ -265,6 +281,10 @@ public class EpicHeads extends JavaPlugin {
 
     public Locale getLocale() {
         return locale;
+    }
+
+    public Economy getEconomy() {
+        return economy;
     }
 
     public References getReferences() {
