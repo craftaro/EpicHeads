@@ -20,7 +20,8 @@ public class EPlayer {
 
     public EPlayer(UUID uuid, List<String> favorites) {
         this.uuid = uuid;
-        this.favorites = favorites;
+        if (favorites != null)
+            this.favorites = favorites;
     }
 
     public UUID getUuid() {
