@@ -26,6 +26,9 @@ public class CommandUrl extends AbstractCommand {
         if (!item.hasItemMeta() || !(item.getItemMeta() instanceof SkullMeta)) return ReturnType.FAILURE;
 
         String encodededStr = Methods.getEncodedTexture(item);
+
+        if (encodededStr == null) return ReturnType.FAILURE;
+
         String url = Methods.getDecodedTexture(encodededStr);
 
         player.sendMessage(instance.getReferences().getPrefix());

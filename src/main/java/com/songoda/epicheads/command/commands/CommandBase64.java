@@ -27,6 +27,8 @@ public class CommandBase64 extends AbstractCommand {
 
         String encodededStr = Methods.getEncodedTexture(item);
 
+        if (encodededStr == null) return ReturnType.FAILURE;
+
         player.sendMessage(instance.getReferences().getPrefix());
         player.sendMessage(encodededStr);
 

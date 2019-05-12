@@ -15,10 +15,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Methods {
 
@@ -52,7 +49,11 @@ public class Methods {
             Field localField = localSkullMeta.getClass().getDeclaredField("profile");
             localField.setAccessible(true);
             GameProfile profile = (GameProfile) localField.get(localSkullMeta);
-            Property property = profile.getProperties().get("textures").iterator().next();
+            Iterator<Property> iterator = profile.getProperties().get("textures").iterator();
+
+            if (!iterator.hasNext()) return null;
+
+            Property property = iterator.next();
             return property.getValue();
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();

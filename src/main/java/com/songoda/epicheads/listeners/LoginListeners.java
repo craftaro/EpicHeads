@@ -27,8 +27,10 @@ public class LoginListeners implements Listener {
         Player player = event.getPlayer();
 
         String encodededStr = Methods.getEncodedTexture(player);
-        String url = Methods.getDecodedTexture(encodededStr);
 
+        if (encodededStr == null) return;
+
+        String url = Methods.getDecodedTexture(encodededStr);
 
         String tagStr = "Player Heads";
 
