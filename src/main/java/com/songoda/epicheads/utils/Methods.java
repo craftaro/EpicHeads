@@ -69,7 +69,12 @@ public class Methods {
                 methodGetProfile = clazzCraftPlayer.getMethod("getProfile");
             }
             Object craftPlayer = clazzCraftPlayer.cast(player);
-            Property property = ((GameProfile) methodGetProfile.invoke(craftPlayer)).getProperties().get("textures").iterator().next();
+
+            Iterator<Property> iterator = ((GameProfile) methodGetProfile.invoke(craftPlayer)).getProperties().get("textures").iterator();
+
+            if (!iterator.hasNext()) return null;
+
+            Property property = iterator.next();
             return property.getValue();
         } catch (ClassNotFoundException
                 | NoSuchMethodException
