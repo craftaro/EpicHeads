@@ -8,6 +8,7 @@ import com.songoda.epicheads.economy.VaultEconomy;
 import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.head.HeadManager;
+import com.songoda.epicheads.listeners.DeathListeners;
 import com.songoda.epicheads.listeners.ItemListeners;
 import com.songoda.epicheads.listeners.LoginListeners;
 import com.songoda.epicheads.players.EPlayer;
@@ -91,6 +92,7 @@ public class EpicHeads extends JavaPlugin {
 
         // Register Listeners
         AbstractGUI.initializeListeners(this);
+        Bukkit.getPluginManager().registerEvents(new DeathListeners(this), this);
         Bukkit.getPluginManager().registerEvents(new ItemListeners(this), this);
         Bukkit.getPluginManager().registerEvents(new LoginListeners(this), this);
 
