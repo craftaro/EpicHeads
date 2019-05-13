@@ -3,13 +3,11 @@ package com.songoda.epicheads.command.commands;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.command.AbstractCommand;
 import com.songoda.epicheads.head.Head;
-import com.songoda.epicheads.utils.Methods;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +24,12 @@ public class CommandGive extends AbstractCommand {
 
         if (args.length != 4) return ReturnType.SYNTAX_ERROR;
 
-        Player player = Bukkit.getPlayer(args[1]);
+        String playerStr = args[1].toLowerCase();
+        Player player = Bukkit.getPlayer(playerStr);
         String archive = args[2];
         int headId = Integer.parseInt(args[3]);
 
-        if (player == null) {
+        if (player == null && !playerStr.equals("all")) {
             sender.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.notonline", args[1]));
             return ReturnType.FAILURE;
         }
@@ -54,16 +53,24 @@ public class CommandGive extends AbstractCommand {
             meta.setLore(new ArrayList<>());
             item.setItemMeta(meta);
 
-            player.getInventory().addItem(item);
+            if (playerStr.equals("all")) {
+                for (Player pl : Bukkit.getOnlinePlayers()) {
+                    if (pl == sender) continue;
+                    pl.getInventory().addItem(item);
+                    pl.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.receive", head.get().getName()));
+                }
+                sender.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.success", instance.getLocale().getMessage("general.word.everyone"), head.get().getName()));
+            } else {
+                player.getInventory().addItem(item);
+                player.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.receive", head.get().getName()));
+                sender.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.success", player.getName(), head.get().getName()));
+            }
+
+            return ReturnType.SUCCESS;
         } else {
             sender.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.notfound", head.get().getName()));
             return ReturnType.FAILURE;
         }
-
-        sender.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.success", player.getName(), head.get().getName()));
-        player.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.receive", head.get().getName()));
-
-        return ReturnType.SUCCESS;
     }
 
     @Override
@@ -78,7 +85,7 @@ public class CommandGive extends AbstractCommand {
 
     @Override
     public String getSyntax() {
-        return "/heads give <player> <global/local> <head_id>";
+        return "/heads give <player/all> <global/local> <head_id>";
     }
 
     @Override

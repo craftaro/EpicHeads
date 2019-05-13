@@ -4,6 +4,7 @@ general.nametag.prefix = "&7[&6EpicHeads&7]"
 general.word.page = "Page"
 general.word.query = "Query"
 general.word.favorites = "Favorites"
+general.word.everyone = "everyone"
 general.phrase.latestpack = "Latest Pack"
 
 general.search.global = "&6Enter your search query."
@@ -33,7 +34,7 @@ event.buyhead.cannotafford = "&cYou cannot afford this head."
 
 command.give.notonline = "&cThe player &4%name% &ccould not be found."
 command.give.notfound = "&cThe head &4%name%&c could not be found."
-command.give.success = "&7You have been given &6%player% &7a head named &6%name%&7."
+command.give.success = "&7You have given &6%player% &7a head named &6%name%&7."
 command.give.receive = "&7You have been given a head named &6%name%&7."
 
 command.givetoken.success = "&7You gave &6%player% %amount% &7player head tokens."
