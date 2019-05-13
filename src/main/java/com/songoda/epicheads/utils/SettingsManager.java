@@ -174,6 +174,10 @@ public class SettingsManager implements Listener {
         DISCORD("Main.Show Discord Button", true),
         FREE_IN_CREATIVE("Main.Heads Free In Creative Mode", false),
 
+        DROP_MOB_HEADS("Main.Drop Mob Heads", true),
+        DROP_PLAYER_HEADS("Main.Drop Player Heads", true),
+        DROP_CHANCE("Main.Head Drop Chance", "25%"),
+
         GLASS_TYPE_1("Interfaces.Glass Type 1", 7),
         GLASS_TYPE_2("Interfaces.Glass Type 2", 11),
         GLASS_TYPE_3("Interfaces.Glass Type 3", 3),

@@ -34,6 +34,9 @@ public class ItemListeners implements Listener {
         event.getItem().removeMetadata("EHE", plugin);
 
         String encodededStr = Methods.getEncodedTexture(item);
+
+        if (encodededStr == null) return;
+
         String url = Methods.getDecodedTexture(encodededStr);
 
         if (url == null) return;
