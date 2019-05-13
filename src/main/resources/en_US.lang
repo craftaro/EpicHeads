@@ -8,7 +8,7 @@ general.phrase.latestpack = "Latest Pack"
 
 general.search.global = "&6Enter your search query."
 general.search.refine = "&6Enter a search term to refine your search.")
-general.search.nonefound = "&cNo heads founds.."
+general.search.nonefound = "&cNo heads found.."
 
 general.head.staffpicked = "&8Staff Favorite";
 general.head.id = "&8ID: &7%id%"
