@@ -19,6 +19,9 @@ gui.heads.refine = "&9Refine Search"
 gui.heads.search = "&9Create Search"
 gui.heads.categories = "&cBack To Categories"
 
+gui.general.previous = "&6Previous Page"
+gui.general.next = "&6Next Page"
+
 gui.overview.title = "EpicHeads (%count% heads)"
 gui.overview.search = "&a&lSearch"
 gui.overview.headname = "&c&l%name%"

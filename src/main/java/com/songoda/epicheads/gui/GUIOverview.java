@@ -14,10 +14,12 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class GUIOverview extends AbstractGUI {
     
     private final EpicHeads plugin;
+    private int page = 0;
     
     public GUIOverview(EpicHeads plugin, Player player) {
         super(player);
@@ -28,6 +30,9 @@ public class GUIOverview extends AbstractGUI {
 
     @Override
     protected void constructGUI() {
+        inventory.clear();
+        resetClickables();
+        registerClickables();
 
         ArrayList<String> lore = new ArrayList<>();
         String[] parts = plugin.getLocale().getMessage("gui.overview.favoriteslore").split("\\|");
@@ -58,12 +63,32 @@ public class GUIOverview extends AbstractGUI {
         inventory.setItem(38, Methods.getBackgroundGlass(false));
         inventory.setItem(42, Methods.getBackgroundGlass(false));
 
-        List<Category> tags = plugin.getHeadManager().getCategories();
+        int numTemplates = plugin.getHeadManager().getCategories().size();
+        int maxPage = (int) Math.floor(numTemplates / 21.0);
+
+        List<Category> categories = plugin.getHeadManager().getCategories().stream().skip(page * 21).limit(21)
+                .collect(Collectors.toList());
+
+        if (page != 0) {
+            createButton(37, Material.ARROW, plugin.getLocale().getMessage("gui.general.previous"));
+            registerClickable(37, ((player1, inventory1, cursor, slot, type) -> {
+                page --;
+                constructGUI();
+            }));
+        }
+
+        if (page != maxPage) {
+            createButton(43, Material.ARROW, plugin.getLocale().getMessage("gui.general.next"));
+            registerClickable(43, ((player1, inventory1, cursor, slot, type) -> {
+                page ++;
+                constructGUI();
+            }));
+        }
         int add = 0;
-        for (int i = 0; i < tags.size(); i++) {
+        for (int i = 0; i < categories.size(); i++) {
             if (i + add == 7 || i + add == 16) add = add + 2;
 
-            Category category = plugin.getHeadManager().getCategories().get(i);
+            Category category = plugin.getHeadManager().getCategories().get((page * 21) + i);
 
             List<Head> heads = category.isLatestPack() ? plugin.getHeadManager().getLatestPack() : plugin.getHeadManager().getHeadsByCategory(category);
 
