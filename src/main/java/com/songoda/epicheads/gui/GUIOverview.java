@@ -58,14 +58,14 @@ public class GUIOverview extends AbstractGUI {
         inventory.setItem(38, Methods.getBackgroundGlass(false));
         inventory.setItem(42, Methods.getBackgroundGlass(false));
 
-        List<Category> tags = plugin.getHeadManager().getTags();
+        List<Category> tags = plugin.getHeadManager().getCategories();
         int add = 0;
         for (int i = 0; i < tags.size(); i++) {
             if (i + add == 7 || i + add == 16) add = add + 2;
 
-            Category category = plugin.getHeadManager().getTags().get(i);
+            Category category = plugin.getHeadManager().getCategories().get(i);
 
-            List<Head> heads = category.isLatestPack() ? plugin.getHeadManager().getLatestPack() : plugin.getHeadManager().getHeadsByTag(category);
+            List<Head> heads = category.isLatestPack() ? plugin.getHeadManager().getLatestPack() : plugin.getHeadManager().getHeadsByCategory(category);
 
             Head firstHead = heads.get(0);
 

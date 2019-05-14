@@ -37,5 +37,8 @@ command.give.notfound = "&cThe head &4%name%&c could not be found."
 command.give.success = "&7You have given &6%player% &7a head named &6%name%&7."
 command.give.receive = "&7You have been given a head named &6%name%&7."
 
+command.add.success = "&7Added the head &6%name% &7successfully."
+command.add.exists = "&cThat head already exists."
+
 command.givetoken.success = "&7You gave &6%player% %amount% &7player head tokens."
 command.givetoken.receive = "&7You have been given &6%amount% &7player head tokens."

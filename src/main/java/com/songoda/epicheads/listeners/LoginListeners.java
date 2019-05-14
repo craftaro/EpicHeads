@@ -34,7 +34,7 @@ public class LoginListeners implements Listener {
 
         String tagStr = "Player Heads";
 
-        Optional<Category> tagOptional = headManager.getTags()
+        Optional<Category> tagOptional = headManager.getCategories()
                 .stream().filter(t -> t.getName().equalsIgnoreCase(tagStr)).findFirst();
 
         Category tag = tagOptional.orElseGet(() -> new Category(tagStr));
