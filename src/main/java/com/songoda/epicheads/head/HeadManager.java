@@ -8,7 +8,7 @@ public class HeadManager {
 
     private static final Set<Head> registeredHeads = new HashSet<>();
     private static final List<Head> localRegisteredHeads = new ArrayList<>();
-    private static final List<Category> registeredTags = new ArrayList<>();
+    private static final List<Category> registeredCategories = new ArrayList<>();
 
     public Head addHead(Head head) {
         registeredHeads.add(head);
@@ -43,17 +43,17 @@ public class HeadManager {
         List<Head> result = getHeads().stream().filter(head -> head.getName().contains(query)).collect(Collectors.toList());
 
         if (result.isEmpty()) {
-            for (Category tag : registeredTags) {
-                if (!tag.getName().equalsIgnoreCase(query)) continue;
-                return getHeads().stream().filter(head -> head.getCategory() == tag).collect(Collectors.toList());
+            for (Category category : registeredCategories) {
+                if (!category.getName().equalsIgnoreCase(query)) continue;
+                return getHeads().stream().filter(head -> head.getCategory() == category).collect(Collectors.toList());
 
             }
         }
         return result;
     }
 
-    public List<Head> getHeadsByTag(Category tag) {
-        return getHeads().stream().filter(head -> head.getCategory() == tag).collect(Collectors.toList());
+    public List<Head> getHeadsByCategory(Category category) {
+        return getHeads().stream().filter(head -> head.getCategory() == category).collect(Collectors.toList());
     }
 
     public List<Head> getHeads() {
@@ -95,17 +95,17 @@ public class HeadManager {
     }
 
     public Category addCategory(Category category) {
-        registeredTags.add(category);
+        registeredCategories.add(category);
         return category;
     }
 
-    public List<Category> getTags() {
-        return Collections.unmodifiableList(registeredTags);
+    public List<Category> getCategories() {
+        return Collections.unmodifiableList(registeredCategories);
     }
 
     public void clear() {
         registeredHeads.clear();
         localRegisteredHeads.clear();
-        registeredTags.clear();
+        registeredCategories.clear();
     }
 }

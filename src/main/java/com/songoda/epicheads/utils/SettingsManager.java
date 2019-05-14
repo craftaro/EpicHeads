@@ -178,6 +178,8 @@ public class SettingsManager implements Listener {
         DROP_PLAYER_HEADS("Main.Drop Player Heads", true),
         DROP_CHANCE("Main.Head Drop Chance", "25%"),
 
+        DISABLED_HEADS("Main.Disabled Global Heads", Arrays.asList(34567, 34568, 34569)),
+
         GLASS_TYPE_1("Interfaces.Glass Type 1", 7),
         GLASS_TYPE_2("Interfaces.Glass Type 2", 11),
         GLASS_TYPE_3("Interfaces.Glass Type 3", 3),
@@ -203,6 +205,10 @@ public class SettingsManager implements Listener {
 
         public List<String> getStringList() {
             return EpicHeads.getInstance().getConfig().getStringList(setting);
+        }
+
+        public List<Integer> getIntegerList() {
+            return EpicHeads.getInstance().getConfig().getIntegerList(setting);
         }
 
         public boolean getBoolean() {

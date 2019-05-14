@@ -186,11 +186,15 @@ public class EpicHeads extends JavaPlugin {
                 JSONObject jsonObject = (JSONObject) o;
 
                 String categoryStr = (String) jsonObject.get("tags");
-                Optional<Category> tagOptional = headManager.getTags().stream().filter(t -> t.getName().equalsIgnoreCase(categoryStr)).findFirst();
+                Optional<Category> tagOptional = headManager.getCategories().stream().filter(t -> t.getName().equalsIgnoreCase(categoryStr)).findFirst();
 
                 Category category = tagOptional.orElseGet(() -> new Category(categoryStr));
 
-                Head head = new Head(Integer.parseInt((String) jsonObject.get("id")),
+                int id = Integer.parseInt((String) jsonObject.get("id"));
+
+                if (SettingsManager.Setting.DISABLED_HEADS.getIntegerList().contains(id)) continue;
+
+                Head head = new Head(id,
                         (String) jsonObject.get("name"),
                         (String) jsonObject.get("url"),
                         category,
@@ -209,7 +213,7 @@ public class EpicHeads extends JavaPlugin {
                 for (StorageRow row : storage.getRowsByGroup("local")) {
                     String tagStr = row.get("category").asString();
 
-                    Optional<Category> tagOptional = headManager.getTags().stream()
+                    Optional<Category> tagOptional = headManager.getCategories().stream()
                             .filter(t -> t.getName().equalsIgnoreCase(tagStr)).findFirst();
 
                     Category category = tagOptional.orElseGet(() -> new Category(tagStr));
