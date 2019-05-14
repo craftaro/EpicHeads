@@ -190,7 +190,11 @@ public class EpicHeads extends JavaPlugin {
 
                 Category category = tagOptional.orElseGet(() -> new Category(categoryStr));
 
-                Head head = new Head(Integer.parseInt((String) jsonObject.get("id")),
+                int id = Integer.parseInt((String) jsonObject.get("id"));
+
+                if (SettingsManager.Setting.DISABLED_HEADS.getIntegerList().contains(id)) continue;
+
+                Head head = new Head(id,
                         (String) jsonObject.get("name"),
                         (String) jsonObject.get("url"),
                         category,
