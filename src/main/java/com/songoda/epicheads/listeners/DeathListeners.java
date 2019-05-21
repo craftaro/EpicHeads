@@ -7,6 +7,7 @@ import com.songoda.epicheads.utils.Methods;
 import com.songoda.epicheads.utils.ServerVersion;
 import com.songoda.epicheads.utils.SettingsManager;
 import org.bukkit.Material;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -55,7 +56,7 @@ public class DeathListeners implements Listener {
                     itemNew = optional.get().asItemStack();
                 }
             } else {
-                if (!SettingsManager.Setting.DROP_MOB_HEADS.getBoolean()) return;
+                if (!SettingsManager.Setting.DROP_MOB_HEADS.getBoolean() || event.getEntity() instanceof ArmorStand) return;
 
                 Head head = new Head(-1, null, HeadType.valueOf(event.getEntity().getType().name()).getUrl(), null, null, (byte) 0);
                 itemNew = head.asItemStack();
