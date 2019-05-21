@@ -18,7 +18,7 @@ public class CommandHelp extends AbstractCommand {
         sender.sendMessage("");
         sender.sendMessage(Methods.formatText(instance.getReferences().getPrefix() + "&7Version " + instance.getDescription().getVersion() + " Created with <3 by &5&l&oSongoda"));
         sender.sendMessage("");
-        sender.sendMessage(Methods.formatText("&7Welcome to EpicHeads! To get started try using the /epicheads command to access the heads panel."));
+        sender.sendMessage(Methods.formatText("&7Welcome to EpicHeads! To get started try using the /heads command to access the heads panel."));
         sender.sendMessage("");
         sender.sendMessage(Methods.formatText("&6Commands:"));
         for (AbstractCommand command : instance.getCommandManager().getCommands()) {
