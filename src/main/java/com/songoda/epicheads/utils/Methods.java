@@ -3,6 +3,7 @@ package com.songoda.epicheads.utils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.songoda.epicheads.EpicHeads;
+import com.songoda.epicheads.utils.settings.Setting;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -90,20 +91,20 @@ public class Methods {
     }
 
     public static ItemStack createToken(int amount) {
-        ItemStack itemStack = new ItemStack(Material.valueOf(SettingsManager.Setting.ITEM_TOKEN_TYPE.getString()));
+        ItemStack itemStack = new ItemStack(Material.valueOf(Setting.ITEM_TOKEN_TYPE.getString()));
 
         if (itemStack.getType() == (EpicHeads.getInstance().isServerVersionAtLeast(ServerVersion.V1_13)
                 ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"))) {
             itemStack = EpicHeads.getInstance().getHeadManager().getHeads().stream()
-                    .filter(head -> head.getId() == SettingsManager.Setting.ITEM_TOKEN_ID.getInt())
+                    .filter(head -> head.getId() == Setting.ITEM_TOKEN_ID.getInt())
                     .findFirst().get().asItemStack();
         }
         itemStack.setAmount(amount);
 
         ItemMeta meta = itemStack.getItemMeta();
-        meta.setDisplayName(formatText(SettingsManager.Setting.ITEM_TOKEN_NAME.getString()));
+        meta.setDisplayName(formatText(Setting.ITEM_TOKEN_NAME.getString()));
         List<String> lore = new ArrayList<>();
-        for (String line : SettingsManager.Setting.ITEM_TOKEN_LORE.getStringList())
+        for (String line : Setting.ITEM_TOKEN_LORE.getStringList())
             lore.add(formatText(line));
         meta.setLore(lore);
         itemStack.setItemMeta(meta);

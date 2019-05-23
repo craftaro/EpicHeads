@@ -16,8 +16,9 @@ import com.songoda.epicheads.players.PlayerManager;
 import com.songoda.epicheads.utils.Methods;
 import com.songoda.epicheads.utils.Metrics;
 import com.songoda.epicheads.utils.ServerVersion;
-import com.songoda.epicheads.utils.SettingsManager;
 import com.songoda.epicheads.utils.gui.AbstractGUI;
+import com.songoda.epicheads.utils.settings.Setting;
+import com.songoda.epicheads.utils.settings.SettingsManager;
 import com.songoda.epicheads.utils.storage.Storage;
 import com.songoda.epicheads.utils.storage.StorageRow;
 import com.songoda.epicheads.utils.storage.types.StorageYaml;
@@ -69,10 +70,10 @@ public class EpicHeads extends JavaPlugin {
         console.sendMessage(Methods.formatText("&7Action: &aEnabling&7..."));
 
         this.settingsManager = new SettingsManager(this);
-        this.setupConfig();
+        this.settingsManager.setupConfig();
 
         // Setup language
-        String langMode = SettingsManager.Setting.LANGUGE_MODE.getString();
+        String langMode = Setting.LANGUGE_MODE.getString();
         Locale.init(this);
         Locale.saveDefaultLocale("en_US");
         this.locale = Locale.getLocale(getConfig().getString("System.Language Mode", langMode));
@@ -97,13 +98,13 @@ public class EpicHeads extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new LoginListeners(this), this);
 
         // Setup Economy
-        if (SettingsManager.Setting.VAULT_ECONOMY.getBoolean()
+        if (Setting.VAULT_ECONOMY.getBoolean()
                 && getServer().getPluginManager().getPlugin("Vault") != null)
             this.economy = new VaultEconomy(this);
-        else if (SettingsManager.Setting.PLAYER_POINTS_ECONOMY.getBoolean()
+        else if (Setting.PLAYER_POINTS_ECONOMY.getBoolean()
                 && getServer().getPluginManager().getPlugin("PlayerPoints") != null)
             this.economy = new PlayerPointsEconomy(this);
-        else if (SettingsManager.Setting.ITEM_ECONOMY.getBoolean())
+        else if (Setting.ITEM_ECONOMY.getBoolean())
             this.economy = new ItemEconomy(this);
 
         // Download Heads
@@ -115,7 +116,7 @@ public class EpicHeads extends JavaPlugin {
         // Load Favorites
         loadData();
 
-        int timeout = SettingsManager.Setting.AUTOSAVE.getInt() * 60 * 20;
+        int timeout = Setting.AUTOSAVE.getInt() * 60 * 20;
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::saveToFile, timeout, timeout);
 
         // Start Metrics
@@ -192,7 +193,7 @@ public class EpicHeads extends JavaPlugin {
 
                 int id = Integer.parseInt((String) jsonObject.get("id"));
 
-                if (SettingsManager.Setting.DISABLED_HEADS.getIntegerList().contains(id)) continue;
+                if (Setting.DISABLED_HEADS.getIntegerList().contains(id)) continue;
 
                 Head head = new Head(id,
                         (String) jsonObject.get("name"),
@@ -268,18 +269,11 @@ public class EpicHeads extends JavaPlugin {
         return serverVersion.ordinal() >= version.ordinal();
     }
 
-    private void setupConfig() {
-        settingsManager.updateSettings();
-        this.getConfig().options().copyDefaults(true);
-        this.saveConfig();
-    }
-
     public void reload() {
         saveToFile();
         locale.reloadMessages();
         references = new References();
-        this.setupConfig();
-        saveConfig();
+        settingsManager.reloadConfig();
         saveToFile();
         downloadHeads();
         loadHeads();

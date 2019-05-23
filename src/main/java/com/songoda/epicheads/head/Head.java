@@ -4,7 +4,7 @@ package com.songoda.epicheads.head;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.utils.Methods;
 import com.songoda.epicheads.utils.ServerVersion;
-import com.songoda.epicheads.utils.SettingsManager;
+import com.songoda.epicheads.utils.settings.Setting;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -64,7 +64,7 @@ public class Head {
         ItemStack item = Methods.addTexture(new ItemStack(plugin.isServerVersionAtLeast(ServerVersion.V1_13)
                         ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3), this.URL);
 
-        double cost = SettingsManager.Setting.HEAD_COST.getDouble();
+        double cost = Setting.HEAD_COST.getDouble();
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(Methods.formatText((favorite ? "&6⭐ " : "") + "&9" + name));
         List<String> lore = new ArrayList<>();

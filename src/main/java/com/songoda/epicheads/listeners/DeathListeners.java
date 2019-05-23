@@ -5,7 +5,7 @@ import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.utils.HeadType;
 import com.songoda.epicheads.utils.Methods;
 import com.songoda.epicheads.utils.ServerVersion;
-import com.songoda.epicheads.utils.SettingsManager;
+import com.songoda.epicheads.utils.settings.Setting;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -29,13 +29,13 @@ public class DeathListeners implements Listener {
     @EventHandler
     public void onDeath(EntityDeathEvent event) {
 
-        int ch = Integer.parseInt(SettingsManager.Setting.DROP_CHANCE.getString().replace("%", ""));
+        int ch = Integer.parseInt(Setting.DROP_CHANCE.getString().replace("%", ""));
         double rand = Math.random() * 100;
         if (rand - ch < 0 || ch == 100) {
 
             ItemStack itemNew;
             if (event.getEntity() instanceof Player) {
-                if (!SettingsManager.Setting.DROP_PLAYER_HEADS.getBoolean()) return;
+                if (!Setting.DROP_PLAYER_HEADS.getBoolean()) return;
 
                 String encodededStr = Methods.getEncodedTexture((Player) event.getEntity());
 
@@ -56,7 +56,7 @@ public class DeathListeners implements Listener {
                     itemNew = optional.get().asItemStack();
                 }
             } else {
-                if (!SettingsManager.Setting.DROP_MOB_HEADS.getBoolean() || event.getEntity() instanceof ArmorStand) return;
+                if (!Setting.DROP_MOB_HEADS.getBoolean() || event.getEntity() instanceof ArmorStand) return;
 
                 Head head = new Head(-1, null, HeadType.valueOf(event.getEntity().getType().name()).getUrl(), null, null, (byte) 0);
                 itemNew = head.asItemStack();
