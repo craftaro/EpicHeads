@@ -5,8 +5,8 @@ import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.utils.Methods;
 import com.songoda.epicheads.utils.ServerVersion;
-import com.songoda.epicheads.utils.SettingsManager;
 import com.songoda.epicheads.utils.gui.AbstractGUI;
+import com.songoda.epicheads.utils.settings.Setting;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -107,10 +107,10 @@ public class GUIOverview extends AbstractGUI {
                             category.isLatestPack() ? GUIHeads.QueryTypes.PACK : GUIHeads.QueryTypes.CATEGORY, heads)));
         }
 
-        createButton(SettingsManager.Setting.DISCORD.getBoolean() ? 39 : 40, Material.COMPASS, plugin.getLocale().getMessage("gui.overview.search"));
+        createButton(Setting.DISCORD.getBoolean() ? 39 : 40, Material.COMPASS, plugin.getLocale().getMessage("gui.overview.search"));
 
 
-        if (SettingsManager.Setting.DISCORD.getBoolean()) {
+        if (Setting.DISCORD.getBoolean()) {
             ArrayList<String> lore2 = new ArrayList<>();
             String[] parts2 = plugin.getLocale().getMessage("gui.overview.discordlore").split("\\|");
             for (String line : parts2)
@@ -130,10 +130,10 @@ public class GUIOverview extends AbstractGUI {
                 new GUIHeads(plugin, player, null, GUIHeads.QueryTypes.FAVORITES,
                         plugin.getPlayerManager().getPlayer(player).getFavoritesAsHeads())));
 
-        registerClickable(SettingsManager.Setting.DISCORD.getBoolean() ? 39 : 40, ((player1, inventory1, cursor, slot, type) ->
+        registerClickable(Setting.DISCORD.getBoolean() ? 39 : 40, ((player1, inventory1, cursor, slot, type) ->
                 GUIHeads.doSearch(player1)));
 
-        if (SettingsManager.Setting.DISCORD.getBoolean()) {
+        if (Setting.DISCORD.getBoolean()) {
             registerClickable(41, ((player1, inventory1, cursor, slot, type) -> {
                 player.sendMessage(Methods.formatText(plugin.getReferences().getPrefix() + "&9https://discord.gg/A9TRJQb"));
                 player.closeInventory();

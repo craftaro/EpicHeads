@@ -6,8 +6,8 @@ import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.players.EPlayer;
 import com.songoda.epicheads.utils.AbstractChatConfirm;
-import com.songoda.epicheads.utils.SettingsManager;
 import com.songoda.epicheads.utils.gui.AbstractGUI;
+import com.songoda.epicheads.utils.settings.Setting;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -154,13 +154,13 @@ public class GUIHeads extends AbstractGUI {
             if (head.getName() == null) continue;
 
             boolean free = player.hasPermission("epicheads.bypasscost")
-                    || (SettingsManager.Setting.FREE_IN_CREATIVE.getBoolean() && player.getGameMode() == GameMode.CREATIVE);
+                    || (Setting.FREE_IN_CREATIVE.getBoolean() && player.getGameMode() == GameMode.CREATIVE);
 
             ItemStack item = head.asItemStack(favorites.contains(head.getURL()), free);
 
             inventory.setItem(i + 9, item);
 
-            double cost = SettingsManager.Setting.HEAD_COST.getDouble();
+            double cost = Setting.HEAD_COST.getDouble();
 
             registerClickable(i + 9, ((player1, inventory1, cursor, slot, type) -> {
                 if (type == ClickType.SHIFT_LEFT || type == ClickType.SHIFT_RIGHT) {
