@@ -8,12 +8,12 @@ general.word.everyone = "everyone"
 general.phrase.latestpack = "Latest Pack"
 
 general.search.global = "&6Enter your search query."
-general.search.refine = "&6Enter a search term to refine your search.")
+general.search.refine = "&6Enter a search term to refine your search."
 general.search.nonefound = "&cNo heads found.."
 
-general.head.staffpicked = "&8Staff Favorite";
+general.head.staffpicked = "&8Staff Favorite"
 general.head.id = "&8ID: &7%id%"
-general.head.cost = "&8Cost: &7$%cost%";
+general.head.cost = "&8Cost: &7$%cost%"
 
 gui.heads.refine = "&9Refine Search"
 gui.heads.search = "&9Create Search"
