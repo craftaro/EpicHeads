@@ -58,7 +58,10 @@ public class DeathListeners implements Listener {
             } else {
                 if (!Setting.DROP_MOB_HEADS.getBoolean() || event.getEntity() instanceof ArmorStand) return;
 
-                Head head = new Head(-1, null, HeadType.valueOf(event.getEntity().getType().name()).getUrl(), null, null, (byte) 0);
+                Head head = new Head(-1, Methods.formatText(event.getEntity().getType().name().toLowerCase()
+                        .replace("_", " "), true),
+                        HeadType.valueOf(event.getEntity().getType().name()).getUrl(),
+                        null, null, (byte) 0);
                 itemNew = head.asItemStack();
             }
 
