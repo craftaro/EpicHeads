@@ -35,6 +35,7 @@ public class CommandManager implements CommandExecutor {
         addCommand(new CommandGive(commandEpicHeads));
         addCommand(new CommandGiveToken(commandEpicHeads));
         addCommand(new CommandAdd(commandEpicHeads));
+        addCommand(new CommandSearch(commandEpicHeads));
 
         for (AbstractCommand abstractCommand : commands) {
             if (abstractCommand.getParent() != null) continue;
