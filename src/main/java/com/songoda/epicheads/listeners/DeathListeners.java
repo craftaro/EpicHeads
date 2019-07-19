@@ -29,7 +29,7 @@ public class DeathListeners implements Listener {
     @EventHandler
     public void onDeath(EntityDeathEvent event) {
 
-        int ch = Integer.parseInt(Setting.DROP_CHANCE.getString().replace("%", ""));
+        double ch = Double.parseDouble(Setting.DROP_CHANCE.getString().replace("%", ""));
         double rand = Math.random() * 100;
         if (rand - ch < 0 || ch == 100) {
 
