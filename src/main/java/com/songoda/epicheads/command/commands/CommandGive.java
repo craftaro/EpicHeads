@@ -30,7 +30,8 @@ public class CommandGive extends AbstractCommand {
         int headId = Integer.parseInt(args[3]);
 
         if (player == null && !playerStr.equals("all")) {
-            sender.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.notonline", args[1]));
+            instance.getLocale().getMessage("command.give.notonline")
+                    .processPlaceholder("name", args[1]).sendPrefixedMessage(sender);
             return ReturnType.FAILURE;
         }
 
@@ -57,18 +58,28 @@ public class CommandGive extends AbstractCommand {
                 for (Player pl : Bukkit.getOnlinePlayers()) {
                     if (pl == sender) continue;
                     pl.getInventory().addItem(item);
-                    pl.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.receive", head.get().getName()));
+
+                    instance.getLocale().getMessage("command.give.receive")
+                            .processPlaceholder("name", head.get().getName()).sendPrefixedMessage(pl);
                 }
-                sender.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.success", instance.getLocale().getMessage("general.word.everyone"), head.get().getName()));
+                instance.getLocale().getMessage("command.give.success")
+                        .processPlaceholder("player", instance.getLocale().getMessage("general.word.everyone").getMessage())
+                        .processPlaceholder("name", head.get().getName())
+                        .sendPrefixedMessage(sender);
             } else {
                 player.getInventory().addItem(item);
-                player.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.receive", head.get().getName()));
-                sender.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.success", player.getName(), head.get().getName()));
+                instance.getLocale().getMessage("command.give.receive")
+                        .processPlaceholder("name", head.get().getName()).sendPrefixedMessage(player);
+                instance.getLocale().getMessage("command.give.success")
+                        .processPlaceholder("player", player.getName())
+                        .processPlaceholder("name", head.get().getName())
+                        .sendPrefixedMessage(sender);
             }
 
             return ReturnType.SUCCESS;
         } else {
-            sender.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.notfound", head.get().getName()));
+            instance.getLocale().getMessage("command.give.notfound")
+                    .processPlaceholder("name", head.get().getName()).sendPrefixedMessage(sender);
             return ReturnType.FAILURE;
         }
     }

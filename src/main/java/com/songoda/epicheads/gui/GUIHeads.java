@@ -50,7 +50,7 @@ public class GUIHeads extends AbstractGUI {
     private void updateTitle() {
         int numHeads = this.heads.size();
         if (numHeads == 0) {
-            player.sendMessage(plugin.getReferences().getPrefix() + plugin.getLocale().getMessage("general.search.nonefound"));
+            plugin.getLocale().getMessage("general.search.nonefound").sendPrefixedMessage(player);
             return;
         }
         Category category = heads.get(0).getCategory();
@@ -65,10 +65,10 @@ public class GUIHeads extends AbstractGUI {
                 name = category.getName();
                 break;
             case FAVORITES:
-                name = plugin.getLocale().getMessage("general.word.favorites");
+                name = plugin.getLocale().getMessage("general.word.favorites").getMessage();
                 break;
             case PACK:
-                name = plugin.getLocale().getMessage("general.phrase.latestpack");
+                name = plugin.getLocale().getMessage("general.phrase.latestpack").getMessage();
                 break;
         }
 
@@ -111,13 +111,13 @@ public class GUIHeads extends AbstractGUI {
             inventory.getItem(2).setAmount(page);
         }
 
-        createButton(3, Material.COMPASS, plugin.getLocale().getMessage("gui.heads.search"));
+        createButton(3, Material.COMPASS, plugin.getLocale().getMessage("gui.heads.search").getMessage());
 
-        createButton(4, Material.MAP, plugin.getLocale().getMessage("gui.heads.categories"));
+        createButton(4, Material.MAP, plugin.getLocale().getMessage("gui.heads.categories").getMessage());
         inventory.getItem(4).setAmount(page + 1);
 
         if (heads.size() > 1)
-            createButton(5, Material.COMPASS, plugin.getLocale().getMessage("gui.heads.refine"));
+            createButton(5, Material.COMPASS, plugin.getLocale().getMessage("gui.heads.refine").getMessage());
 
         if (page != maxPage) {
             createButton(6, Material.ARROW, "&c" + plugin.getLocale().getMessage("general.word.page") + " " + (page + 2));
@@ -184,7 +184,7 @@ public class GUIHeads extends AbstractGUI {
                         if (economy.hasBalance(player, cost)) {
                             economy.withdrawBalance(player, cost);
                         } else {
-                            player.sendMessage(plugin.getLocale().getMessage("event.buyhead.cannotafford"));
+                            player.sendMessage(plugin.getLocale().getMessage("event.buyhead.cannotafford").getMessage());
                             return;
                         }
                     } else {
@@ -209,7 +209,7 @@ public class GUIHeads extends AbstractGUI {
         if (heads.size() > 1) {
             registerClickable(5, ((player1, inventory1, cursor, slot, type) -> {
 
-                player.sendMessage(plugin.getReferences().getPrefix() + plugin.getLocale().getMessage("general.search.refine"));
+                plugin.getLocale().getMessage("general.search.refine").sendPrefixedMessage(player);
                 AbstractChatConfirm abstractChatConfirm = new AbstractChatConfirm(player, event -> {
                     this.page = 0;
                     this.heads = this.heads.stream().filter(head -> head.getName().toLowerCase()
@@ -230,7 +230,7 @@ public class GUIHeads extends AbstractGUI {
     }
 
     public static void doSearch(Player player) {
-        player.sendMessage(EpicHeads.getInstance().getReferences().getPrefix() + EpicHeads.getInstance().getLocale().getMessage("general.search.global"));
+        EpicHeads.getInstance().getLocale().getMessage("general.search.global").sendPrefixedMessage(player);
         new AbstractChatConfirm(player, event -> {
             List<Head> heads = EpicHeads.getInstance().getHeadManager().getHeads().stream()
                     .filter(head -> head.getName().toLowerCase().contains(event.getMessage().toLowerCase()))

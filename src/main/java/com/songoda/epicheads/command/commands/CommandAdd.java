@@ -27,7 +27,7 @@ public class CommandAdd extends AbstractCommand {
         HeadManager headManager = instance.getHeadManager();
 
         if (headManager.getLocalHeads().stream().anyMatch(head -> head.getURL().equals(url))) {
-            sender.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.add.exists"));
+            instance.getLocale().getMessage("command.add.exists").sendPrefixedMessage(sender);
             return ReturnType.FAILURE;
         }
 
@@ -37,7 +37,8 @@ public class CommandAdd extends AbstractCommand {
 
         headManager.addLocalHead(new Head(headManager.getNextLocalId(), name, url, category, null, (byte)0));
 
-        sender.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.add.success", name));
+        instance.getLocale().getMessage("command.add.success")
+                .processPlaceholder("name", name).sendPrefixedMessage(sender);
         if (categories.isEmpty()) {
             instance.reload();
         }

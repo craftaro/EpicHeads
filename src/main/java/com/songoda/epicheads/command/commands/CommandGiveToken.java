@@ -22,16 +22,20 @@ public class CommandGiveToken extends AbstractCommand {
         int amount = Integer.valueOf(args[2]);
 
         if (player == null) {
-            sender.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.notonline", args[1]));
+            instance.getLocale().getMessage("command.give.notonline")
+                    .processPlaceholder("name", args[1]).sendPrefixedMessage(sender);
             return ReturnType.FAILURE;
         }
 
         player.getInventory().addItem(Methods.createToken(amount));
 
-        player.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.givetoken.receive", amount));
+        instance.getLocale().getMessage("command.givetoken.receive")
+                .processPlaceholder("amount", amount).sendPrefixedMessage(player);
 
         if (player != sender)
-            sender.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.givetoken.success", player.getName(), amount));
+            instance.getLocale().getMessage("command.givetoken.success")
+                    .processPlaceholder("player", player.getName())
+                    .processPlaceholder("amount", amount).sendPrefixedMessage(sender);
 
         return ReturnType.SUCCESS;
     }

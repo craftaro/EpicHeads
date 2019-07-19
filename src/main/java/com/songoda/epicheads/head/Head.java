@@ -69,10 +69,12 @@ public class Head {
         meta.setDisplayName(Methods.formatText((favorite ? "&6⭐ " : "") + "&9" + name));
         List<String> lore = new ArrayList<>();
         if (this.staffPicked == 1)
-            lore.add(Methods.formatText(plugin.getLocale().getMessage("general.head.staffpicked")));
-        lore.add(Methods.formatText(plugin.getLocale().getMessage("general.head.id", this.id)));
+            lore.add(plugin.getLocale().getMessage("general.head.staffpicked").getMessage());
+        lore.add(plugin.getLocale().getMessage("general.head.id")
+                .processPlaceholder("id", this.id).getMessage());
         if (!free)
-            lore.add(plugin.getLocale().getMessage("general.head.cost", cost));
+            lore.add(plugin.getLocale().getMessage("general.head.cost")
+                    .processPlaceholder("cost", cost).getMessage());
 
         meta.setLore(lore);
         item.setItemMeta(meta);

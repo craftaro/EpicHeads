@@ -31,8 +31,7 @@ public class CommandUrl extends AbstractCommand {
 
         String url = Methods.getDecodedTexture(encodededStr);
 
-        player.sendMessage(instance.getReferences().getPrefix());
-        player.sendMessage("http://textures.minecraft.net/texture/" + url);
+        instance.getLocale().newMessage("http://textures.minecraft.net/texture/" + url).sendPrefixedMessage(player);
 
         return ReturnType.SUCCESS;
     }

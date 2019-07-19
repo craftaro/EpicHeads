@@ -17,6 +17,7 @@ import com.songoda.epicheads.utils.Methods;
 import com.songoda.epicheads.utils.Metrics;
 import com.songoda.epicheads.utils.ServerVersion;
 import com.songoda.epicheads.utils.gui.AbstractGUI;
+import com.songoda.epicheads.utils.locale.Locale;
 import com.songoda.epicheads.utils.settings.Setting;
 import com.songoda.epicheads.utils.settings.SettingsManager;
 import com.songoda.epicheads.utils.storage.Storage;
@@ -44,7 +45,6 @@ import java.util.UUID;
 public class EpicHeads extends JavaPlugin {
     private static CommandSender console = Bukkit.getConsoleSender();
     private static EpicHeads INSTANCE;
-    private References references;
 
     private ServerVersion serverVersion = ServerVersion.fromPackageName(Bukkit.getServer().getClass().getPackage().getName());
 
@@ -73,17 +73,14 @@ public class EpicHeads extends JavaPlugin {
         this.settingsManager.setupConfig();
 
         // Setup language
-        String langMode = Setting.LANGUGE_MODE.getString();
-        Locale.init(this);
-        Locale.saveDefaultLocale("en_US");
-        this.locale = Locale.getLocale(getConfig().getString("System.Language Mode", langMode));
+        new Locale(this, "en_US");
+        this.locale = Locale.getLocale(getConfig().getString("System.Language Mode"));
 
         //Running Songoda Updater
         Plugin plugin = new Plugin(this, 26);
         plugin.addModule(new LocaleModule());
         SongodaUpdate.load(plugin);
 
-        this.references = new References();
         this.storage = new StorageYaml(this);
 
         // Setup Managers
@@ -271,8 +268,8 @@ public class EpicHeads extends JavaPlugin {
 
     public void reload() {
         saveToFile();
-        locale.reloadMessages();
-        references = new References();
+        this.locale = Locale.getLocale(getConfig().getString("System.Language Mode"));
+        this.locale.reloadMessages();
         settingsManager.reloadConfig();
         saveToFile();
         downloadHeads();
@@ -285,10 +282,6 @@ public class EpicHeads extends JavaPlugin {
 
     public Economy getEconomy() {
         return economy;
-    }
-
-    public References getReferences() {
-        return references;
     }
 
     public HeadManager getHeadManager() {

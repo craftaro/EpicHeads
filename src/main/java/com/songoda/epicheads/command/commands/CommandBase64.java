@@ -29,8 +29,7 @@ public class CommandBase64 extends AbstractCommand {
 
         if (encodededStr == null) return ReturnType.FAILURE;
 
-        player.sendMessage(instance.getReferences().getPrefix());
-        player.sendMessage(encodededStr);
+        instance.getLocale().newMessage(encodededStr).sendPrefixedMessage(player);
 
         return ReturnType.SUCCESS;
     }

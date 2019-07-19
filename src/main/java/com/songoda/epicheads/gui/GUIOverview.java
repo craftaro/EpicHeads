@@ -25,7 +25,9 @@ public class GUIOverview extends AbstractGUI {
         super(player);
         this.plugin = plugin;
 
-        init(plugin.getLocale().getMessage("gui.overview.title", plugin.getHeadManager().getHeads().size()), 45);
+        init(plugin.getLocale().getMessage("gui.overview.title")
+                .processPlaceholder("count", plugin.getHeadManager().getHeads().size())
+                .getMessage(), 45);
     }
 
     @Override
@@ -35,12 +37,12 @@ public class GUIOverview extends AbstractGUI {
         registerClickables();
 
         ArrayList<String> lore = new ArrayList<>();
-        String[] parts = plugin.getLocale().getMessage("gui.overview.favoriteslore").split("\\|");
+        String[] parts = plugin.getLocale().getMessage("gui.overview.favoriteslore").getMessage().split("\\|");
         for (String line : parts)
             lore.add(Methods.formatText(line));
 
-        createButton(4, Material.GOLDEN_APPLE, plugin.getLocale().getMessage("gui.overview.viewfavorites"),
-                lore);
+        createButton(4, Material.GOLDEN_APPLE, plugin.getLocale().getMessage("gui.overview.viewfavorites")
+                        .getMessage(), lore);
 
         inventory.setItem(0, Methods.getBackgroundGlass(true));
         inventory.setItem(1, Methods.getBackgroundGlass(true));
@@ -70,7 +72,8 @@ public class GUIOverview extends AbstractGUI {
                 .collect(Collectors.toList());
 
         if (page != 0) {
-            createButton(37, Material.ARROW, plugin.getLocale().getMessage("gui.general.previous"));
+            createButton(37, Material.ARROW, plugin.getLocale().getMessage("gui.general.previous")
+                    .getMessage());
             registerClickable(37, ((player1, inventory1, cursor, slot, type) -> {
                 page --;
                 constructGUI();
@@ -78,7 +81,8 @@ public class GUIOverview extends AbstractGUI {
         }
 
         if (page != maxPage) {
-            createButton(43, Material.ARROW, plugin.getLocale().getMessage("gui.general.next"));
+            createButton(43, Material.ARROW, plugin.getLocale().getMessage("gui.general.next")
+                    .getMessage());
             registerClickable(43, ((player1, inventory1, cursor, slot, type) -> {
                 page ++;
                 constructGUI();
@@ -98,28 +102,34 @@ public class GUIOverview extends AbstractGUI {
 
             createButton(i + 10 + add, Methods.addTexture(new ItemStack(plugin.isServerVersionAtLeast(ServerVersion.V1_13)
                             ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3), firstHead.getURL()),
-                    plugin.getLocale().getMessage("gui.overview.headname", Color.getRandomColor() + category.getName()),
-                    category.isLatestPack() ? plugin.getLocale().getMessage("gui.overview.packlore", firstHead.getPack())
-                            : plugin.getLocale().getMessage("gui.overview.headlore", String.format("%,d", category.getCount())));
+                    plugin.getLocale().getMessage("gui.overview.headname")
+                            .processPlaceholder("name", Color.getRandomColor() + category.getName())
+                            .getMessage(),
+                    category.isLatestPack() ? plugin.getLocale().getMessage("gui.overview.packlore")
+                            .processPlaceholder("pack", firstHead.getPack()).getMessage()
+                            : plugin.getLocale().getMessage("gui.overview.headlore")
+                            .processPlaceholder("count", String.format("%,d", category.getCount()))
+                            .getMessage());
 
             registerClickable(i + 10 + add, ((player1, inventory1, cursor, slot, type) ->
                     new GUIHeads(plugin, player, category.isLatestPack() ? category.getName() : null,
                             category.isLatestPack() ? GUIHeads.QueryTypes.PACK : GUIHeads.QueryTypes.CATEGORY, heads)));
         }
 
-        createButton(Setting.DISCORD.getBoolean() ? 39 : 40, Material.COMPASS, plugin.getLocale().getMessage("gui.overview.search"));
+        createButton(Setting.DISCORD.getBoolean() ? 39 : 40, Material.COMPASS, plugin.getLocale().getMessage("gui.overview.search").getMessage());
 
 
         if (Setting.DISCORD.getBoolean()) {
             ArrayList<String> lore2 = new ArrayList<>();
-            String[] parts2 = plugin.getLocale().getMessage("gui.overview.discordlore").split("\\|");
+            String[] parts2 = plugin.getLocale().getMessage("gui.overview.discordlore")
+                    .getMessage().split("\\|");
             for (String line : parts2)
                 lore2.add(Methods.formatText(line));
 
             createButton(41, Methods.addTexture(new ItemStack(plugin.isServerVersionAtLeast(ServerVersion.V1_13)
                             ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3),
                     "a3b183b148b9b4e2b158334aff3b5bb6c2c2dbbc4d67f76a7be856687a2b623"),
-                    plugin.getLocale().getMessage("gui.overview.discord"),
+                    plugin.getLocale().getMessage("gui.overview.discord").getMessage(),
                     lore2);
         }
     }
@@ -135,7 +145,7 @@ public class GUIOverview extends AbstractGUI {
 
         if (Setting.DISCORD.getBoolean()) {
             registerClickable(41, ((player1, inventory1, cursor, slot, type) -> {
-                player.sendMessage(Methods.formatText(plugin.getReferences().getPrefix() + "&9https://discord.gg/A9TRJQb"));
+                plugin.getLocale().newMessage("&9https://discord.gg/A9TRJQb").sendPrefixedMessage(player);
                 player.closeInventory();
             }));
         }
