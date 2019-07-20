@@ -1,10 +1,7 @@
 package com.songoda.epicheads;
 
 import com.songoda.epicheads.command.CommandManager;
-import com.songoda.epicheads.economy.Economy;
-import com.songoda.epicheads.economy.ItemEconomy;
-import com.songoda.epicheads.economy.PlayerPointsEconomy;
-import com.songoda.epicheads.economy.VaultEconomy;
+import com.songoda.epicheads.economy.*;
 import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.head.HeadManager;
@@ -29,6 +26,7 @@ import com.songoda.update.SongodaUpdate;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -88,21 +86,23 @@ public class EpicHeads extends JavaPlugin {
         this.playerManager = new PlayerManager();
         this.commandManager = new CommandManager(this);
 
+        PluginManager pluginManager = Bukkit.getPluginManager();
+
         // Register Listeners
         AbstractGUI.initializeListeners(this);
-        Bukkit.getPluginManager().registerEvents(new DeathListeners(this), this);
-        Bukkit.getPluginManager().registerEvents(new ItemListeners(this), this);
-        Bukkit.getPluginManager().registerEvents(new LoginListeners(this), this);
+        pluginManager.registerEvents(new DeathListeners(this), this);
+        pluginManager.registerEvents(new ItemListeners(this), this);
+        pluginManager.registerEvents(new LoginListeners(this), this);
 
         // Setup Economy
-        if (Setting.VAULT_ECONOMY.getBoolean()
-                && getServer().getPluginManager().getPlugin("Vault") != null)
-            this.economy = new VaultEconomy(this);
-        else if (Setting.PLAYER_POINTS_ECONOMY.getBoolean()
-                && getServer().getPluginManager().getPlugin("PlayerPoints") != null)
-            this.economy = new PlayerPointsEconomy(this);
+        if (Setting.VAULT_ECONOMY.getBoolean() && pluginManager.isPluginEnabled("Vault"))
+            this.economy = new VaultEconomy();
+        else if (Setting.RESERVE_ECONOMY.getBoolean() && pluginManager.isPluginEnabled("Reserve"))
+            this.economy = new ReserveEconomy();
+        else if (Setting.PLAYER_POINTS_ECONOMY.getBoolean() && pluginManager.isPluginEnabled("PlayerPoints"))
+            this.economy = new PlayerPointsEconomy();
         else if (Setting.ITEM_ECONOMY.getBoolean())
-            this.economy = new ItemEconomy(this);
+            this.economy = new ItemEconomy();
 
         // Download Heads
         downloadHeads();

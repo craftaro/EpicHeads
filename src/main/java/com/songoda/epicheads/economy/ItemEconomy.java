@@ -1,17 +1,10 @@
 package com.songoda.epicheads.economy;
 
-import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.utils.Methods;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class ItemEconomy implements Economy {
-
-    private final EpicHeads plugin;
-
-    public ItemEconomy(EpicHeads plugin) {
-        this.plugin = plugin;
-    }
 
 
     public boolean isItem(ItemStack itemStack) {
