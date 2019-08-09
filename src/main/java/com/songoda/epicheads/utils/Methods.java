@@ -105,8 +105,9 @@ public class Methods {
         meta.setDisplayName(formatText(Setting.ITEM_TOKEN_NAME.getString()));
         List<String> lore = new ArrayList<>();
         for (String line : Setting.ITEM_TOKEN_LORE.getStringList())
-            lore.add(formatText(line));
-        meta.setLore(lore);
+            if (!line.equals(""))
+                lore.add(formatText(line));
+        if (lore != null) meta.setLore(lore);
         itemStack.setItemMeta(meta);
         return itemStack;
     }
