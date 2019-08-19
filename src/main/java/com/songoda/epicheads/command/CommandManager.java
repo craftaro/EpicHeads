@@ -2,7 +2,6 @@ package com.songoda.epicheads.command;
 
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.command.commands.*;
-import com.songoda.epicheads.utils.Methods;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
