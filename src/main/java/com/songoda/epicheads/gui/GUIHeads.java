@@ -1,16 +1,18 @@
 package com.songoda.epicheads.gui;
 
+import com.songoda.core.compatibility.LegacyMaterials;
+import com.songoda.core.gui.Gui;
+import com.songoda.core.gui.GuiUtils;
+import com.songoda.core.hooks.EconomyManager;
+import com.songoda.core.input.ChatPrompt;
 import com.songoda.epicheads.EpicHeads;
-import com.songoda.epicheads.economy.Economy;
 import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.players.EPlayer;
-import com.songoda.epicheads.utils.AbstractChatConfirm;
-import com.songoda.epicheads.utils.gui.AbstractGUI;
-import com.songoda.epicheads.utils.settings.Setting;
+import com.songoda.epicheads.settings.Settings;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -21,9 +23,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GUIHeads extends AbstractGUI {
+public class GUIHeads extends Gui {
 
     private final EpicHeads plugin;
+    private final Player player;
 
     private List<Head> heads;
     private int page = 0;
@@ -34,8 +37,8 @@ public class GUIHeads extends AbstractGUI {
     private final QueryTypes type;
 
     public GUIHeads(EpicHeads plugin, Player player, String query, QueryTypes type, List<Head> heads) {
-        super(player);
         this.plugin = plugin;
+        this.player = player;
         this.query = query;
         this.type = type;
 
@@ -73,77 +76,108 @@ public class GUIHeads extends AbstractGUI {
         }
 
         this.maxPage = (int) Math.floor(numHeads / 45.0);
-        init(name + " (" + numHeads + ") " + plugin.getLocale().getMessage("general.word.page") + " " + (page + 1) + "/" + (maxPage + 1), 54);
-        constructGUI();
+
+        this.setDefaultItem(null);
+        this.setRows(6);
+        this.setTitle(name + " (" + numHeads + ") " + plugin.getLocale().getMessage("general.word.page") + " " + (page + 1) + "/" + (maxPage + 1));
+        showPage();
     }
 
-    @Override
-    protected void constructGUI() {
-        resetClickables();
-        registerClickables();
+    void showPage() {
         List<Head> heads = this.heads.stream().skip(page * 45).limit(45)
                 .collect(Collectors.toList());
 
         if (page - 2 > 0) {
-            createButton(0, Material.ARROW, "&c" + plugin.getLocale().getMessage("general.word.page") + " " + (page - 2));
-            registerClickable(0, ((player1, inventory1, cursor, slot, type) -> {
-                page -= 3;
-                updateTitle();
-            }));
-            inventory.getItem(0).setAmount(page - 2);
+            ItemStack arrow = GuiUtils.createButtonItem(LegacyMaterials.ARROW,
+                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page - 2));
+            arrow.setAmount(page - 2);
+            setButton(0, arrow,
+                    (event) -> {
+                        page -= 3;
+                        updateTitle();
+                    });
         }
 
         if (page - 1 > 0) {
-            createButton(1, Material.ARROW, "&c" + plugin.getLocale().getMessage("general.word.page") + " " + (page - 1));
-            registerClickable(1, ((player1, inventory1, cursor, slot, type) -> {
-                page -= 2;
-                updateTitle();
-            }));
-            inventory.getItem(1).setAmount(page - 1);
+            ItemStack arrow = GuiUtils.createButtonItem(LegacyMaterials.ARROW,
+                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page - 1));
+            arrow.setAmount(page - 1);
+            setButton(1, arrow,
+                    (event) -> {
+                        page -= 2;
+                        updateTitle();
+                    });
         }
 
         if (page != 0) {
-            createButton(2, Material.ARROW, "&c" + plugin.getLocale().getMessage("general.word.page") + " " + page);
-            registerClickable(2, ((player1, inventory1, cursor, slot, type) -> {
-                page--;
-                updateTitle();
-            }));
-            inventory.getItem(2).setAmount(page);
+            ItemStack arrow = GuiUtils.createButtonItem(LegacyMaterials.ARROW,
+                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + page);
+            arrow.setAmount(page);
+            setButton(2, arrow,
+                    (event) -> {
+                        page--;
+                        updateTitle();
+                    });
         }
 
-        createButton(3, Material.COMPASS, plugin.getLocale().getMessage("gui.heads.search").getMessage());
+        setButton(3, GuiUtils.createButtonItem(LegacyMaterials.COMPASS,
+                plugin.getLocale().getMessage("gui.heads.search").getMessage()),
+                (event) -> doSearch(plugin, event.player));
 
-        createButton(4, Material.MAP, plugin.getLocale().getMessage("gui.heads.categories").getMessage());
-        inventory.getItem(4).setAmount(page + 1);
+        ItemStack map = GuiUtils.createButtonItem(LegacyMaterials.MAP,
+                plugin.getLocale().getMessage("gui.heads.categories").getMessage());
+        map.setAmount(page + 1);
+        setButton(4, map, (event) -> plugin.getGuiManager().showGUI(player, new GUIOverview(plugin, event.player)));
+
 
         if (heads.size() > 1)
-            createButton(5, Material.COMPASS, plugin.getLocale().getMessage("gui.heads.refine").getMessage());
+            setButton(5, GuiUtils.createButtonItem(LegacyMaterials.COMPASS,
+                    plugin.getLocale().getMessage("gui.heads.refine").getMessage()),
+                    (event) -> {
+                        plugin.getLocale().getMessage("general.search.refine").sendPrefixedMessage(event.player);
+                        ChatPrompt chatPrompt = ChatPrompt.showPrompt(plugin, event.player, promptEvent -> {
+                            this.page = 0;
+                            this.heads = this.heads.stream().filter(head -> head.getName().toLowerCase()
+                                    .contains(promptEvent.getMessage().toLowerCase())).collect(Collectors.toList());
+                            if (query == null)
+                                this.query = promptEvent.getMessage();
+                            else
+                                this.query += ", " + promptEvent.getMessage();
+                        });
+                        chatPrompt.setOnClose(this::updateTitle);
+                    });
 
         if (page != maxPage) {
-            createButton(6, Material.ARROW, "&c" + plugin.getLocale().getMessage("general.word.page") + " " + (page + 2));
-            registerClickable(6, ((player1, inventory1, cursor, slot, type) -> {
-                page++;
-                updateTitle();
-            }));
-            inventory.getItem(6).setAmount(page + 2);
+            ItemStack arrow = GuiUtils.createButtonItem(LegacyMaterials.ARROW,
+                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page + 2));
+            arrow.setAmount(page + 2);
+            setButton(6, arrow,
+                    (event) -> {
+                        page++;
+                        updateTitle();
+                    });
         }
 
         if (page + 1 < maxPage) {
-            createButton(7, Material.ARROW, "&c" + plugin.getLocale().getMessage("general.word.page") + " " + (page + 3));
-            registerClickable(7, ((player1, inventory1, cursor, slot, type) -> {
-                page += 2;
-                updateTitle();
-            }));
-            inventory.getItem(7).setAmount(page + 3);
+            ItemStack arrow = GuiUtils.createButtonItem(LegacyMaterials.ARROW,
+                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page + 3));
+            arrow.setAmount(page + 3);
+            setButton(7, arrow,
+                    (event) -> {
+                        page += 2;
+                        updateTitle();
+                    });
         }
 
         if (page + 2 < maxPage) {
-            createButton(8, Material.ARROW, "&c" + plugin.getLocale().getMessage("general.word.page") + " " + (page + 4));
-            registerClickable(8, ((player1, inventory1, cursor, slot, type) -> {
-                page += 3;
-                updateTitle();
-            }));
-            inventory.getItem(8).setAmount(page + 4);
+            ItemStack arrow = GuiUtils.createButtonItem(LegacyMaterials.ARROW,
+                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page + 4));
+            arrow.setAmount(page + 4);
+            setButton(8, arrow,
+                    (event) -> {
+                        page += 3;
+                        updateTitle();
+                    });
         }
 
         List<String> favorites = plugin.getPlayerManager().getPlayer(player).getFavorites();
@@ -154,16 +188,14 @@ public class GUIHeads extends AbstractGUI {
             if (head.getName() == null) continue;
 
             boolean free = player.hasPermission("epicheads.bypasscost")
-                    || (Setting.FREE_IN_CREATIVE.getBoolean() && player.getGameMode() == GameMode.CREATIVE);
+                    || (Settings.FREE_IN_CREATIVE.getBoolean() && player.getGameMode() == GameMode.CREATIVE);
 
             ItemStack item = head.asItemStack(favorites.contains(head.getURL()), free);
 
-            inventory.setItem(i + 9, item);
+            double cost = Settings.HEAD_COST.getDouble();
 
-            double cost = Setting.HEAD_COST.getDouble();
-
-            registerClickable(i + 9, ((player1, inventory1, cursor, slot, type) -> {
-                if (type == ClickType.SHIFT_LEFT || type == ClickType.SHIFT_RIGHT) {
+            setButton(i + 9, item, (event) -> {
+                if (event.clickType == ClickType.SHIFT_LEFT || event.clickType == ClickType.SHIFT_RIGHT) {
                     EPlayer ePlayer = plugin.getPlayerManager().getPlayer(player);
                     if (!ePlayer.getFavorites().contains(head.getURL()))
                         ePlayer.addFavorite(head.getURL());
@@ -179,10 +211,9 @@ public class GUIHeads extends AbstractGUI {
 
 
                 if (!free) {
-                    if (plugin.getEconomy() != null) {
-                        Economy economy = plugin.getEconomy();
-                        if (economy.hasBalance(player, cost)) {
-                            economy.withdrawBalance(player, cost);
+                    if (EconomyManager.isEnabled()) {
+                        if (EconomyManager.hasBalance(player, cost)) {
+                            EconomyManager.withdrawBalance(player, cost);
                         } else {
                             player.sendMessage(plugin.getLocale().getMessage("event.buyhead.cannotafford").getMessage());
                             return;
@@ -192,51 +223,19 @@ public class GUIHeads extends AbstractGUI {
                         return;
                     }
                 }
-
                 player.getInventory().addItem(item);
-            }));
+            });
         }
     }
 
-    @Override
-    protected void registerClickables() {
-        registerClickable(4, ((player1, inventory1, cursor, slot, type) ->
-                new GUIOverview(plugin, player)));
-
-        registerClickable(3, ((player1, inventory1, cursor, slot, type) ->
-                doSearch(player1)));
-
-        if (heads.size() > 1) {
-            registerClickable(5, ((player1, inventory1, cursor, slot, type) -> {
-
-                plugin.getLocale().getMessage("general.search.refine").sendPrefixedMessage(player);
-                AbstractChatConfirm abstractChatConfirm = new AbstractChatConfirm(player, event -> {
-                    this.page = 0;
-                    this.heads = this.heads.stream().filter(head -> head.getName().toLowerCase()
-                            .contains(event.getMessage().toLowerCase())).collect(Collectors.toList());
-                    if (query == null)
-                        this.query = event.getMessage();
-                    else
-                        this.query += ", " + event.getMessage();
-                });
-                abstractChatConfirm.setOnClose(this::updateTitle);
-            }));
-        }
-    }
-
-    @Override
-    protected void registerOnCloses() {
-
-    }
-
-    public static void doSearch(Player player) {
-        EpicHeads.getInstance().getLocale().getMessage("general.search.global").sendPrefixedMessage(player);
-        new AbstractChatConfirm(player, event -> {
-            List<Head> heads = EpicHeads.getInstance().getHeadManager().getHeads().stream()
+    public static void doSearch(EpicHeads plugin, Player player) {
+        plugin.getLocale().getMessage("general.search.global").sendPrefixedMessage(player);
+        ChatPrompt.showPrompt(plugin, player, event -> {
+            List<Head> heads = plugin.getHeadManager().getHeads().stream()
                     .filter(head -> head.getName().toLowerCase().contains(event.getMessage().toLowerCase()))
                     .collect(Collectors.toList());
             Bukkit.getScheduler().scheduleSyncDelayedTask(EpicHeads.getInstance(), () ->
-                    new GUIHeads(EpicHeads.getInstance(), player, event.getMessage(), QueryTypes.SEARCH, heads), 0L);
+                    plugin.getGuiManager().showGUI(player, new GUIHeads(plugin, player, event.getMessage(), QueryTypes.SEARCH, heads)), 0L);
         });
     }
 

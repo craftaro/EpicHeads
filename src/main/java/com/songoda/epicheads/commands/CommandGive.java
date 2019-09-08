@@ -1,7 +1,7 @@
-package com.songoda.epicheads.command.commands;
+package com.songoda.epicheads.commands;
 
+import com.songoda.core.commands.AbstractCommand;
 import com.songoda.epicheads.EpicHeads;
-import com.songoda.epicheads.command.AbstractCommand;
 import com.songoda.epicheads.head.Head;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -15,19 +15,21 @@ import java.util.Optional;
 
 public class CommandGive extends AbstractCommand {
 
-    public CommandGive(AbstractCommand parent) {
-        super(parent, false, "give");
+    final EpicHeads instance;
+
+    public CommandGive(EpicHeads instance) {
+        super(false, "give");
+        this.instance = instance;
     }
 
     @Override
-    protected ReturnType runCommand(EpicHeads instance, CommandSender sender, String... args) {
+    protected ReturnType runCommand(CommandSender sender, String... args) {
+        if (args.length != 3) return ReturnType.SYNTAX_ERROR;
 
-        if (args.length != 4) return ReturnType.SYNTAX_ERROR;
-
-        String playerStr = args[1].toLowerCase();
+        String playerStr = args[0].toLowerCase();
         Player player = Bukkit.getPlayer(playerStr);
-        String archive = args[2];
-        int headId = Integer.parseInt(args[3]);
+        String archive = args[1];
+        int headId = Integer.parseInt(args[2]);
 
         if (player == null && !playerStr.equals("all")) {
             instance.getLocale().getMessage("command.give.notonline")
@@ -85,7 +87,7 @@ public class CommandGive extends AbstractCommand {
     }
 
     @Override
-    protected List<String> onTab(EpicHeads instance, CommandSender sender, String... args) {
+    protected List<String> onTab(CommandSender sender, String... args) {
         return null;
     }
 

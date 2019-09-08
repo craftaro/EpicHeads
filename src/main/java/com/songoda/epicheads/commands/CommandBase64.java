@@ -1,7 +1,7 @@
-package com.songoda.epicheads.command.commands;
+package com.songoda.epicheads.commands;
 
+import com.songoda.core.commands.AbstractCommand;
 import com.songoda.epicheads.EpicHeads;
-import com.songoda.epicheads.command.AbstractCommand;
 import com.songoda.epicheads.utils.Methods;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,14 +12,17 @@ import java.util.List;
 
 public class CommandBase64 extends AbstractCommand {
 
-    public CommandBase64(AbstractCommand parent) {
-        super(parent, true, "base64");
+    final EpicHeads instance;
+
+    public CommandBase64(EpicHeads instance) {
+        super(true, "base64");
+        this.instance = instance;
     }
 
     @Override
-    protected ReturnType runCommand(EpicHeads instance, CommandSender sender, String... args) {
+    protected ReturnType runCommand(CommandSender sender, String... args) {
 
-        Player player = (Player)sender;
+        Player player = (Player) sender;
 
         ItemStack item = player.getItemInHand();
 
@@ -35,7 +38,7 @@ public class CommandBase64 extends AbstractCommand {
     }
 
     @Override
-    protected List<String> onTab(EpicHeads instance, CommandSender sender, String... args) {
+    protected List<String> onTab(CommandSender sender, String... args) {
         return null;
     }
 
@@ -53,4 +56,5 @@ public class CommandBase64 extends AbstractCommand {
     public String getDescription() {
         return "Gives you the base64 code of the head you are holding.";
     }
+
 }

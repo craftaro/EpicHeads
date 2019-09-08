@@ -1,13 +1,13 @@
 package com.songoda.epicheads.gui;
 
+import com.songoda.core.compatibility.LegacyMaterials;
+import com.songoda.core.gui.Gui;
+import com.songoda.core.gui.GuiUtils;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.head.Head;
+import com.songoda.epicheads.settings.Settings;
 import com.songoda.epicheads.utils.Methods;
-import com.songoda.epicheads.utils.ServerVersion;
-import com.songoda.epicheads.utils.gui.AbstractGUI;
-import com.songoda.epicheads.utils.settings.Setting;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,54 +16,43 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class GUIOverview extends AbstractGUI {
-    
-    private final EpicHeads plugin;
-    private int page = 0;
-    
-    public GUIOverview(EpicHeads plugin, Player player) {
-        super(player);
-        this.plugin = plugin;
+public class GUIOverview extends Gui {
 
-        init(plugin.getLocale().getMessage("gui.overview.title")
+    private final EpicHeads plugin;
+    private final Player player;
+    private int page = 0;
+
+    public GUIOverview(EpicHeads plugin, Player player) {
+        this.plugin = plugin;
+        this.player = player;
+
+        this.setDefaultItem(null);
+        this.setRows(5);
+        this.setTitle(plugin.getLocale().getMessage("gui.overview.title")
                 .processPlaceholder("count", plugin.getHeadManager().getHeads().size())
-                .getMessage(), 45);
+                .getMessage());
+        showPage();
     }
 
-    @Override
-    protected void constructGUI() {
-        inventory.clear();
-        resetClickables();
-        registerClickables();
-
+    void showPage() {
         ArrayList<String> lore = new ArrayList<>();
         String[] parts = plugin.getLocale().getMessage("gui.overview.favoriteslore").getMessage().split("\\|");
         for (String line : parts)
             lore.add(Methods.formatText(line));
 
-        createButton(4, Material.GOLDEN_APPLE, plugin.getLocale().getMessage("gui.overview.viewfavorites")
-                        .getMessage(), lore);
+        setButton(4, GuiUtils.createButtonItem(LegacyMaterials.GOLDEN_APPLE,
+                plugin.getLocale().getMessage("gui.overview.viewfavorites").getMessage(), lore),
+                (event) -> plugin.getGuiManager().showGUI(player, new GUIHeads(plugin, player, null, GUIHeads.QueryTypes.FAVORITES,
+                                plugin.getPlayerManager().getPlayer(player).getFavoritesAsHeads())));
 
-        inventory.setItem(0, Methods.getBackgroundGlass(true));
-        inventory.setItem(1, Methods.getBackgroundGlass(true));
-        inventory.setItem(9, Methods.getBackgroundGlass(true));
 
-        inventory.setItem(7, Methods.getBackgroundGlass(true));
-        inventory.setItem(8, Methods.getBackgroundGlass(true));
-        inventory.setItem(17, Methods.getBackgroundGlass(true));
+        ItemStack glass2 = GuiUtils.getBorderItem(Settings.GLASS_TYPE_2.getMaterial());
+        ItemStack glass3 = GuiUtils.getBorderItem(Settings.GLASS_TYPE_3.getMaterial());
 
-        inventory.setItem(27, Methods.getBackgroundGlass(true));
-        inventory.setItem(36, Methods.getBackgroundGlass(true));
-        inventory.setItem(37, Methods.getBackgroundGlass(true));
-
-        inventory.setItem(35, Methods.getBackgroundGlass(true));
-        inventory.setItem(43, Methods.getBackgroundGlass(true));
-        inventory.setItem(44, Methods.getBackgroundGlass(true));
-
-        inventory.setItem(2, Methods.getBackgroundGlass(false));
-        inventory.setItem(6, Methods.getBackgroundGlass(false));
-        inventory.setItem(38, Methods.getBackgroundGlass(false));
-        inventory.setItem(42, Methods.getBackgroundGlass(false));
+        GuiUtils.mirrorFill(this, 0, 0, true, true, glass2);
+        GuiUtils.mirrorFill(this, 1, 0, true, true, glass2);
+        GuiUtils.mirrorFill(this, 0, 1, true, true, glass2);
+        GuiUtils.mirrorFill(this, 0, 2, true, true, glass3);
 
         int numTemplates = plugin.getHeadManager().getCategories().size();
         int maxPage = (int) Math.floor(numTemplates / 21.0);
@@ -71,23 +60,22 @@ public class GUIOverview extends AbstractGUI {
         List<Category> categories = plugin.getHeadManager().getCategories().stream().skip(page * 21).limit(21)
                 .collect(Collectors.toList());
 
-        if (page != 0) {
-            createButton(37, Material.ARROW, plugin.getLocale().getMessage("gui.general.previous")
-                    .getMessage());
-            registerClickable(37, ((player1, inventory1, cursor, slot, type) -> {
-                page --;
-                constructGUI();
-            }));
-        }
+        if (page != 0)
+            setButton(37, GuiUtils.createButtonItem(LegacyMaterials.ARROW,
+                    plugin.getLocale().getMessage("gui.general.previous").getMessage()),
+                    (event) -> {
+                        page--;
+                        showPage();
+                    });
 
-        if (page != maxPage) {
-            createButton(43, Material.ARROW, plugin.getLocale().getMessage("gui.general.next")
-                    .getMessage());
-            registerClickable(43, ((player1, inventory1, cursor, slot, type) -> {
-                page ++;
-                constructGUI();
-            }));
-        }
+        if (page != maxPage)
+            setButton(43, GuiUtils.createButtonItem(LegacyMaterials.ARROW,
+                    plugin.getLocale().getMessage("gui.general.next").getMessage()),
+                    (event) -> {
+                        page++;
+                        showPage();
+                    });
+
         int add = 0;
         for (int i = 0; i < categories.size(); i++) {
             if (i + add == 7 || i + add == 16) add = add + 2;
@@ -100,8 +88,7 @@ public class GUIOverview extends AbstractGUI {
 
             if (!player.hasPermission("epicheads.category." + category.getName().replace(" ", "_"))) continue;
 
-            createButton(i + 10 + add, Methods.addTexture(new ItemStack(plugin.isServerVersionAtLeast(ServerVersion.V1_13)
-                            ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3), firstHead.getURL()),
+            setButton(i + 10 + add, GuiUtils.createButtonItem(Methods.addTexture(new ItemStack(LegacyMaterials.PLAYER_HEAD.getMaterial(), 1, (byte) 3), firstHead.getURL()),
                     plugin.getLocale().getMessage("gui.overview.headname")
                             .processPlaceholder("name", Color.getRandomColor() + category.getName())
                             .getMessage(),
@@ -109,51 +96,33 @@ public class GUIOverview extends AbstractGUI {
                             .processPlaceholder("pack", firstHead.getPack()).getMessage()
                             : plugin.getLocale().getMessage("gui.overview.headlore")
                             .processPlaceholder("count", String.format("%,d", category.getCount()))
-                            .getMessage());
-
-            registerClickable(i + 10 + add, ((player1, inventory1, cursor, slot, type) ->
-                    new GUIHeads(plugin, player, category.isLatestPack() ? category.getName() : null,
-                            category.isLatestPack() ? GUIHeads.QueryTypes.PACK : GUIHeads.QueryTypes.CATEGORY, heads)));
+                            .getMessage()),
+                    (event) ->
+                            plugin.getGuiManager().showGUI(player, new GUIHeads(plugin, player, category.isLatestPack() ? category.getName() : null,
+                                    category.isLatestPack() ? GUIHeads.QueryTypes.PACK : GUIHeads.QueryTypes.CATEGORY, heads)));
         }
 
-        createButton(Setting.DISCORD.getBoolean() ? 39 : 40, Material.COMPASS, plugin.getLocale().getMessage("gui.overview.search").getMessage());
+        setButton(Settings.DISCORD.getBoolean() ? 39 : 40, GuiUtils.createButtonItem(LegacyMaterials.COMPASS,
+                plugin.getLocale().getMessage("gui.overview.search").getMessage()),
+                (event) -> GUIHeads.doSearch(plugin, event.player));
 
 
-        if (Setting.DISCORD.getBoolean()) {
+        if (Settings.DISCORD.getBoolean()) {
             ArrayList<String> lore2 = new ArrayList<>();
             String[] parts2 = plugin.getLocale().getMessage("gui.overview.discordlore")
                     .getMessage().split("\\|");
             for (String line : parts2)
                 lore2.add(Methods.formatText(line));
 
-            createButton(41, Methods.addTexture(new ItemStack(plugin.isServerVersionAtLeast(ServerVersion.V1_13)
-                            ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3),
+            setButton(41, GuiUtils.createButtonItem(Methods.addTexture(new ItemStack(LegacyMaterials.PLAYER_HEAD.getMaterial(), 1, (byte) 3),
                     "a3b183b148b9b4e2b158334aff3b5bb6c2c2dbbc4d67f76a7be856687a2b623"),
                     plugin.getLocale().getMessage("gui.overview.discord").getMessage(),
-                    lore2);
+                    lore2),
+                    (event) -> {
+                        plugin.getLocale().newMessage("&9https://discord.gg/A9TRJQb").sendPrefixedMessage(player);
+                        player.closeInventory();
+                    });
         }
-    }
-
-    @Override
-    protected void registerClickables() {
-        registerClickable(4, ((player1, inventory1, cursor, slot, type) ->
-                new GUIHeads(plugin, player, null, GUIHeads.QueryTypes.FAVORITES,
-                        plugin.getPlayerManager().getPlayer(player).getFavoritesAsHeads())));
-
-        registerClickable(Setting.DISCORD.getBoolean() ? 39 : 40, ((player1, inventory1, cursor, slot, type) ->
-                GUIHeads.doSearch(player1)));
-
-        if (Setting.DISCORD.getBoolean()) {
-            registerClickable(41, ((player1, inventory1, cursor, slot, type) -> {
-                plugin.getLocale().newMessage("&9https://discord.gg/A9TRJQb").sendPrefixedMessage(player);
-                player.closeInventory();
-            }));
-        }
-    }
-
-    @Override
-    protected void registerOnCloses() {
-
     }
 
     public enum Color {

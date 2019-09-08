@@ -1,11 +1,10 @@
 package com.songoda.epicheads.head;
 
 
+import com.songoda.core.compatibility.LegacyMaterials;
 import com.songoda.epicheads.EpicHeads;
+import com.songoda.epicheads.settings.Settings;
 import com.songoda.epicheads.utils.Methods;
-import com.songoda.epicheads.utils.ServerVersion;
-import com.songoda.epicheads.utils.settings.Setting;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -39,7 +38,9 @@ public class Head {
         return name;
     }
 
-    public String getPack() { return pack; }
+    public String getPack() {
+        return pack;
+    }
 
     public String getURL() {
         return URL;
@@ -57,14 +58,15 @@ public class Head {
         return asItemStack(false, false);
     }
 
-    public ItemStack asItemStack(boolean favorite) { return asItemStack(favorite, false); }
+    public ItemStack asItemStack(boolean favorite) {
+        return asItemStack(favorite, false);
+    }
 
     public ItemStack asItemStack(boolean favorite, boolean free) {
         EpicHeads plugin = EpicHeads.getInstance();
-        ItemStack item = Methods.addTexture(new ItemStack(plugin.isServerVersionAtLeast(ServerVersion.V1_13)
-                        ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3), this.URL);
+        ItemStack item = Methods.addTexture(new ItemStack(LegacyMaterials.PLAYER_HEAD.getMaterial(), 1, (byte) 3), this.URL);
 
-        double cost = Setting.HEAD_COST.getDouble();
+        double cost = Settings.HEAD_COST.getDouble();
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(Methods.formatText((favorite ? "&6⭐ " : "") + "&9" + name));
         List<String> lore = new ArrayList<>();

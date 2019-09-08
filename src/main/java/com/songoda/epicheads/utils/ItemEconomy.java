@@ -1,10 +1,11 @@
 package com.songoda.epicheads.economy;
 
+import com.songoda.core.hooks.economies.Economy;
 import com.songoda.epicheads.utils.Methods;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 
-public class ItemEconomy implements Economy {
+public class ItemEconomy extends Economy {
 
 
     public boolean isItem(ItemStack itemStack) {
@@ -60,6 +61,16 @@ public class ItemEconomy implements Economy {
 
     @Override
     public boolean deposit(OfflinePlayer player, double amount) {
+        return false;
+    }
+
+    @Override
+    public String getName() {
+        return "Item";
+    }
+
+    @Override
+    public boolean isEnabled() {
         return false;
     }
 }

@@ -1,12 +1,11 @@
 package com.songoda.epicheads.listeners;
 
+import com.songoda.core.compatibility.LegacyMaterials;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Head;
+import com.songoda.epicheads.settings.Settings;
 import com.songoda.epicheads.utils.HeadType;
 import com.songoda.epicheads.utils.Methods;
-import com.songoda.epicheads.utils.ServerVersion;
-import com.songoda.epicheads.utils.settings.Setting;
-import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,19 +28,18 @@ public class DeathListeners implements Listener {
     @EventHandler
     public void onDeath(EntityDeathEvent event) {
 
-        double ch = Double.parseDouble(Setting.DROP_CHANCE.getString().replace("%", ""));
+        double ch = Double.parseDouble(Settings.DROP_CHANCE.getString().replace("%", ""));
         double rand = Math.random() * 100;
         if (rand - ch < 0 || ch == 100) {
 
             ItemStack itemNew;
             if (event.getEntity() instanceof Player) {
-                if (!Setting.DROP_PLAYER_HEADS.getBoolean()) return;
+                if (!Settings.DROP_PLAYER_HEADS.getBoolean()) return;
 
                 String encodededStr = Methods.getEncodedTexture((Player) event.getEntity());
 
                 if (encodededStr == null) {
-                    itemNew = new ItemStack(plugin.isServerVersionAtLeast(ServerVersion.V1_13)
-                            ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3);
+                    itemNew = new ItemStack(LegacyMaterials.PLAYER_HEAD.getMaterial(), 1, (byte) 3);
 
                     ItemMeta meta = itemNew.getItemMeta();
                     meta.setDisplayName(Methods.formatText("&9" + ((Player) event.getEntity()).getDisplayName()));
@@ -56,7 +54,7 @@ public class DeathListeners implements Listener {
                     itemNew = optional.get().asItemStack();
                 }
             } else {
-                if (!Setting.DROP_MOB_HEADS.getBoolean() || event.getEntity() instanceof ArmorStand) return;
+                if (!Settings.DROP_MOB_HEADS.getBoolean() || event.getEntity() instanceof ArmorStand) return;
 
                 Head head = new Head(-1, Methods.formatText(event.getEntity().getType().name().toLowerCase()
                         .replace("_", " "), true),

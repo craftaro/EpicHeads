@@ -1,27 +1,29 @@
-package com.songoda.epicheads.command.commands;
+package com.songoda.epicheads.commands;
 
+import com.songoda.core.commands.AbstractCommand;
 import com.songoda.epicheads.EpicHeads;
-import com.songoda.epicheads.command.AbstractCommand;
-import com.songoda.epicheads.utils.Methods;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
 public class CommandReload extends AbstractCommand {
 
-    public CommandReload(AbstractCommand parent) {
-        super(parent, false, "reload");
+    final EpicHeads instance;
+
+    public CommandReload(EpicHeads instance) {
+        super(false, "reload");
+        this.instance = instance;
     }
 
     @Override
-    protected ReturnType runCommand(EpicHeads instance, CommandSender sender, String... args) {
-        instance.reload();
+    protected ReturnType runCommand(CommandSender sender, String... args) {
+        instance.reloadConfig();
         instance.getLocale().getMessage("&7Configuration and Language files reloaded.").sendPrefixedMessage(sender);
         return ReturnType.SUCCESS;
     }
 
     @Override
-    protected List<String> onTab(EpicHeads instance, CommandSender sender, String... args) {
+    protected List<String> onTab(CommandSender sender, String... args) {
         return null;
     }
 

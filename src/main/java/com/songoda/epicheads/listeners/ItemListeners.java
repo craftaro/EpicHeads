@@ -1,10 +1,9 @@
 package com.songoda.epicheads.listeners;
 
+import com.songoda.core.compatibility.LegacyMaterials;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.utils.Methods;
-import com.songoda.epicheads.utils.ServerVersion;
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -27,7 +26,7 @@ public class ItemListeners implements Listener {
     public void itemSpawnEvent(ItemSpawnEvent event) {
         ItemStack item = event.getEntity().getItemStack();
 
-        if (item.getType() != (plugin.isServerVersionAtLeast(ServerVersion.V1_13) ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"))) return;
+        if (item.getType() != LegacyMaterials.PLAYER_HEAD.getMaterial()) return;
 
         String encodededStr = Methods.getEncodedTexture(item);
 

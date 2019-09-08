@@ -1,34 +1,30 @@
-package com.songoda.epicheads.command.commands;
+package com.songoda.epicheads.commands;
 
+import com.songoda.core.commands.AbstractCommand;
 import com.songoda.epicheads.EpicHeads;
-import com.songoda.epicheads.command.AbstractCommand;
 import com.songoda.epicheads.gui.GUIHeads;
-import com.songoda.epicheads.head.Head;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class CommandSearch extends AbstractCommand {
 
-    public CommandSearch(AbstractCommand parent) {
-        super(parent, true, "search");
+    final EpicHeads instance;
+
+    public CommandSearch(EpicHeads instance) {
+        super(true, "search");
+        this.instance = instance;
     }
 
     @Override
-    protected ReturnType runCommand(EpicHeads instance, CommandSender sender, String... args) {
-
-        GUIHeads.doSearch((Player)sender);
+    protected AbstractCommand.ReturnType runCommand(CommandSender sender, String... args) {
+        GUIHeads.doSearch(instance, (Player) sender);
         return ReturnType.SUCCESS;
     }
 
     @Override
-    protected List<String> onTab(EpicHeads instance, CommandSender sender, String... args) {
+    protected List<String> onTab(CommandSender sender, String... args) {
         return null;
     }
 

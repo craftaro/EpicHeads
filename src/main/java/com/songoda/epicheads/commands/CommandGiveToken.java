@@ -1,7 +1,7 @@
-package com.songoda.epicheads.command.commands;
+package com.songoda.epicheads.commands;
 
+import com.songoda.core.commands.AbstractCommand;
 import com.songoda.epicheads.EpicHeads;
-import com.songoda.epicheads.command.AbstractCommand;
 import com.songoda.epicheads.utils.Methods;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -11,15 +11,19 @@ import java.util.List;
 
 public class CommandGiveToken extends AbstractCommand {
 
-    public CommandGiveToken(AbstractCommand parent) {
-        super(parent, false, "givetoken");
+    final EpicHeads instance;
+
+    public CommandGiveToken(EpicHeads instance) {
+        super(false, "givetoken");
+        this.instance = instance;
     }
 
     @Override
-    protected ReturnType runCommand(EpicHeads instance, CommandSender sender, String... args) {
+    protected ReturnType runCommand(CommandSender sender, String... args) {
+        if (args.length != 2) return ReturnType.SYNTAX_ERROR;
 
-        Player player = Bukkit.getPlayer(args[1]);
-        int amount = Integer.valueOf(args[2]);
+        Player player = Bukkit.getPlayer(args[0]);
+        int amount = Integer.parseInt(args[1]);
 
         if (player == null) {
             instance.getLocale().getMessage("command.give.notonline")
@@ -41,7 +45,7 @@ public class CommandGiveToken extends AbstractCommand {
     }
 
     @Override
-    protected List<String> onTab(EpicHeads instance, CommandSender sender, String... args) {
+    protected List<String> onTab(CommandSender sender, String... args) {
         return null;
     }
 

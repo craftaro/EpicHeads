@@ -1,7 +1,7 @@
-package com.songoda.epicheads.command.commands;
+package com.songoda.epicheads.commands;
 
+import com.songoda.core.commands.AbstractCommand;
 import com.songoda.epicheads.EpicHeads;
-import com.songoda.epicheads.command.AbstractCommand;
 import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.head.HeadManager;
@@ -12,17 +12,20 @@ import java.util.stream.Collectors;
 
 public class CommandAdd extends AbstractCommand {
 
-    public CommandAdd(AbstractCommand parent) {
-        super(parent, false, "add");
+    final EpicHeads instance;
+
+    public CommandAdd(EpicHeads instance) {
+        super(false, "add");
+        this.instance = instance;
     }
 
     @Override
-    protected ReturnType runCommand(EpicHeads instance, CommandSender sender, String... args) {
-        if (args.length != 4) return ReturnType.SYNTAX_ERROR;
+    protected ReturnType runCommand(CommandSender sender, String... args) {
+        if (args.length != 3) return ReturnType.SYNTAX_ERROR;
 
-        String url = args[1];
-        String name = args[2].replace("_", " ");
-        String categoryStr = args[3].replace("_", " ");
+        String url = args[0];
+        String name = args[1].replace("_", " ");
+        String categoryStr = args[2].replace("_", " ");
 
         HeadManager headManager = instance.getHeadManager();
 
@@ -35,18 +38,18 @@ public class CommandAdd extends AbstractCommand {
 
         Category category = categories.isEmpty() ? new Category(categoryStr) : categories.get(0);
 
-        headManager.addLocalHead(new Head(headManager.getNextLocalId(), name, url, category, null, (byte)0));
+        headManager.addLocalHead(new Head(headManager.getNextLocalId(), name, url, category, null, (byte) 0));
 
         instance.getLocale().getMessage("command.add.success")
                 .processPlaceholder("name", name).sendPrefixedMessage(sender);
         if (categories.isEmpty()) {
-            instance.reload();
+            instance.reloadConfig();
         }
         return ReturnType.SUCCESS;
     }
 
     @Override
-    protected List<String> onTab(EpicHeads instance, CommandSender sender, String... args) {
+    protected List<String> onTab(CommandSender sender, String... args) {
         return null;
     }
 

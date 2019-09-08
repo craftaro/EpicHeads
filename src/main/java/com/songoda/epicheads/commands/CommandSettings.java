@@ -1,7 +1,8 @@
-package com.songoda.epicheads.command.commands;
+package com.songoda.epicheads.commands;
 
+import com.songoda.core.commands.AbstractCommand;
+import com.songoda.core.configuration.editor.PluginConfigGui;
 import com.songoda.epicheads.EpicHeads;
-import com.songoda.epicheads.command.AbstractCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -9,19 +10,21 @@ import java.util.List;
 
 public class CommandSettings extends AbstractCommand {
 
-    public CommandSettings(AbstractCommand parent) {
-        super(parent, true, "settings");
+    final EpicHeads instance;
+
+    public CommandSettings(EpicHeads instance) {
+        super(true, "settings");
+        this.instance = instance;
     }
 
     @Override
-    protected ReturnType runCommand(EpicHeads instance, CommandSender sender, String... args) {
-        Player player = (Player) sender;
-        instance.getSettingsManager().openSettingsManager(player);
+    protected ReturnType runCommand(CommandSender sender, String... args) {
+        instance.getGuiManager().showGUI((Player) sender, new PluginConfigGui(instance));
         return ReturnType.SUCCESS;
     }
 
     @Override
-    protected List<String> onTab(EpicHeads instance, CommandSender sender, String... args) {
+    protected List<String> onTab(CommandSender sender, String... args) {
         return null;
     }
 
