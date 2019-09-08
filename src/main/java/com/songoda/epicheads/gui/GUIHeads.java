@@ -126,7 +126,7 @@ public class GUIHeads extends Gui {
                     (event) -> {
                         exit();
                         ChatPrompt.showPrompt(plugin, event.player, plugin.getLocale().getMessage("general.search.refine").getPrefixedMessage(), promptEvent -> {
-                            this.page = 0;
+                            this.page = 1;
                             this.heads = this.heads.stream().filter(head -> head.getName().toLowerCase()
                                     .contains(promptEvent.getMessage().toLowerCase())).collect(Collectors.toList());
                             if (query == null)
@@ -141,7 +141,7 @@ public class GUIHeads extends Gui {
                         });
                     });
 
-        if (page != pages) {
+        if (page + 1 <= pages) {
             setButton(6, GuiUtils.createButtonItem(LegacyMaterials.ARROW, page + 1,
                     ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page + 1)),
                     (event) -> changePage(+1));
@@ -173,7 +173,8 @@ public class GUIHeads extends Gui {
         double cost = Settings.HEAD_COST.getDouble();
         boolean free = player.hasPermission("epicheads.bypasscost")
                 || (Settings.FREE_IN_CREATIVE.getBoolean() && player.getGameMode() == GameMode.CREATIVE);
-        for (int i = 0; i < pageHeads.size(); i++) {
+        int i = 0;
+        for (; i < pageHeads.size(); i++) {
             Head head = pageHeads.get(i);
 
             if (head.getName() == null) continue;
@@ -212,6 +213,13 @@ public class GUIHeads extends Gui {
 
                 player.getInventory().addItem(headItem);
             });
+        }
+        if(inventory != null) {
+            i += 9;
+            for(; i < this.inventory.getSize(); ++i) {
+                clearActions(i);
+                setItem(i, null);
+            }
         }
     }
 
