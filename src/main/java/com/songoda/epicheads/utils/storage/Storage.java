@@ -1,23 +1,21 @@
 package com.songoda.epicheads.utils.storage;
 
+import com.songoda.core.configuration.Config;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.players.EPlayer;
-import com.songoda.epicheads.utils.ConfigWrapper;
 
 import java.util.List;
 
 public abstract class Storage {
 
     protected final EpicHeads instance;
-    protected final ConfigWrapper dataFile;
+    protected final Config dataFile;
 
     public Storage(EpicHeads instance) {
         this.instance = instance;
-        this.dataFile = new ConfigWrapper(instance, "", "data.yml");
-        this.dataFile.createNewFile(null, "EpicSpawners Data File");
-        this.dataFile.getConfig().options().copyDefaults(true);
-        this.dataFile.saveConfig();
+        this.dataFile = (new Config(instance, "", "data.yml"))
+                .setAutosave(true);
     }
 
     public abstract boolean containsGroup(String group);

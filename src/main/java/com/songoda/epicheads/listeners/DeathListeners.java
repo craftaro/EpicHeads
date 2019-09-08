@@ -39,7 +39,7 @@ public class DeathListeners implements Listener {
                 String encodededStr = Methods.getEncodedTexture((Player) event.getEntity());
 
                 if (encodededStr == null) {
-                    itemNew = new ItemStack(LegacyMaterials.PLAYER_HEAD.getMaterial(), 1, (byte) 3);
+                    itemNew = LegacyMaterials.PLAYER_HEAD.getItem();
 
                     ItemMeta meta = itemNew.getItemMeta();
                     meta.setDisplayName(Methods.formatText("&9" + ((Player) event.getEntity()).getDisplayName()));

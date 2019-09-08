@@ -1,6 +1,7 @@
 package com.songoda.epicheads.commands;
 
 import com.songoda.core.commands.AbstractCommand;
+import com.songoda.core.gui.GuiManager;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.gui.GUIHeads;
 import org.bukkit.command.CommandSender;
@@ -10,16 +11,16 @@ import java.util.List;
 
 public class CommandSearch extends AbstractCommand {
 
-    final EpicHeads instance;
+    final GuiManager guiManager;
 
-    public CommandSearch(EpicHeads instance) {
+    public CommandSearch(GuiManager guiManager) {
         super(true, "search");
-        this.instance = instance;
+        this.guiManager = guiManager;
     }
 
     @Override
     protected AbstractCommand.ReturnType runCommand(CommandSender sender, String... args) {
-        GUIHeads.doSearch(instance, (Player) sender);
+        GUIHeads.doSearch(EpicHeads.getInstance(), null, guiManager, (Player) sender);
         return ReturnType.SUCCESS;
     }
 

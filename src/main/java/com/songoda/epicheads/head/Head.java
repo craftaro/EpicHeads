@@ -1,6 +1,5 @@
 package com.songoda.epicheads.head;
 
-
 import com.songoda.core.compatibility.LegacyMaterials;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.settings.Settings;
@@ -63,12 +62,24 @@ public class Head {
     }
 
     public ItemStack asItemStack(boolean favorite, boolean free) {
-        EpicHeads plugin = EpicHeads.getInstance();
-        ItemStack item = Methods.addTexture(new ItemStack(LegacyMaterials.PLAYER_HEAD.getMaterial(), 1, (byte) 3), this.URL);
+        ItemStack item = Methods.addTexture(LegacyMaterials.PLAYER_HEAD.getItem(), this.URL);
 
-        double cost = Settings.HEAD_COST.getDouble();
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(Methods.formatText((favorite ? "&6⭐ " : "") + "&9" + name));
+        if(meta != null) {
+            meta.setDisplayName(getHeadItemName(favorite));
+            meta.setLore(getHeadItemLore(free));
+            item.setItemMeta(meta);
+        }
+        return item;
+    }
+
+    public String getHeadItemName(boolean favorite) {
+        return Methods.formatText((favorite ? "&6⭐ " : "") + "&9" + name);
+    }
+
+    public List<String> getHeadItemLore(boolean free) {
+        EpicHeads plugin = EpicHeads.getInstance();
+        double cost = Settings.HEAD_COST.getDouble();
         List<String> lore = new ArrayList<>();
         if (this.staffPicked == 1)
             lore.add(plugin.getLocale().getMessage("general.head.staffpicked").getMessage());
@@ -77,10 +88,7 @@ public class Head {
         if (!free)
             lore.add(plugin.getLocale().getMessage("general.head.cost")
                     .processPlaceholder("cost", cost).getMessage());
-
-        meta.setLore(lore);
-        item.setItemMeta(meta);
-        return item;
+        return lore;
     }
 
     @Override

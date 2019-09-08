@@ -26,7 +26,7 @@ public class ItemListeners implements Listener {
     public void itemSpawnEvent(ItemSpawnEvent event) {
         ItemStack item = event.getEntity().getItemStack();
 
-        if (item.getType() != LegacyMaterials.PLAYER_HEAD.getMaterial()) return;
+        if (!LegacyMaterials.PLAYER_HEAD.matches(item)) return;
 
         String encodededStr = Methods.getEncodedTexture(item);
 

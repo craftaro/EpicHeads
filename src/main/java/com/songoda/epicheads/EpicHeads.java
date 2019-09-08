@@ -19,7 +19,6 @@ import com.songoda.epicheads.listeners.LoginListeners;
 import com.songoda.epicheads.players.EPlayer;
 import com.songoda.epicheads.players.PlayerManager;
 import com.songoda.epicheads.settings.Settings;
-import com.songoda.epicheads.utils.Metrics;
 import com.songoda.epicheads.utils.storage.Storage;
 import com.songoda.epicheads.utils.storage.StorageRow;
 import com.songoda.epicheads.utils.storage.types.StorageYaml;
@@ -41,10 +40,11 @@ public class EpicHeads extends SongodaPlugin {
 
     private static EpicHeads INSTANCE;
 
-    private GuiManager guiManager = new GuiManager(this);
+    private final GuiManager guiManager = new GuiManager(this);
     private HeadManager headManager;
     private PlayerManager playerManager;
     private CommandManager commandManager;
+    PluginHook itemEconomyHook = PluginHook.addHook(Economy.class, "EpicHeads", com.songoda.epicheads.economy.ItemEconomy.class);
 
     private Storage storage;
 
@@ -55,7 +55,6 @@ public class EpicHeads extends SongodaPlugin {
     @Override
     public void onPluginLoad() {
         INSTANCE = this;
-        PluginHook.addHook(Economy.class, "EpicHeads", com.songoda.epicheads.economy.ItemEconomy.class);
     }
 
     @Override
@@ -77,11 +76,16 @@ public class EpicHeads extends SongodaPlugin {
         this.setLocale(Settings.LANGUGE_MODE.getString(), false);
 
         // Set economy preference
-        EconomyManager.getManager().setPreferredHook(Settings.ECONOMY_PLUGIN.getString());
+        String ecoPreference = Settings.ECONOMY_PLUGIN.getString();
+        if(ecoPreference.equalsIgnoreCase("item")) {
+            EconomyManager.getManager().setPreferredHook(itemEconomyHook);
+        } else {
+            EconomyManager.getManager().setPreferredHook(ecoPreference);
+        }
 
         // Register commands
         this.commandManager = new CommandManager(this);
-        this.commandManager.addCommand(new CommandEpicHeads(this))
+        this.commandManager.addCommand(new CommandEpicHeads(guiManager))
                 .addSubCommands(
                         new CommandAdd(this),
                         new CommandBase64(this),
@@ -89,8 +93,8 @@ public class EpicHeads extends SongodaPlugin {
                         new CommandGiveToken(this),
                         new CommandHelp(this),
                         new CommandReload(this),
-                        new CommandSearch(this),
-                        new CommandSettings(this),
+                        new CommandSearch(guiManager),
+                        new CommandSettings(guiManager),
                         new CommandUrl(this)
                 );
 
@@ -118,9 +122,6 @@ public class EpicHeads extends SongodaPlugin {
 
         int timeout = Settings.AUTOSAVE.getInt() * 60 * 20;
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::saveToFile, timeout, timeout);
-
-        // Start Metrics
-        new Metrics(this);
     }
 
     private void saveToFile() {
@@ -260,10 +261,6 @@ public class EpicHeads extends SongodaPlugin {
 
     public CommandManager getCommandManager() {
         return commandManager;
-    }
-
-    public GuiManager getGuiManager() {
-        return guiManager;
     }
 
     public HeadManager getHeadManager() {

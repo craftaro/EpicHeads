@@ -7,13 +7,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class ItemEconomy extends Economy {
 
-
     public boolean isItem(ItemStack itemStack) {
         if (itemStack == null)
             return false;
         return itemStack.isSimilar(Methods.createToken(1));
     }
-
 
     private int convertAmount(double amount) {
         return (int) Math.ceil(amount);
@@ -31,7 +29,6 @@ public class ItemEconomy extends Economy {
         }
         return false;
     }
-
 
     @Override
     public boolean withdrawBalance(OfflinePlayer player, double cost) {
