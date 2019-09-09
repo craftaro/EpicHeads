@@ -1,11 +1,10 @@
 package com.songoda.epicheads.head;
 
-
+import com.songoda.core.compatibility.CompatibleMaterial;
+import com.songoda.core.utils.ItemUtils;
 import com.songoda.epicheads.EpicHeads;
+import com.songoda.epicheads.settings.Settings;
 import com.songoda.epicheads.utils.Methods;
-import com.songoda.epicheads.utils.ServerVersion;
-import com.songoda.epicheads.utils.settings.Setting;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -39,7 +38,9 @@ public class Head {
         return name;
     }
 
-    public String getPack() { return pack; }
+    public String getPack() {
+        return pack;
+    }
 
     public String getURL() {
         return URL;
@@ -57,26 +58,38 @@ public class Head {
         return asItemStack(false, false);
     }
 
-    public ItemStack asItemStack(boolean favorite) { return asItemStack(favorite, false); }
+    public ItemStack asItemStack(boolean favorite) {
+        return asItemStack(favorite, false);
+    }
 
     public ItemStack asItemStack(boolean favorite, boolean free) {
-        EpicHeads plugin = EpicHeads.getInstance();
-        ItemStack item = Methods.addTexture(new ItemStack(plugin.isServerVersionAtLeast(ServerVersion.V1_13)
-                        ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"), 1, (byte) 3), this.URL);
+        ItemStack item = ItemUtils.getCustomHead(this.URL);
 
-        double cost = Setting.HEAD_COST.getDouble();
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(Methods.formatText((favorite ? "&6⭐ " : "") + "&9" + name));
+        if(meta != null) {
+            meta.setDisplayName(getHeadItemName(favorite));
+            meta.setLore(getHeadItemLore(free));
+            item.setItemMeta(meta);
+        }
+        return item;
+    }
+
+    public String getHeadItemName(boolean favorite) {
+        return Methods.formatText((favorite ? "&6⭐ " : "") + "&9" + name);
+    }
+
+    public List<String> getHeadItemLore(boolean free) {
+        EpicHeads plugin = EpicHeads.getInstance();
+        double cost = Settings.HEAD_COST.getDouble();
         List<String> lore = new ArrayList<>();
         if (this.staffPicked == 1)
-            lore.add(Methods.formatText(plugin.getLocale().getMessage("general.head.staffpicked")));
-        lore.add(Methods.formatText(plugin.getLocale().getMessage("general.head.id", this.id)));
+            lore.add(plugin.getLocale().getMessage("general.head.staffpicked").getMessage());
+        lore.add(plugin.getLocale().getMessage("general.head.id")
+                .processPlaceholder("id", this.id).getMessage());
         if (!free)
-            lore.add(plugin.getLocale().getMessage("general.head.cost", cost));
-
-        meta.setLore(lore);
-        item.setItemMeta(meta);
-        return item;
+            lore.add(plugin.getLocale().getMessage("general.head.cost")
+                    .processPlaceholder("cost", cost).getMessage());
+        return lore;
     }
 
     @Override

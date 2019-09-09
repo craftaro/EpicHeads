@@ -1,7 +1,8 @@
-package com.songoda.epicheads.command.commands;
+package com.songoda.epicheads.commands;
 
+import com.songoda.core.commands.AbstractCommand;
+import com.songoda.core.gui.GuiManager;
 import com.songoda.epicheads.EpicHeads;
-import com.songoda.epicheads.command.AbstractCommand;
 import com.songoda.epicheads.gui.GUIOverview;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -10,18 +11,21 @@ import java.util.List;
 
 public class CommandEpicHeads extends AbstractCommand {
 
-    public CommandEpicHeads() {
-        super(true, false, "EpicHeads");
+    final GuiManager guiManager;
+
+    public CommandEpicHeads(GuiManager guiManager) {
+        super(false, "EpicHeads");
+        this.guiManager = guiManager;
     }
 
     @Override
-    protected ReturnType runCommand(EpicHeads instance, CommandSender sender, String... args) {
-        new GUIOverview(instance, (Player)sender);
+    protected ReturnType runCommand(CommandSender sender, String... args) {
+        guiManager.showGUI((Player) sender, new GUIOverview((Player) sender));
         return ReturnType.SUCCESS;
     }
 
     @Override
-    protected List<String> onTab(EpicHeads instance, CommandSender sender, String... args) {
+    protected List<String> onTab(CommandSender sender, String... args) {
         return null;
     }
 

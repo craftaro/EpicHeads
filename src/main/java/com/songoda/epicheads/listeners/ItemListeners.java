@@ -1,16 +1,16 @@
 package com.songoda.epicheads.listeners;
 
+import com.songoda.core.compatibility.CompatibleMaterial;
+import com.songoda.core.utils.ItemUtils;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.utils.Methods;
-import com.songoda.epicheads.utils.ServerVersion;
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -23,38 +23,28 @@ public class ItemListeners implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
-    public void itemPickupEvent(PlayerPickupItemEvent event) {
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    public void itemSpawnEvent(ItemSpawnEvent event) {
+        ItemStack item = event.getEntity().getItemStack();
 
-        ItemStack item = event.getItem().getItemStack();
+        if (!CompatibleMaterial.PLAYER_HEAD.matches(item)) return;
 
-        if (item.getType() != (plugin.isServerVersionAtLeast(ServerVersion.V1_13) ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"))
-                || event.getItem().hasMetadata("EHE")) return;
-
-        event.getItem().removeMetadata("EHE", plugin);
-
-        String encodededStr = Methods.getEncodedTexture(item);
+        String encodededStr = ItemUtils.getSkullTexture(item);
 
         if (encodededStr == null) return;
 
-        String url = Methods.getDecodedTexture(encodededStr);
+        String url = ItemUtils.getDecodedTexture(encodededStr);
 
         if (url == null) return;
         Optional<Head> optional = plugin.getHeadManager().getHeads().stream()
                 .filter(head -> url.equals(head.getURL())).findFirst();
 
         if (optional.isPresent()) {
-            event.setCancelled(true);
-            event.getItem().setMetadata("EHE", new FixedMetadataValue(plugin, true));
-
             ItemStack itemNew = optional.get().asItemStack();
-            itemNew.setAmount(item.getAmount());
 
             ItemMeta meta = itemNew.getItemMeta();
             meta.setLore(new ArrayList<>());
-            itemNew.setItemMeta(meta);
-
-            event.getItem().setItemStack(itemNew);
+            item.setItemMeta(meta);
         }
     }
 

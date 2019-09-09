@@ -1,29 +1,34 @@
-package com.songoda.epicheads.command.commands;
+package com.songoda.epicheads.commands;
 
+import com.songoda.core.commands.AbstractCommand;
 import com.songoda.epicheads.EpicHeads;
-import com.songoda.epicheads.command.AbstractCommand;
 import com.songoda.epicheads.utils.Methods;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
 public class CommandHelp extends AbstractCommand {
 
-    public CommandHelp(AbstractCommand parent) {
-        super(parent, false, "help");
+    final EpicHeads instance;
+
+    public CommandHelp(EpicHeads instance) {
+        super(false, "help");
+        this.instance = instance;
     }
 
     @Override
-    protected ReturnType runCommand(EpicHeads instance, CommandSender sender, String... args) {
+    protected ReturnType runCommand(CommandSender sender, String... args) {
         sender.sendMessage("");
-        sender.sendMessage(Methods.formatText(instance.getReferences().getPrefix() + "&7Version " + instance.getDescription().getVersion() + " Created with <3 by &5&l&oSongoda"));
+        instance.getLocale().newMessage("&7Version " + instance.getDescription().getVersion()
+                + " Created with <3 by &5&l&oSongoda").sendPrefixedMessage(sender);
         sender.sendMessage("");
         sender.sendMessage(Methods.formatText("&7Welcome to EpicHeads! To get started try using the /heads command to access the heads panel."));
         sender.sendMessage("");
         sender.sendMessage(Methods.formatText("&6Commands:"));
-        for (AbstractCommand command : instance.getCommandManager().getCommands()) {
+        for (AbstractCommand command : instance.getCommandManager().getAllCommands()) {
             if (command.getPermissionNode() == null || sender.hasPermission(command.getPermissionNode())) {
-                sender.sendMessage(Methods.formatText("&8 - &a" + command.getSyntax() + "&7 - " + command.getDescription()));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8 - &a" + command.getSyntax() + "&7 - " + command.getDescription()));
             }
         }
         sender.sendMessage("");
@@ -32,7 +37,7 @@ public class CommandHelp extends AbstractCommand {
     }
 
     @Override
-    protected List<String> onTab(EpicHeads instance, CommandSender sender, String... args) {
+    protected List<String> onTab(CommandSender sender, String... args) {
         return null;
     }
 

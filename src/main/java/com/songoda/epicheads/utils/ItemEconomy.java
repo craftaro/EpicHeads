@@ -1,18 +1,11 @@
 package com.songoda.epicheads.economy;
 
-import com.songoda.epicheads.EpicHeads;
+import com.songoda.core.hooks.economies.Economy;
 import com.songoda.epicheads.utils.Methods;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 
-public class ItemEconomy implements Economy {
-
-    private final EpicHeads plugin;
-
-    public ItemEconomy(EpicHeads plugin) {
-        this.plugin = plugin;
-    }
-
+public class ItemEconomy extends Economy {
 
     public boolean isItem(ItemStack itemStack) {
         if (itemStack == null)
@@ -20,15 +13,14 @@ public class ItemEconomy implements Economy {
         return itemStack.isSimilar(Methods.createToken(1));
     }
 
-
     private int convertAmount(double amount) {
         return (int) Math.ceil(amount);
     }
 
     @Override
-    public boolean hasBalance(Player player, double cost) {
+    public boolean hasBalance(OfflinePlayer player, double cost) {
         int amount = convertAmount(cost);
-        for (ItemStack item : player.getInventory().getContents()) {
+        for (ItemStack item : player.getPlayer().getInventory().getContents()) {
             if (!isItem(item))
                 continue;
             if (amount <= item.getAmount())
@@ -38,11 +30,10 @@ public class ItemEconomy implements Economy {
         return false;
     }
 
-
     @Override
-    public boolean withdrawBalance(Player player, double cost) {
+    public boolean withdrawBalance(OfflinePlayer player, double cost) {
         int amount = convertAmount(cost);
-        ItemStack[] contents = player.getInventory().getContents();
+        ItemStack[] contents = player.getPlayer().getInventory().getContents();
         for (int index = 0; index < contents.length; ++index) {
             ItemStack item = contents[index];
             if (!isItem(item))
@@ -59,9 +50,24 @@ public class ItemEconomy implements Economy {
         }
         if (amount != 0)
             return false;
-        player.getInventory().setContents(contents);
+        player.getPlayer().getInventory().setContents(contents);
 
         return true;
 
+    }
+
+    @Override
+    public boolean deposit(OfflinePlayer player, double amount) {
+        return false;
+    }
+
+    @Override
+    public String getName() {
+        return "Item";
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }

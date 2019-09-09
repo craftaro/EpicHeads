@@ -1,10 +1,15 @@
 package com.songoda.epicheads;
 
-import com.songoda.epicheads.command.CommandManager;
-import com.songoda.epicheads.economy.Economy;
-import com.songoda.epicheads.economy.ItemEconomy;
-import com.songoda.epicheads.economy.PlayerPointsEconomy;
-import com.songoda.epicheads.economy.VaultEconomy;
+import com.songoda.core.SongodaCore;
+import com.songoda.core.SongodaPlugin;
+import com.songoda.core.commands.CommandManager;
+import com.songoda.core.compatibility.CompatibleMaterial;
+import com.songoda.core.configuration.Config;
+import com.songoda.core.gui.GuiManager;
+import com.songoda.core.hooks.EconomyManager;
+import com.songoda.core.hooks.PluginHook;
+import com.songoda.core.hooks.economies.Economy;
+import com.songoda.epicheads.commands.*;
 import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.head.HeadManager;
@@ -13,22 +18,12 @@ import com.songoda.epicheads.listeners.ItemListeners;
 import com.songoda.epicheads.listeners.LoginListeners;
 import com.songoda.epicheads.players.EPlayer;
 import com.songoda.epicheads.players.PlayerManager;
-import com.songoda.epicheads.utils.Methods;
-import com.songoda.epicheads.utils.Metrics;
-import com.songoda.epicheads.utils.ServerVersion;
-import com.songoda.epicheads.utils.gui.AbstractGUI;
-import com.songoda.epicheads.utils.settings.Setting;
-import com.songoda.epicheads.utils.settings.SettingsManager;
+import com.songoda.epicheads.settings.Settings;
 import com.songoda.epicheads.utils.storage.Storage;
 import com.songoda.epicheads.utils.storage.StorageRow;
 import com.songoda.epicheads.utils.storage.types.StorageYaml;
-import com.songoda.epicheads.utils.updateModules.LocaleModule;
-import com.songoda.update.Plugin;
-import com.songoda.update.SongodaUpdate;
-import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.PluginManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -41,71 +36,80 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class EpicHeads extends JavaPlugin {
-    private static CommandSender console = Bukkit.getConsoleSender();
+public class EpicHeads extends SongodaPlugin {
+
     private static EpicHeads INSTANCE;
-    private References references;
 
-    private ServerVersion serverVersion = ServerVersion.fromPackageName(Bukkit.getServer().getClass().getPackage().getName());
-
+    private final GuiManager guiManager = new GuiManager(this);
     private HeadManager headManager;
     private PlayerManager playerManager;
-    private SettingsManager settingsManager;
     private CommandManager commandManager;
+    PluginHook itemEconomyHook = PluginHook.addHook(Economy.class, "EpicHeads", com.songoda.epicheads.economy.ItemEconomy.class);
 
-    private Locale locale;
     private Storage storage;
-    private Economy economy;
 
     public static EpicHeads getInstance() {
         return INSTANCE;
     }
 
     @Override
-    public void onEnable() {
+    public void onPluginLoad() {
         INSTANCE = this;
+    }
 
-        console.sendMessage(Methods.formatText("&a============================="));
-        console.sendMessage(Methods.formatText("&7EpicHeads " + this.getDescription().getVersion() + " by &5Songoda <3!"));
-        console.sendMessage(Methods.formatText("&7Action: &aEnabling&7..."));
+    @Override
+    public void onPluginDisable() {
+        this.storage.closeConnection();
+        this.saveToFile();
+    }
 
-        this.settingsManager = new SettingsManager(this);
-        this.settingsManager.setupConfig();
+    @Override
+    public void onPluginEnable() {
+        // Run Songoda Updater
+        SongodaCore.registerPlugin(this, 26, CompatibleMaterial.PLAYER_HEAD);
 
-        // Setup language
-        String langMode = Setting.LANGUGE_MODE.getString();
-        Locale.init(this);
-        Locale.saveDefaultLocale("en_US");
-        this.locale = Locale.getLocale(getConfig().getString("System.Language Mode", langMode));
+        // Load Economy
+        EconomyManager.load();
 
-        //Running Songoda Updater
-        Plugin plugin = new Plugin(this, 26);
-        plugin.addModule(new LocaleModule());
-        SongodaUpdate.load(plugin);
+        // Setup Config
+        Settings.setupConfig();
+        this.setLocale(Settings.LANGUGE_MODE.getString(), false);
 
-        this.references = new References();
+        // Set economy preference
+        String ecoPreference = Settings.ECONOMY_PLUGIN.getString();
+        if(ecoPreference.equalsIgnoreCase("item")) {
+            EconomyManager.getManager().setPreferredHook(itemEconomyHook);
+        } else {
+            EconomyManager.getManager().setPreferredHook(ecoPreference);
+        }
+
+        // Register commands
+        this.commandManager = new CommandManager(this);
+        this.commandManager.addCommand(new CommandEpicHeads(guiManager))
+                .addSubCommands(
+                        new CommandAdd(this),
+                        new CommandBase64(this),
+                        new CommandGive(this),
+                        new CommandGiveToken(this),
+                        new CommandHelp(this),
+                        new CommandReload(this),
+                        new CommandSearch(guiManager),
+                        new CommandSettings(guiManager),
+                        new CommandUrl(this)
+                );
+
         this.storage = new StorageYaml(this);
 
         // Setup Managers
         this.headManager = new HeadManager();
         this.playerManager = new PlayerManager();
-        this.commandManager = new CommandManager(this);
 
         // Register Listeners
-        AbstractGUI.initializeListeners(this);
-        Bukkit.getPluginManager().registerEvents(new DeathListeners(this), this);
-        Bukkit.getPluginManager().registerEvents(new ItemListeners(this), this);
-        Bukkit.getPluginManager().registerEvents(new LoginListeners(this), this);
-
-        // Setup Economy
-        if (Setting.VAULT_ECONOMY.getBoolean()
-                && getServer().getPluginManager().getPlugin("Vault") != null)
-            this.economy = new VaultEconomy(this);
-        else if (Setting.PLAYER_POINTS_ECONOMY.getBoolean()
-                && getServer().getPluginManager().getPlugin("PlayerPoints") != null)
-            this.economy = new PlayerPointsEconomy(this);
-        else if (Setting.ITEM_ECONOMY.getBoolean())
-            this.economy = new ItemEconomy(this);
+        guiManager.init();
+        PluginManager pluginManager = Bukkit.getPluginManager();
+        pluginManager.registerEvents(new DeathListeners(this), this);
+        pluginManager.registerEvents(new ItemListeners(this), this);
+        pluginManager.registerEvents(new LoginListeners(this), this);
 
         // Download Heads
         downloadHeads();
@@ -116,23 +120,8 @@ public class EpicHeads extends JavaPlugin {
         // Load Favorites
         loadData();
 
-        int timeout = Setting.AUTOSAVE.getInt() * 60 * 20;
+        int timeout = Settings.AUTOSAVE.getInt() * 60 * 20;
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::saveToFile, timeout, timeout);
-
-        // Start Metrics
-        new Metrics(this);
-
-        console.sendMessage(Methods.formatText("&a============================="));
-    }
-
-    @Override
-    public void onDisable() {
-        this.storage.closeConnection();
-        this.saveToFile();
-        console.sendMessage(Methods.formatText("&a============================="));
-        console.sendMessage(Methods.formatText("&7EpicHeads " + this.getDescription().getVersion() + " by &5Songoda <3!"));
-        console.sendMessage(Methods.formatText("&7Action: &cDisabling&7..."));
-        console.sendMessage(Methods.formatText("&a============================="));
     }
 
     private void saveToFile() {
@@ -148,7 +137,7 @@ public class EpicHeads extends JavaPlugin {
 
                 EPlayer player = new EPlayer(
                         UUID.fromString(row.get("uuid").asString()),
-                        (List<String>)row.get("favorites").asObject());
+                        (List<String>) row.get("favorites").asObject());
 
                 this.playerManager.addPlayer(player);
             }
@@ -193,7 +182,7 @@ public class EpicHeads extends JavaPlugin {
 
                 int id = Integer.parseInt((String) jsonObject.get("id"));
 
-                if (Setting.DISABLED_HEADS.getIntegerList().contains(id)) continue;
+                if (Settings.DISABLED_HEADS.getIntegerList().contains(id)) continue;
 
                 Head head = new Head(id,
                         (String) jsonObject.get("name"),
@@ -253,42 +242,25 @@ public class EpicHeads extends JavaPlugin {
         return sb.toString();
     }
 
-
-    public ServerVersion getServerVersion() {
-        return serverVersion;
-    }
-
-    public boolean isServerVersion(ServerVersion version) {
-        return serverVersion == version;
-    }
-    public boolean isServerVersion(ServerVersion... versions) {
-        return ArrayUtils.contains(versions, serverVersion);
-    }
-
-    public boolean isServerVersionAtLeast(ServerVersion version) {
-        return serverVersion.ordinal() >= version.ordinal();
-    }
-
-    public void reload() {
+    @Override
+    public void onConfigReload() {
         saveToFile();
-        locale.reloadMessages();
-        references = new References();
-        settingsManager.reloadConfig();
+
+        this.setLocale(getConfig().getString("System.Language Mode"), true);
+        this.locale.reloadMessages();
+
         saveToFile();
         downloadHeads();
         loadHeads();
     }
 
-    public Locale getLocale() {
-        return locale;
+    @Override
+    public List<Config> getExtraConfig() {
+        return null;
     }
 
-    public Economy getEconomy() {
-        return economy;
-    }
-
-    public References getReferences() {
-        return references;
+    public CommandManager getCommandManager() {
+        return commandManager;
     }
 
     public HeadManager getHeadManager() {
@@ -297,13 +269,5 @@ public class EpicHeads extends JavaPlugin {
 
     public PlayerManager getPlayerManager() {
         return playerManager;
-    }
-
-    public CommandManager getCommandManager() {
-        return commandManager;
-    }
-
-    public SettingsManager getSettingsManager() {
-        return settingsManager;
     }
 }

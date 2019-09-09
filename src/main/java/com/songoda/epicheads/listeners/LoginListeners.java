@@ -1,5 +1,6 @@
 package com.songoda.epicheads.listeners;
 
+import com.songoda.core.utils.ItemUtils;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.head.HeadManager;
@@ -26,11 +27,11 @@ public class LoginListeners implements Listener {
 
         Player player = event.getPlayer();
 
-        String encodededStr = Methods.getEncodedTexture(player);
+        String encodededStr = ItemUtils.getSkullTexture(player);
 
         if (encodededStr == null) return;
 
-        String url = Methods.getDecodedTexture(encodededStr);
+        String url = ItemUtils.getDecodedTexture(encodededStr);
 
         String tagStr = "Player Heads";
 

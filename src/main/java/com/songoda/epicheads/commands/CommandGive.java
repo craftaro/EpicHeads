@@ -1,7 +1,7 @@
-package com.songoda.epicheads.command.commands;
+package com.songoda.epicheads.commands;
 
+import com.songoda.core.commands.AbstractCommand;
 import com.songoda.epicheads.EpicHeads;
-import com.songoda.epicheads.command.AbstractCommand;
 import com.songoda.epicheads.head.Head;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -15,22 +15,25 @@ import java.util.Optional;
 
 public class CommandGive extends AbstractCommand {
 
-    public CommandGive(AbstractCommand parent) {
-        super(parent, false, "give");
+    final EpicHeads instance;
+
+    public CommandGive(EpicHeads instance) {
+        super(false, "give");
+        this.instance = instance;
     }
 
     @Override
-    protected ReturnType runCommand(EpicHeads instance, CommandSender sender, String... args) {
+    protected ReturnType runCommand(CommandSender sender, String... args) {
+        if (args.length != 3) return ReturnType.SYNTAX_ERROR;
 
-        if (args.length != 4) return ReturnType.SYNTAX_ERROR;
-
-        String playerStr = args[1].toLowerCase();
+        String playerStr = args[0].toLowerCase();
         Player player = Bukkit.getPlayer(playerStr);
-        String archive = args[2];
-        int headId = Integer.parseInt(args[3]);
+        String archive = args[1];
+        int headId = Integer.parseInt(args[2]);
 
         if (player == null && !playerStr.equals("all")) {
-            sender.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.notonline", args[1]));
+            instance.getLocale().getMessage("command.give.notonline")
+                    .processPlaceholder("name", args[1]).sendPrefixedMessage(sender);
             return ReturnType.FAILURE;
         }
 
@@ -57,24 +60,34 @@ public class CommandGive extends AbstractCommand {
                 for (Player pl : Bukkit.getOnlinePlayers()) {
                     if (pl == sender) continue;
                     pl.getInventory().addItem(item);
-                    pl.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.receive", head.get().getName()));
+
+                    instance.getLocale().getMessage("command.give.receive")
+                            .processPlaceholder("name", head.get().getName()).sendPrefixedMessage(pl);
                 }
-                sender.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.success", instance.getLocale().getMessage("general.word.everyone"), head.get().getName()));
+                instance.getLocale().getMessage("command.give.success")
+                        .processPlaceholder("player", instance.getLocale().getMessage("general.word.everyone").getMessage())
+                        .processPlaceholder("name", head.get().getName())
+                        .sendPrefixedMessage(sender);
             } else {
                 player.getInventory().addItem(item);
-                player.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.receive", head.get().getName()));
-                sender.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.success", player.getName(), head.get().getName()));
+                instance.getLocale().getMessage("command.give.receive")
+                        .processPlaceholder("name", head.get().getName()).sendPrefixedMessage(player);
+                instance.getLocale().getMessage("command.give.success")
+                        .processPlaceholder("player", player.getName())
+                        .processPlaceholder("name", head.get().getName())
+                        .sendPrefixedMessage(sender);
             }
 
             return ReturnType.SUCCESS;
         } else {
-            sender.sendMessage(instance.getReferences().getPrefix() + instance.getLocale().getMessage("command.give.notfound", head.get().getName()));
+            instance.getLocale().getMessage("command.give.notfound")
+                    .processPlaceholder("name", head.get().getName()).sendPrefixedMessage(sender);
             return ReturnType.FAILURE;
         }
     }
 
     @Override
-    protected List<String> onTab(EpicHeads instance, CommandSender sender, String... args) {
+    protected List<String> onTab(CommandSender sender, String... args) {
         return null;
     }
 
