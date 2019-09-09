@@ -1,6 +1,6 @@
 package com.songoda.epicheads.listeners;
 
-import com.songoda.core.compatibility.LegacyMaterials;
+import com.songoda.core.compatibility.CompatibleMaterial;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.utils.Methods;
@@ -26,7 +26,7 @@ public class ItemListeners implements Listener {
     public void itemSpawnEvent(ItemSpawnEvent event) {
         ItemStack item = event.getEntity().getItemStack();
 
-        if (!LegacyMaterials.PLAYER_HEAD.matches(item)) return;
+        if (!CompatibleMaterial.PLAYER_HEAD.matches(item)) return;
 
         String encodededStr = Methods.getEncodedTexture(item);
 

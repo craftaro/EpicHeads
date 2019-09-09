@@ -3,7 +3,7 @@ package com.songoda.epicheads;
 import com.songoda.core.SongodaCore;
 import com.songoda.core.SongodaPlugin;
 import com.songoda.core.commands.CommandManager;
-import com.songoda.core.compatibility.LegacyMaterials;
+import com.songoda.core.compatibility.CompatibleMaterial;
 import com.songoda.core.configuration.Config;
 import com.songoda.core.gui.GuiManager;
 import com.songoda.core.hooks.EconomyManager;
@@ -66,7 +66,7 @@ public class EpicHeads extends SongodaPlugin {
     @Override
     public void onPluginEnable() {
         // Run Songoda Updater
-        SongodaCore.registerPlugin(this, 26, LegacyMaterials.PLAYER_HEAD);
+        SongodaCore.registerPlugin(this, 26, CompatibleMaterial.PLAYER_HEAD);
 
         // Load Economy
         EconomyManager.load();

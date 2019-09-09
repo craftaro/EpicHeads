@@ -1,6 +1,6 @@
 package com.songoda.epicheads.gui;
 
-import com.songoda.core.compatibility.LegacyMaterials;
+import com.songoda.core.compatibility.CompatibleMaterial;
 import com.songoda.core.gui.Gui;
 import com.songoda.core.gui.GuiUtils;
 import com.songoda.epicheads.EpicHeads;
@@ -29,16 +29,16 @@ public class GUIOverview extends Gui {
         this.setTitle(plugin.getLocale().getMessage("gui.overview.title")
                 .processPlaceholder("count", plugin.getHeadManager().getHeads().size())
                 .getMessage());
-        this.setPrevPage(rows - 1, 1, GuiUtils.createButtonItem(LegacyMaterials.ARROW,
+        this.setPrevPage(rows - 1, 1, GuiUtils.createButtonItem(CompatibleMaterial.ARROW,
                     plugin.getLocale().getMessage("gui.general.previous").getMessage()));
-        this.setNextPage(rows - 1, 7, GuiUtils.createButtonItem(LegacyMaterials.ARROW,
+        this.setNextPage(rows - 1, 7, GuiUtils.createButtonItem(CompatibleMaterial.ARROW,
                     plugin.getLocale().getMessage("gui.general.next").getMessage()));
         this.setOnPage((event) -> showPage());
         showPage();
     }
 
     void showPage() {
-        setButton(4, GuiUtils.createButtonItem(LegacyMaterials.GOLDEN_APPLE,
+        setButton(4, GuiUtils.createButtonItem(CompatibleMaterial.GOLDEN_APPLE,
                 plugin.getLocale().getMessage("gui.overview.viewfavorites").getMessage(), 
                 plugin.getLocale().getMessage("gui.overview.favoriteslore").getMessage().split("\\|")),
                 (event) -> guiManager.showGUI(player, new GUIHeads(plugin, player, null, GUIHeads.QueryTypes.FAVORITES,
@@ -70,7 +70,7 @@ public class GUIOverview extends Gui {
 
             if (!player.hasPermission("epicheads.category." + category.getName().replace(" ", "_"))) continue;
 
-            setButton(i + 10 + add, GuiUtils.createButtonItem(Methods.addTexture(LegacyMaterials.PLAYER_HEAD.getItem(), firstHead.getURL()),
+            setButton(i + 10 + add, GuiUtils.createButtonItem(Methods.addTexture(CompatibleMaterial.PLAYER_HEAD.getItem(), firstHead.getURL()),
                     plugin.getLocale().getMessage("gui.overview.headname")
                             .processPlaceholder("name", Color.getRandomColor() + category.getName())
                             .getMessage(),
@@ -84,12 +84,12 @@ public class GUIOverview extends Gui {
                                     category.isLatestPack() ? GUIHeads.QueryTypes.PACK : GUIHeads.QueryTypes.CATEGORY, heads)));
         }
 
-        setButton(Settings.DISCORD.getBoolean() ? 39 : 40, GuiUtils.createButtonItem(LegacyMaterials.COMPASS,
+        setButton(Settings.DISCORD.getBoolean() ? 39 : 40, GuiUtils.createButtonItem(CompatibleMaterial.COMPASS,
                 plugin.getLocale().getMessage("gui.overview.search").getMessage()),
                 (event) -> GUIHeads.doSearch(plugin, this, guiManager, event.player));
 
         if (Settings.DISCORD.getBoolean()) {
-            setButton(41, GuiUtils.createButtonItem(Methods.addTexture(LegacyMaterials.PLAYER_HEAD.getItem(),
+            setButton(41, GuiUtils.createButtonItem(Methods.addTexture(CompatibleMaterial.PLAYER_HEAD.getItem(),
                     "a3b183b148b9b4e2b158334aff3b5bb6c2c2dbbc4d67f76a7be856687a2b623"),
                     plugin.getLocale().getMessage("gui.overview.discord").getMessage(),
                     plugin.getLocale().getMessage("gui.overview.discordlore").getMessage().split("\\|")),

@@ -1,6 +1,6 @@
 package com.songoda.epicheads.listeners;
 
-import com.songoda.core.compatibility.LegacyMaterials;
+import com.songoda.core.compatibility.CompatibleMaterial;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.settings.Settings;
@@ -39,7 +39,7 @@ public class DeathListeners implements Listener {
                 String encodededStr = Methods.getEncodedTexture((Player) event.getEntity());
 
                 if (encodededStr == null) {
-                    itemNew = LegacyMaterials.PLAYER_HEAD.getItem();
+                    itemNew = CompatibleMaterial.PLAYER_HEAD.getItem();
 
                     ItemMeta meta = itemNew.getItemMeta();
                     meta.setDisplayName(Methods.formatText("&9" + ((Player) event.getEntity()).getDisplayName()));

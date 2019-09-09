@@ -1,6 +1,6 @@
 package com.songoda.epicheads.gui;
 
-import com.songoda.core.compatibility.LegacyMaterials;
+import com.songoda.core.compatibility.CompatibleMaterial;
 import com.songoda.core.gui.Gui;
 import com.songoda.core.gui.GuiManager;
 import com.songoda.core.gui.GuiUtils;
@@ -87,7 +87,7 @@ public class GUIHeads extends Gui {
                 .collect(Collectors.toList());
 
         if (page - 3 >= 1) {
-            setButton(0, GuiUtils.createButtonItem(LegacyMaterials.ARROW, page - 3,
+            setButton(0, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, page - 3,
                     ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page - 3)), 
                     (event) -> changePage(-3));
         } else {
@@ -96,7 +96,7 @@ public class GUIHeads extends Gui {
         }
 
         if (page - 2 >= 1) {
-            setButton(1, GuiUtils.createButtonItem(LegacyMaterials.ARROW, page - 2,
+            setButton(1, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, page - 2,
                     ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page - 2)),
                     (event) -> changePage(-2));
         } else {
@@ -105,7 +105,7 @@ public class GUIHeads extends Gui {
         }
 
         if (page > 1) {
-            setButton(2, GuiUtils.createButtonItem(LegacyMaterials.ARROW, page - 1,
+            setButton(2, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, page - 1,
                     ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page - 1)), 
                     (event) -> changePage(-1));
         } else {
@@ -113,15 +113,15 @@ public class GUIHeads extends Gui {
             setItem(2, null);
         }
 
-        setButton(3, GuiUtils.createButtonItem(LegacyMaterials.COMPASS,
+        setButton(3, GuiUtils.createButtonItem(CompatibleMaterial.COMPASS,
                 plugin.getLocale().getMessage("gui.heads.search").getMessage()),
                 (event) -> doSearch(plugin, this, guiManager, event.player));
 
-        setButton(4, GuiUtils.createButtonItem(LegacyMaterials.MAP, page,
+        setButton(4, GuiUtils.createButtonItem(CompatibleMaterial.MAP, page,
                 plugin.getLocale().getMessage("gui.heads.categories").getMessage()), (event) -> guiManager.showGUI(player, new GUIOverview(event.player)));
 
         if (pageHeads.size() > 1)
-            setButton(5, GuiUtils.createButtonItem(LegacyMaterials.COMPASS,
+            setButton(5, GuiUtils.createButtonItem(CompatibleMaterial.COMPASS,
                     plugin.getLocale().getMessage("gui.heads.refine").getMessage()),
                     (event) -> {
                         exit();
@@ -142,7 +142,7 @@ public class GUIHeads extends Gui {
                     });
 
         if (page + 1 <= pages) {
-            setButton(6, GuiUtils.createButtonItem(LegacyMaterials.ARROW, page + 1,
+            setButton(6, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, page + 1,
                     ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page + 1)),
                     (event) -> changePage(+1));
         } else {
@@ -151,7 +151,7 @@ public class GUIHeads extends Gui {
         }
 
         if (page + 2 <= pages) {
-            setButton(7, GuiUtils.createButtonItem(LegacyMaterials.ARROW, page + 2,
+            setButton(7, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, page + 2,
                     ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page + 2)),
                     (event) -> changePage(+2));
         } else {
@@ -160,7 +160,7 @@ public class GUIHeads extends Gui {
         }
 
         if (page + 3 <= pages) {
-            setButton(8, GuiUtils.createButtonItem(LegacyMaterials.ARROW, page + 3,
+            setButton(8, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, page + 3,
                     ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page + 3)),
                     (event) -> changePage(+3));
         } else {
