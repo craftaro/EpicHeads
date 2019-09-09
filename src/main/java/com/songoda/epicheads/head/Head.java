@@ -1,6 +1,7 @@
 package com.songoda.epicheads.head;
 
 import com.songoda.core.compatibility.CompatibleMaterial;
+import com.songoda.core.utils.ItemUtils;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.settings.Settings;
 import com.songoda.epicheads.utils.Methods;
@@ -62,7 +63,7 @@ public class Head {
     }
 
     public ItemStack asItemStack(boolean favorite, boolean free) {
-        ItemStack item = Methods.addTexture(CompatibleMaterial.PLAYER_HEAD.getItem(), this.URL);
+        ItemStack item = ItemUtils.getCustomHead(this.URL);
 
         ItemMeta meta = item.getItemMeta();
         if(meta != null) {

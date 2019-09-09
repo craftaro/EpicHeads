@@ -3,6 +3,7 @@ package com.songoda.epicheads.gui;
 import com.songoda.core.compatibility.CompatibleMaterial;
 import com.songoda.core.gui.Gui;
 import com.songoda.core.gui.GuiUtils;
+import com.songoda.core.utils.ItemUtils;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.head.Head;
@@ -70,7 +71,7 @@ public class GUIOverview extends Gui {
 
             if (!player.hasPermission("epicheads.category." + category.getName().replace(" ", "_"))) continue;
 
-            setButton(i + 10 + add, GuiUtils.createButtonItem(Methods.addTexture(CompatibleMaterial.PLAYER_HEAD.getItem(), firstHead.getURL()),
+            setButton(i + 10 + add, GuiUtils.createButtonItem(ItemUtils.getCustomHead(firstHead.getURL()),
                     plugin.getLocale().getMessage("gui.overview.headname")
                             .processPlaceholder("name", Color.getRandomColor() + category.getName())
                             .getMessage(),
@@ -89,7 +90,7 @@ public class GUIOverview extends Gui {
                 (event) -> GUIHeads.doSearch(plugin, this, guiManager, event.player));
 
         if (Settings.DISCORD.getBoolean()) {
-            setButton(41, GuiUtils.createButtonItem(Methods.addTexture(CompatibleMaterial.PLAYER_HEAD.getItem(),
+            setButton(41, GuiUtils.createButtonItem(ItemUtils.getCustomHead(
                     "a3b183b148b9b4e2b158334aff3b5bb6c2c2dbbc4d67f76a7be856687a2b623"),
                     plugin.getLocale().getMessage("gui.overview.discord").getMessage(),
                     plugin.getLocale().getMessage("gui.overview.discordlore").getMessage().split("\\|")),

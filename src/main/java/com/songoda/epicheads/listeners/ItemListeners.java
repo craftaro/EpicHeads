@@ -1,6 +1,7 @@
 package com.songoda.epicheads.listeners;
 
 import com.songoda.core.compatibility.CompatibleMaterial;
+import com.songoda.core.utils.ItemUtils;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.utils.Methods;
@@ -28,11 +29,11 @@ public class ItemListeners implements Listener {
 
         if (!CompatibleMaterial.PLAYER_HEAD.matches(item)) return;
 
-        String encodededStr = Methods.getEncodedTexture(item);
+        String encodededStr = ItemUtils.getSkullTexture(item);
 
         if (encodededStr == null) return;
 
-        String url = Methods.getDecodedTexture(encodededStr);
+        String url = ItemUtils.getDecodedTexture(encodededStr);
 
         if (url == null) return;
         Optional<Head> optional = plugin.getHeadManager().getHeads().stream()

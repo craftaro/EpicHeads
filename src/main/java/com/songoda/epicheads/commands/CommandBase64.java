@@ -1,6 +1,7 @@
 package com.songoda.epicheads.commands;
 
 import com.songoda.core.commands.AbstractCommand;
+import com.songoda.core.utils.ItemUtils;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.utils.Methods;
 import org.bukkit.command.CommandSender;
@@ -28,7 +29,7 @@ public class CommandBase64 extends AbstractCommand {
 
         if (!item.hasItemMeta() || !(item.getItemMeta() instanceof SkullMeta)) return ReturnType.FAILURE;
 
-        String encodededStr = Methods.getEncodedTexture(item);
+        String encodededStr = ItemUtils.getSkullTexture(item);
 
         if (encodededStr == null) return ReturnType.FAILURE;
 

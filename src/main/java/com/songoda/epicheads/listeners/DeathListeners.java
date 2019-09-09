@@ -1,6 +1,7 @@
 package com.songoda.epicheads.listeners;
 
 import com.songoda.core.compatibility.CompatibleMaterial;
+import com.songoda.core.utils.ItemUtils;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.settings.Settings;
@@ -36,7 +37,7 @@ public class DeathListeners implements Listener {
             if (event.getEntity() instanceof Player) {
                 if (!Settings.DROP_PLAYER_HEADS.getBoolean()) return;
 
-                String encodededStr = Methods.getEncodedTexture((Player) event.getEntity());
+                String encodededStr = ItemUtils.getSkullTexture((Player) event.getEntity());
 
                 if (encodededStr == null) {
                     itemNew = CompatibleMaterial.PLAYER_HEAD.getItem();
@@ -46,7 +47,7 @@ public class DeathListeners implements Listener {
                     itemNew.setItemMeta(meta);
                 } else {
 
-                    String url = Methods.getDecodedTexture(encodededStr);
+                    String url = ItemUtils.getDecodedTexture(encodededStr);
 
                     Optional<Head> optional = plugin.getHeadManager().getHeads().stream()
                             .filter(head -> url.equals(head.getURL())).findFirst();
