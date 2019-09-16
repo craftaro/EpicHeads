@@ -3,7 +3,7 @@ description: EpicHeads
 main: com.songoda.epicheads.EpicHeads
 version: maven-version-number
 author: Songoda
-softdepend: [Vault]
+softdepend: [Vault, PlayerPoints, Reserve]
 api-version: 1.13
 commands:
   EpicHeads:
