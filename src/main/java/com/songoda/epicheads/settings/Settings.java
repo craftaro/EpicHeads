@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  */
 public class Settings {
 
-    static final Config config = EpicHeads.getInstance().getConfig().getCoreConfig();
+    static final Config config = EpicHeads.getInstance().getCoreConfig();
 
     public static final ConfigSetting AUTOSAVE = new ConfigSetting(config, "Main.Auto Save Interval In Seconds", 15,
             "The amount of time in between saving to file.",
