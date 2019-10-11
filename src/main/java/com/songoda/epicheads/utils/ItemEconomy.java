@@ -1,7 +1,6 @@
-package com.songoda.epicheads.economy;
+package com.songoda.epicheads.utils;
 
 import com.songoda.core.hooks.economies.Economy;
-import com.songoda.epicheads.utils.Methods;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 
@@ -68,6 +67,6 @@ public class ItemEconomy extends Economy {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

@@ -49,7 +49,7 @@ public class Settings {
 
     public static final ConfigSetting ECONOMY_PLUGIN = new ConfigSetting(config, "Economy.Economy", EconomyManager.getEconomy() == null ? "Vault" : EconomyManager.getEconomy().getName(),
             "Which economy plugin should be used?",
-            "Supported plugins you have installed: \"" + EconomyManager.getManager().getRegisteredPlugins().stream().collect(Collectors.joining("\", \"")) + "\".");
+            "Supported plugins you have installed: \"" + EconomyManager.getManager().getRegisteredPlugins().stream().filter(p -> !p.equals("EpicHeads")).collect(Collectors.joining("\", \"")) + "\", \"Item\".");
 
     public static final ConfigSetting HEAD_COST = new ConfigSetting(config, "Economy.Head Cost", 24.99,
             "The cost the of the head. If you wan't to use PlayerPoints",
