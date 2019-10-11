@@ -44,7 +44,7 @@ public class EpicHeads extends SongodaPlugin {
     private HeadManager headManager;
     private PlayerManager playerManager;
     private CommandManager commandManager;
-    PluginHook itemEconomyHook = PluginHook.addHook(Economy.class, "EpicHeads", com.songoda.epicheads.economy.ItemEconomy.class);
+    private PluginHook itemEconomyHook;
 
     private Storage storage;
 
@@ -55,6 +55,7 @@ public class EpicHeads extends SongodaPlugin {
     @Override
     public void onPluginLoad() {
         INSTANCE = this;
+        this.itemEconomyHook = PluginHook.addHook(Economy.class, "EpicHeads", com.songoda.epicheads.utils.ItemEconomy.class);
     }
 
     @Override
