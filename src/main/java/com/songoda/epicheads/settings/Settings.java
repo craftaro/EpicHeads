@@ -47,15 +47,14 @@ public class Settings {
             "These are head ID's from the global database that are disabled.",
             "By default this is filled with non existent ID's.");
 
-    public static final ConfigSetting ECONOMY_PLUGIN = new ConfigSetting(config, "Economy.Economy", EconomyManager.getEconomy() == null ? "Vault" : EconomyManager.getEconomy().getName(),
-            "Which economy plugin should be used?",
-            "Supported plugins you have installed: \"" + EconomyManager.getManager().getRegisteredPlugins().stream().filter(p -> !p.equals("EpicHeads")).collect(Collectors.joining("\", \"")) + "\", \"Item\".");
+    public static final ConfigSetting ECONOMY_PLUGIN = new ConfigSetting(config, "Economy.Economy", "Vault",
+            "Which economy plugin should be used?");
 
     public static final ConfigSetting HEAD_COST = new ConfigSetting(config, "Economy.Head Cost", 24.99,
             "The cost the of the head. If you wan't to use PlayerPoints",
             "or item tokens you need to use whole numbers.");
 
-    public static final ConfigSetting ITEM_TOKEN_TYPE = new ConfigSetting(config, "Economy.Item.Type", ServerVersion.isServerVersionAtLeast(ServerVersion.V1_13) ? "PLAYER_HEAD" : "SKULL_ITEM",
+    public static final ConfigSetting ITEM_TOKEN_TYPE = new ConfigSetting(config, "Economy.Item.Type", "PLAYER_HEAD",
             "Which item material type should be used?",
             "You can use any of the materials from the following link:",
             "https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html");
@@ -97,6 +96,12 @@ public class Settings {
         if ((color = GLASS_TYPE_3.getInt(-1)) != -1) {
             config.set(GLASS_TYPE_3.getKey(), CompatibleMaterial.getGlassPaneColor(color).name());
         }
+
+        config.setDefault("Economy.Economy", 
+                EconomyManager.getEconomy() == null ? "Vault" : EconomyManager.getEconomy().getName());
+        config.setComment("Economy.Economy", null,
+                "Which economy plugin should be used?",
+                "Supported plugins you have installed: \"" + EconomyManager.getManager().getRegisteredPlugins().stream().filter(p -> !p.equals("EpicHeads")).collect(Collectors.joining("\", \"")) + "\", \"Item\".");
 
         // convert economy settings
         if (config.getBoolean("Economy.Use Vault Economy") && EconomyManager.getManager().isEnabled("Vault")) {
