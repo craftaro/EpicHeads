@@ -3,14 +3,12 @@ package com.songoda.epicheads.utils;
 import com.songoda.core.compatibility.ServerVersion;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.settings.Settings;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 public class Methods {

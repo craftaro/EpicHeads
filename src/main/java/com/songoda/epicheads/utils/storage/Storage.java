@@ -14,8 +14,9 @@ public abstract class Storage {
 
     public Storage(EpicHeads instance) {
         this.instance = instance;
-        this.dataFile = (new Config(instance, "", "data.yml"))
+        this.dataFile = (new Config(instance, "data.yml"))
                 .setAutosave(true);
+        this.dataFile.load();
     }
 
     public abstract boolean containsGroup(String group);
