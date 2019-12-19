@@ -189,7 +189,7 @@ public class GUIHeads extends Gui {
                         ePlayer.removeFavorite(head.getURL());
                     else
                         ePlayer.addFavorite(head.getURL());
-                    updateItem(event.slot, head.getHeadItemName(!isFav), head.getHeadItemLore(free));
+                    showPage();
                     return;
                 }
                 if (!free) {
