@@ -30,7 +30,7 @@ public class Methods {
         for (String line : Settings.ITEM_TOKEN_LORE.getStringList())
             if (!line.equals(""))
                 lore.add(formatText(line));
-        if (lore != null) meta.setLore(lore);
+        meta.setLore(lore);
         itemStack.setItemMeta(meta);
         return itemStack;
     }
