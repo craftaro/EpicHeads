@@ -1,19 +1,35 @@
 package com.songoda.epicheads.utils;
 
+import com.songoda.core.compatibility.CompatibleMaterial;
 import com.songoda.core.hooks.economies.Economy;
+import com.songoda.core.utils.ItemUtils;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 
 public class ItemEconomy extends Economy {
 
     public boolean isItem(ItemStack itemStack) {
-        if (itemStack == null)
+        if (itemStack == null || itemStack.getType() == Material.AIR)
             return false;
+        if (CompatibleMaterial.getMaterial(itemStack) == CompatibleMaterial.PLAYER_HEAD)
+            return ItemUtils.getSkullTexture(itemStack).equals(ItemUtils.getSkullTexture(Methods.createToken(1)));
         return itemStack.isSimilar(Methods.createToken(1));
     }
 
     private int convertAmount(double amount) {
         return (int) Math.ceil(amount);
+    }
+
+    @Override
+    public double getBalance(OfflinePlayer player) {
+        int amount = 0;
+        for (ItemStack item : player.getPlayer().getInventory().getContents()) {
+            if (!isItem(item))
+                continue;
+            amount += item.getAmount();
+        }
+        return amount;
     }
 
     @Override
