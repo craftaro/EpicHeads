@@ -8,6 +8,8 @@ general:
     query: Query
     favorites: Favorites
     everyone: everyone
+    playerheads: Player Heads
+    latestpack: Latest Pack
   phrase:
     latestpack: Latest Pack
   search:

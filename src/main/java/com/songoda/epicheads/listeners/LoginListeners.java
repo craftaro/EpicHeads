@@ -26,13 +26,13 @@ public class LoginListeners implements Listener {
 
         Player player = event.getPlayer();
 
-        String encodededStr = ItemUtils.getSkullTexture(player);
+        String encodedStr = ItemUtils.getSkullTexture(player);
 
-        if (encodededStr == null) return;
+        if (encodedStr == null) return;
 
-        String url = ItemUtils.getDecodedTexture(encodededStr);
+        String url = ItemUtils.getDecodedTexture(encodedStr);
 
-        String tagStr = "Player Heads";
+        String tagStr = plugin.getLocale().getMessage("general.word.playerheads").getMessage();
 
         Optional<Category> tagOptional = headManager.getCategories()
                 .stream().filter(t -> t.getName().equalsIgnoreCase(tagStr)).findFirst();

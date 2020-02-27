@@ -169,7 +169,8 @@ public class EpicHeads extends SongodaPlugin {
         try {
 
             this.headManager.clear();
-            this.headManager.addCategory(new Category("Latest Pack", true));
+            this.headManager.addCategory(new Category(getLocale()
+                    .getMessage("general.word.latestpack").getMessage(), true));
 
             JSONParser parser = new JSONParser();
             JSONArray jsonArray = (JSONArray) parser.parse(new FileReader(getDataFolder() + "/heads.json"));
