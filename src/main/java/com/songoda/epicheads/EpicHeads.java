@@ -167,7 +167,6 @@ public class EpicHeads extends SongodaPlugin {
 
     private boolean loadHeads() {
         try {
-
             this.headManager.clear();
             this.headManager.addCategory(new Category(getLocale()
                     .getMessage("general.word.latestpack").getMessage(), true));
