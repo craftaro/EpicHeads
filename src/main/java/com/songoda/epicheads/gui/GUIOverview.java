@@ -8,7 +8,6 @@ import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.settings.Settings;
-import com.songoda.epicheads.utils.Methods;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -31,19 +30,19 @@ public class GUIOverview extends Gui {
                 .processPlaceholder("count", plugin.getHeadManager().getHeads().size())
                 .getMessage());
         this.setPrevPage(rows - 1, 1, GuiUtils.createButtonItem(CompatibleMaterial.ARROW,
-                    plugin.getLocale().getMessage("gui.general.previous").getMessage()));
+                plugin.getLocale().getMessage("gui.general.previous").getMessage()));
         this.setNextPage(rows - 1, 7, GuiUtils.createButtonItem(CompatibleMaterial.ARROW,
-                    plugin.getLocale().getMessage("gui.general.next").getMessage()));
+                plugin.getLocale().getMessage("gui.general.next").getMessage()));
         this.setOnPage((event) -> showPage());
         showPage();
     }
 
     void showPage() {
         setButton(4, GuiUtils.createButtonItem(CompatibleMaterial.GOLDEN_APPLE,
-                plugin.getLocale().getMessage("gui.overview.viewfavorites").getMessage(), 
+                plugin.getLocale().getMessage("gui.overview.viewfavorites").getMessage(),
                 plugin.getLocale().getMessage("gui.overview.favoriteslore").getMessage().split("\\|")),
                 (event) -> guiManager.showGUI(player, new GUIHeads(plugin, player, null, GUIHeads.QueryTypes.FAVORITES,
-                                plugin.getPlayerManager().getPlayer(player).getFavoritesAsHeads())));
+                        plugin.getPlayerManager().getPlayer(player).getFavoritesAsHeads())));
 
         ItemStack glass2 = GuiUtils.getBorderItem(Settings.GLASS_TYPE_2.getMaterial());
         ItemStack glass3 = GuiUtils.getBorderItem(Settings.GLASS_TYPE_3.getMaterial());
@@ -66,6 +65,8 @@ public class GUIOverview extends Gui {
             Category category = categories.get(i);
 
             List<Head> heads = category.isLatestPack() ? plugin.getHeadManager().getLatestPack() : plugin.getHeadManager().getHeadsByCategory(category);
+
+            if (heads.isEmpty()) continue;
 
             Head firstHead = heads.get(0);
 

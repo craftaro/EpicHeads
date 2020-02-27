@@ -72,13 +72,17 @@ public class EpicHeads extends SongodaPlugin {
         // Load Economy
         EconomyManager.load();
 
+        // Setup Managers
+        this.headManager = new HeadManager();
+        this.playerManager = new PlayerManager();
+
         // Setup Config
         Settings.setupConfig();
         this.setLocale(Settings.LANGUGE_MODE.getString(), false);
 
         // Set economy preference
         String ecoPreference = Settings.ECONOMY_PLUGIN.getString();
-        if(ecoPreference.equalsIgnoreCase("item")) {
+        if (ecoPreference.equalsIgnoreCase("item")) {
             EconomyManager.getManager().setPreferredHook(itemEconomyHook);
         } else {
             EconomyManager.getManager().setPreferredHook(ecoPreference);
@@ -100,10 +104,6 @@ public class EpicHeads extends SongodaPlugin {
                 );
 
         this.storage = new StorageYaml(this);
-
-        // Setup Managers
-        this.headManager = new HeadManager();
-        this.playerManager = new PlayerManager();
 
         // Register Listeners
         guiManager.init();
@@ -167,6 +167,7 @@ public class EpicHeads extends SongodaPlugin {
 
     private boolean loadHeads() {
         try {
+
             this.headManager.clear();
             this.headManager.addCategory(new Category("Latest Pack", true));
 
@@ -183,12 +184,11 @@ public class EpicHeads extends SongodaPlugin {
 
                 int id = Integer.parseInt((String) jsonObject.get("id"));
 
-                if (Settings.DISABLED_HEADS.getIntegerList().contains(id)) continue;
-
                 Head head = new Head(id,
                         (String) jsonObject.get("name"),
                         (String) jsonObject.get("url"),
                         category,
+                        false,
                         (String) jsonObject.get("pack"),
                         Byte.parseByte((String) jsonObject.get("staff_picked")));
 
@@ -213,6 +213,7 @@ public class EpicHeads extends SongodaPlugin {
                             row.get("name").asString(),
                             row.get("url").asString(),
                             category,
+                            true,
                             null,
                             (byte) 0);
 
@@ -220,6 +221,20 @@ public class EpicHeads extends SongodaPlugin {
                         headManager.addCategory(category);
                     headManager.addLocalHead(head);
                 }
+            }
+
+            if (storage.containsGroup("disabled")) {
+                for (StorageRow row : storage.getRowsByGroup("disabled")) {
+                    headManager.disableHead(new Head(row.get("id").asInt(), false));
+                }
+            }
+
+            // convert disabled heads
+            if (config.contains("Main.Disabled Global Heads")) {
+                for (int id : config.getIntegerList("Main.Disabled Global Heads")) {
+                    EpicHeads.getInstance().getHeadManager().disableHead(new Head(id, false));
+                }
+                config.set("Main.Disabled Global Heads", null);
             }
 
             System.out.println("loaded " + headManager.getHeads().size() + " Heads.");

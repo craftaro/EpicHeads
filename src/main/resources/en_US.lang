@@ -24,6 +24,7 @@ gui:
     refine: '&9Refine Search'
     search: '&9Create Search'
     categories: '&cBack To Categories'
+    delete: '&cMiddle-Click to delete'
   general:
     previous: '&6Previous Page'
     next: '&6Next Page'

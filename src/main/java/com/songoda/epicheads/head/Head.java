@@ -10,24 +10,32 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Head {
 
     private final int id;
-    private final String name;
-    private final String URL;
-    private final String pack;
-    private final byte staffPicked;
+    private String name = null;
+    private String URL = null;
+    private String pack = null;
+    private byte staffPicked = 0;
+    private final boolean local;
 
-    private final Category category;
+    private Category category;
 
-    public Head(int id, String name, String URL, Category category, String pack, byte staffPicked) {
+    public Head(int id, String name, String URL, Category category, boolean local, String pack, byte staffPicked) {
         this.id = id;
         this.name = name;
         this.URL = URL;
         this.category = category;
         this.pack = pack;
         this.staffPicked = staffPicked;
+        this.local = local;
+    }
+
+    public Head(int id, boolean local) {
+        this.id = id;
+        this.local = local;
     }
 
     public int getId() {
@@ -52,6 +60,10 @@ public class Head {
 
     public byte getStaffPicked() {
         return staffPicked;
+    }
+
+    public boolean isLocal() {
+        return local;
     }
 
     public ItemStack asItemStack() {
@@ -93,14 +105,29 @@ public class Head {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Head head = (Head) o;
+        return id == head.id &&
+                local == head.local;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, local);
+    }
+
+    @Override
     public String toString() {
-        return "Head:{"
-                + "Id:\"" + id + "\","
-                + "Name:\"" + name + "\","
-                + "URL:\"" + URL + "\","
-                + "Category:\"" + category.getName() + "\","
-                + "Pack:\"" + pack + "\","
-                + "StaffPicked:\"" + staffPicked + "\""
-                + "}";
+        return "Head{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", URL='" + URL + '\'' +
+                ", pack='" + pack + '\'' +
+                ", staffPicked=" + staffPicked +
+                ", local=" + local +
+                ", category=" + category +
+                '}';
     }
 }

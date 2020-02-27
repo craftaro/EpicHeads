@@ -1,11 +1,11 @@
 package com.songoda.epicheads.settings;
 
 import com.songoda.core.compatibility.CompatibleMaterial;
-import com.songoda.core.compatibility.ServerVersion;
 import com.songoda.core.configuration.Config;
 import com.songoda.core.configuration.ConfigSetting;
 import com.songoda.core.hooks.EconomyManager;
 import com.songoda.epicheads.EpicHeads;
+import com.songoda.epicheads.head.Head;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -42,10 +42,6 @@ public class Settings {
     public static final ConfigSetting DROP_CHANCE = new ConfigSetting(config, "Main.Head Drop Chance", "25%",
             "When a player or monster is killed what should be",
             "the chance that their head drops?");
-
-    public static final ConfigSetting DISABLED_HEADS = new ConfigSetting(config, "Main.Disabled Global Heads", Arrays.asList(34567, 34568, 34569),
-            "These are head ID's from the global database that are disabled.",
-            "By default this is filled with non existent ID's.");
 
     public static final ConfigSetting ECONOMY_PLUGIN = new ConfigSetting(config, "Economy.Economy", "Vault",
             "Which economy plugin should be used?");
@@ -97,7 +93,7 @@ public class Settings {
             config.set(GLASS_TYPE_3.getKey(), CompatibleMaterial.getGlassPaneColor(color).name());
         }
 
-        config.setDefault("Economy.Economy", 
+        config.setDefault("Economy.Economy",
                 EconomyManager.getEconomy() == null ? "Vault" : EconomyManager.getEconomy().getName());
         config.setComment("Economy.Economy", null,
                 "Which economy plugin should be used?",

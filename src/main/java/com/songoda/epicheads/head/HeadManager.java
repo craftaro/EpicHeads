@@ -6,9 +6,10 @@ import java.util.stream.Stream;
 
 public class HeadManager {
 
-    private static final Set<Head> registeredHeads = new HashSet<>();
-    private static final List<Head> localRegisteredHeads = new ArrayList<>();
-    private static final List<Category> registeredCategories = new ArrayList<>();
+    private final Set<Head> registeredHeads = new HashSet<>();
+    private final List<Head> localRegisteredHeads = new ArrayList<>();
+    private final List<Category> registeredCategories = new ArrayList<>();
+    private final Set<Head> disabledHeads = new HashSet<>();
 
     public Head addHead(Head head) {
         registeredHeads.add(head);
@@ -76,6 +77,18 @@ public class HeadManager {
         return new ArrayList<>(registeredHeads);
     }
 
+    public Head disableHead(Head head) {
+        if (head.isLocal() && localRegisteredHeads.remove(head))
+            return head;
+        this.disabledHeads.add(head);
+        this.registeredHeads.remove(head);
+        return head;
+    }
+
+    public Set<Head> getDisabledHeads() {
+        return Collections.unmodifiableSet(disabledHeads);
+    }
+
     public List<Head> getLatestPack() {
         List<Head> heads = getHeads().stream().sorted(Comparator.comparingInt(Head::getId)).filter(head -> head.getPack() != null).collect(Collectors.toList());
 
@@ -106,6 +119,7 @@ public class HeadManager {
     public void clear() {
         registeredHeads.clear();
         localRegisteredHeads.clear();
+        disabledHeads.clear();
         registeredCategories.clear();
     }
 }
