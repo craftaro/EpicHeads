@@ -23,6 +23,8 @@ public class StorageItem {
 
     public String asString() {
         if (object == null) return null;
+        if (!(object instanceof String))
+            return String.valueOf(object);
         return (String) object;
     }
 
@@ -33,6 +35,8 @@ public class StorageItem {
 
     public int asInt() {
         if (object == null) return 0;
+        if (object instanceof String)
+            return Integer.parseInt(asString());
         return (int) object;
     }
 

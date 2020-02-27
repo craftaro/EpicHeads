@@ -1,48 +1,59 @@
-#General Messages
+# General Messages
 
-general.nametag.prefix = "&7[&6EpicHeads&7]"
-general.word.page = "Page"
-general.word.query = "Query"
-general.word.favorites = "Favorites"
-general.word.everyone = "everyone"
-general.phrase.latestpack = "Latest Pack"
-
-general.search.global = "&6Enter your search query."
-general.search.refine = "&6Enter a search term to refine your search."
-general.search.nonefound = "&cNo heads found.."
-general.search.canceled = "&cSearch canceled."
-
-general.head.staffpicked = "&8Staff Favorite"
-general.head.id = "&8ID: &7%id%"
-general.head.cost = "&8Cost: &7$%cost%"
-
-gui.heads.refine = "&9Refine Search"
-gui.heads.search = "&9Create Search"
-gui.heads.categories = "&cBack To Categories"
-
-gui.general.previous = "&6Previous Page"
-gui.general.next = "&6Next Page"
-
-gui.overview.title = "EpicHeads (%count% heads)"
-gui.overview.search = "&a&lSearch"
-gui.overview.headname = "&c&l%name%"
-gui.overview.headlore = "&e%count% heads"
-gui.overview.packlore = "&e%pack%"
-gui.overview.viewfavorites = "&6&lView Favorites"
-gui.overview.favoriteslore = "&8Shift click any head|&8to save as a favorite."
-gui.overview.discord = "&9&lDiscord"
-gui.overview.discordlore = "&8Add or request new heads|&8in our discord server."
-
-event.general.nopermission = "&cYou do not have permission to use that command."
-event.buyhead.cannotafford = "&cYou cannot afford this head."
-
-command.give.notonline = "&cThe player &4%name% &ccould not be found."
-command.give.notfound = "&cThe head &4%name%&c could not be found."
-command.give.success = "&7You have given &6%player% &7a head named &6%name%&7."
-command.give.receive = "&7You have been given a head named &6%name%&7."
-
-command.add.success = "&7Added the head &6%name% &7successfully."
-command.add.exists = "&cThat head already exists."
-
-command.givetoken.success = "&7You gave &6%player% %amount% &7player head tokens."
-command.givetoken.receive = "&7You have been given &6%amount% &7player head tokens."
+general:
+  nametag:
+    prefix: '&7[&6EpicHeads&7]'
+  word:
+    page: Page
+    query: Query
+    favorites: Favorites
+    everyone: everyone
+    playerheads: Player Heads
+    latestpack: Latest Pack
+  phrase:
+    latestpack: Latest Pack
+  search:
+    global: '&6Enter your search query.'
+    refine: '&6Enter a search term to refine your search.'
+    nonefound: '&cNo heads found..'
+    canceled: '&cSearch canceled.'
+  head:
+    staffpicked: '&8Staff Favorite'
+    id: '&8ID: &7%id%'
+    cost: '&8Cost: &7$%cost%'
+gui:
+  heads:
+    refine: '&9Refine Search'
+    search: '&9Create Search'
+    categories: '&cBack To Categories'
+    delete: '&cMiddle-Click to delete'
+  general:
+    previous: '&6Previous Page'
+    next: '&6Next Page'
+  overview:
+    title: EpicHeads (%count% heads)
+    search: '&a&lSearch'
+    headname: '&c&l%name%'
+    headlore: '&e%count% heads'
+    packlore: '&e%pack%'
+    viewfavorites: '&6&lView Favorites'
+    favoriteslore: '&8Shift click any head|&8to save as a favorite.'
+    discord: '&9&lDiscord'
+    discordlore: '&8Add or request new heads|&8in our discord server.'
+event:
+  general:
+    nopermission: '&cYou do not have permission to use that command.'
+  buyhead:
+    cannotafford: '&cYou cannot afford this head.'
+command:
+  give:
+    notonline: '&cThe player &4%name% &ccould not be found.'
+    notfound: '&cThe head &4%name%&c could not be found.'
+    success: '&7You have given &6%player% &7a head named &6%name%&7.'
+    receive: '&7You have been given a head named &6%name%&7.'
+  add:
+    success: '&7Added the head &6%name% &7successfully.'
+    exists: '&cThat head already exists.'
+  givetoken:
+    success: '&7You gave &6%player% %amount% &7player head tokens.'
+    receive: '&7You have been given &6%amount% &7player head tokens.'

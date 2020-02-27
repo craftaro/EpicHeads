@@ -60,7 +60,7 @@ public class DeathListeners implements Listener {
                 Head head = new Head(-1, Methods.formatText(event.getEntity().getType().name().toLowerCase()
                         .replace("_", " "), true),
                         HeadType.valueOf(event.getEntity().getType().name()).getUrl(),
-                        null, null, (byte) 0);
+                        null, true, null, (byte) 0);
                 itemNew = head.asItemStack();
             }
 

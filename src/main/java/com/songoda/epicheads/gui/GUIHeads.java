@@ -88,7 +88,7 @@ public class GUIHeads extends Gui {
 
         if (page - 3 >= 1) {
             setButton(0, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, page - 3,
-                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page - 3)), 
+                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page - 3)),
                     (event) -> changePage(-3));
         } else {
             clearActions(0);
@@ -106,7 +106,7 @@ public class GUIHeads extends Gui {
 
         if (page > 1) {
             setButton(2, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, page - 1,
-                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page - 1)), 
+                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page - 1)),
                     (event) -> changePage(-1));
         } else {
             clearActions(2);
@@ -180,9 +180,19 @@ public class GUIHeads extends Gui {
             if (head.getName() == null) continue;
 
             ItemStack item = head.asItemStack(favorites.contains(head.getURL()), free);
+            ItemMeta meta = item.getItemMeta();
+            List<String> lore = item.getItemMeta().getLore();
+            lore.add(plugin.getLocale().getMessage("gui.heads.delete").getMessage());
+            meta.setLore(lore);
+            item.setItemMeta(meta);
 
             setButton(i + 9, item, (event) -> {
-                if (event.clickType == ClickType.SHIFT_LEFT || event.clickType == ClickType.SHIFT_RIGHT) {
+                if (event.clickType == ClickType.MIDDLE && player.hasPermission("epicheads.delete")) {
+                    plugin.getHeadManager().disableHead(head);
+                    heads.remove(head);
+                    showPage();
+                    return;
+                } else if (event.clickType == ClickType.SHIFT_LEFT || event.clickType == ClickType.SHIFT_RIGHT) {
                     EPlayer ePlayer = plugin.getPlayerManager().getPlayer(player);
                     boolean isFav = ePlayer.getFavorites().contains(head.getURL());
                     if (isFav)
@@ -207,7 +217,6 @@ public class GUIHeads extends Gui {
                 }
 
                 ItemStack headItem = item.clone();
-                ItemMeta meta = headItem.getItemMeta();
                 meta.setLore(new ArrayList<>());
                 headItem.setItemMeta(meta);
 

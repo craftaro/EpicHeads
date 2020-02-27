@@ -48,15 +48,4 @@ public class Methods {
             text = text.substring(0, 1).toUpperCase() + text.substring(1);
         return ChatColor.translateAlternateColorCodes('&', text);
     }
-
-    public static String formatTitle(String text) {
-        if (text == null || text.equals(""))
-            return "";
-        if (!ServerVersion.isServerVersionAtLeast(ServerVersion.V1_9)) {
-            if (text.length() > 31)
-                text = text.substring(0, 29) + "...";
-        }
-        text = formatText(text);
-        return text;
-    }
 }

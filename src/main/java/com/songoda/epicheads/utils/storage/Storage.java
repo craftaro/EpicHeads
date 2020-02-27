@@ -38,6 +38,10 @@ public abstract class Storage {
                     new StorageItem("id", head.getId()),
                     new StorageItem("category", head.getCategory().getName()));
         }
+
+        for (Head head : instance.getHeadManager().getDisabledHeads()) {
+            prepareSaveItem("disabled", new StorageItem("id", String.valueOf(head.getId())));
+        }
     }
 
     public abstract void doSave();
