@@ -51,6 +51,8 @@ public class Head {
     }
 
     public String getURL() {
+        if (URL == null)
+            return "d23eaefbd581159384274cdbbd576ced82eb72423f2ea887124f9ed33a6872c";
         return URL;
     }
 
