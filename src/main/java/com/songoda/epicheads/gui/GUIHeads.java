@@ -76,7 +76,7 @@ public class GUIHeads extends Gui {
                 break;
         }
 
-        pages = (int) Math.floor(numHeads / 45.0);
+        pages = (int) Math.ceil(numHeads / 45.0);
 
         this.setTitle(name + " (" + numHeads + ") " + plugin.getLocale().getMessage("general.word.page") + " " + (page) + "/" + (pages));
     }
