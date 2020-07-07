@@ -1,5 +1,6 @@
 package com.songoda.epicheads.commands;
 
+import com.songoda.core.chat.ChatMessage;
 import com.songoda.core.commands.AbstractCommand;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.utils.Methods;
@@ -20,15 +21,16 @@ public class CommandHelp extends AbstractCommand {
     @Override
     protected ReturnType runCommand(CommandSender sender, String... args) {
         sender.sendMessage("");
-        instance.getLocale().newMessage("&7Version " + instance.getDescription().getVersion()
-                + " Created with <3 by &5&l&oSongoda").sendPrefixedMessage(sender);
+        new ChatMessage().fromText(String.format("#ff8080&l%s &8» &7Version %s Created with <3 by #ec4e74&l&oS#fa5b65&l&oo#ff6c55&l&on#ff7f44&l&og#ff9432&l&oo#ffaa1e&l&od#f4c009&l&oa",
+                instance.getDescription().getName(), instance.getDescription().getVersion()))
+                .sendTo(sender);
         sender.sendMessage("");
-        sender.sendMessage(Methods.formatText("&7Welcome to EpicHeads! To get started try using the /heads command to access the heads panel."));
+        sender.sendMessage(Methods.formatText("&7Welcome to EpicHeads! To get started try using the command /heads to access the heads panel."));
         sender.sendMessage("");
         sender.sendMessage(Methods.formatText("&6Commands:"));
         for (AbstractCommand command : instance.getCommandManager().getAllCommands()) {
             if (command.getPermissionNode() == null || sender.hasPermission(command.getPermissionNode())) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8 - &a" + command.getSyntax() + "&7 - " + command.getDescription()));
+                sender.sendMessage(ChatColor.DARK_GRAY + "- " + ChatColor.YELLOW + command.getSyntax() + ChatColor.GRAY + " - " + command.getDescription());
             }
         }
         sender.sendMessage("");
@@ -48,7 +50,7 @@ public class CommandHelp extends AbstractCommand {
 
     @Override
     public String getSyntax() {
-        return "/heads help";
+        return "help";
     }
 
     @Override

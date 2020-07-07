@@ -36,7 +36,7 @@ public class CommandSearch extends AbstractCommand {
 
     @Override
     public String getSyntax() {
-        return "/heads search";
+        return "search";
     }
 
     @Override

@@ -51,7 +51,7 @@ public class CommandUrl extends AbstractCommand {
 
     @Override
     public String getSyntax() {
-        return "/heads url";
+        return "url";
     }
 
     @Override
