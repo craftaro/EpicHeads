@@ -63,7 +63,7 @@ public class GUIHeads extends Gui {
 
         switch (type) {
             case SEARCH:
-                name = plugin.getLocale().getMessage("general.word.query") + ": " + query;
+                name = plugin.getLocale().getMessage("general.word.query").getMessage() + ": " + query;
                 break;
             case CATEGORY:
                 name = category.getName();
@@ -78,7 +78,7 @@ public class GUIHeads extends Gui {
 
         pages = (int) Math.ceil(numHeads / 45.0);
 
-        this.setTitle(name + " (" + numHeads + ") " + plugin.getLocale().getMessage("general.word.page") + " " + (page) + "/" + (pages));
+        this.setTitle(name + " (" + numHeads + ") " + plugin.getLocale().getMessage("general.word.page").getMessage() + " " + (page) + "/" + (pages));
     }
 
     void showPage() {
@@ -88,7 +88,7 @@ public class GUIHeads extends Gui {
 
         if (page - 3 >= 1) {
             setButton(0, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, page - 3,
-                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page - 3)),
+                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page").getMessage() + " " + (page - 3)),
                     (event) -> changePage(-3));
         } else {
             clearActions(0);
@@ -97,7 +97,7 @@ public class GUIHeads extends Gui {
 
         if (page - 2 >= 1) {
             setButton(1, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, page - 2,
-                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page - 2)),
+                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page").getMessage() + " " + (page - 2)),
                     (event) -> changePage(-2));
         } else {
             clearActions(1);
@@ -106,7 +106,7 @@ public class GUIHeads extends Gui {
 
         if (page > 1) {
             setButton(2, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, page - 1,
-                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page - 1)),
+                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page").getMessage() + " " + (page - 1)),
                     (event) -> changePage(-1));
         } else {
             clearActions(2);
@@ -143,7 +143,7 @@ public class GUIHeads extends Gui {
 
         if (page + 1 <= pages) {
             setButton(6, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, page + 1,
-                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page + 1)),
+                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page").getMessage() + " " + (page + 1)),
                     (event) -> changePage(+1));
         } else {
             clearActions(6);
@@ -152,7 +152,7 @@ public class GUIHeads extends Gui {
 
         if (page + 2 <= pages) {
             setButton(7, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, page + 2,
-                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page + 2)),
+                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page").getMessage() + " " + (page + 2)),
                     (event) -> changePage(+2));
         } else {
             clearActions(7);
@@ -161,7 +161,7 @@ public class GUIHeads extends Gui {
 
         if (page + 3 <= pages) {
             setButton(8, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, page + 3,
-                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page") + " " + (page + 3)),
+                    ChatColor.RED.toString() + plugin.getLocale().getMessage("general.word.page").getMessage() + " " + (page + 3)),
                     (event) -> changePage(+3));
         } else {
             clearActions(8);
@@ -223,9 +223,9 @@ public class GUIHeads extends Gui {
                 player.getInventory().addItem(headItem);
             });
         }
-        if(inventory != null) {
+        if (inventory != null) {
             i += 9;
-            for(; i < this.inventory.getSize(); ++i) {
+            for (; i < this.inventory.getSize(); ++i) {
                 clearActions(i);
                 setItem(i, null);
             }
@@ -242,7 +242,7 @@ public class GUIHeads extends Gui {
             Bukkit.getScheduler().scheduleSyncDelayedTask(EpicHeads.getInstance(), ()
                     -> guiManager.showGUI(player, new GUIHeads(plugin, player, response.getMessage(), QueryTypes.SEARCH, searchHeads)), 0L);
         }).setOnCancel(() -> {
-            player.sendMessage(plugin.getLocale().getMessage("general.search.canceled").getPrefixedMessage());
+            plugin.getLocale().getMessage("general.search.canceled").sendPrefixedMessage(player);
         });
     }
 

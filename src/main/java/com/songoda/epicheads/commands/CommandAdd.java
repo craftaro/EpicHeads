@@ -60,7 +60,7 @@ public class CommandAdd extends AbstractCommand {
 
     @Override
     public String getSyntax() {
-        return "/heads add <url> <name> <category>";
+        return "add <url> <name> <category>";
     }
 
     @Override

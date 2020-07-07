@@ -98,7 +98,7 @@ public class CommandGive extends AbstractCommand {
 
     @Override
     public String getSyntax() {
-        return "/heads give <player/all> <global/local> <head_id>";
+        return "give <player/all> <global/local> <head_id>";
     }
 
     @Override

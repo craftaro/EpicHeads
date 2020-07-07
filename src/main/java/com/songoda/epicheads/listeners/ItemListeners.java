@@ -4,7 +4,6 @@ import com.songoda.core.compatibility.CompatibleMaterial;
 import com.songoda.core.utils.ItemUtils;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Head;
-import com.songoda.epicheads.utils.Methods;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -27,7 +26,8 @@ public class ItemListeners implements Listener {
     public void itemSpawnEvent(ItemSpawnEvent event) {
         ItemStack item = event.getEntity().getItemStack();
 
-        if (!CompatibleMaterial.PLAYER_HEAD.matches(item)) return;
+        if (!CompatibleMaterial.PLAYER_HEAD.matches(item)
+                || item.getItemMeta() != null && item.getItemMeta().hasDisplayName()) return;
 
         String encodededStr = ItemUtils.getSkullTexture(item);
 

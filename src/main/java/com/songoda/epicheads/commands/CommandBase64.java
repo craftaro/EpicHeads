@@ -50,7 +50,7 @@ public class CommandBase64 extends AbstractCommand {
 
     @Override
     public String getSyntax() {
-        return "/heads base64";
+        return "base64";
     }
 
     @Override

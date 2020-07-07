@@ -9,5 +9,5 @@ commands:
   EpicHeads:
     description: View information on this plugin.
     default: true
-    aliases: [ehe, heads]
+    aliases: [heads, ehe]
     usage: /epicheads

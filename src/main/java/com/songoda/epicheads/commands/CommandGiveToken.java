@@ -56,7 +56,7 @@ public class CommandGiveToken extends AbstractCommand {
 
     @Override
     public String getSyntax() {
-        return "/heads givetoken <player> <amount>";
+        return "givetoken <player> <amount>";
     }
 
     @Override
