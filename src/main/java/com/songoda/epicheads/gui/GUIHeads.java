@@ -238,6 +238,7 @@ public class GUIHeads extends Gui {
         ChatPrompt.showPrompt(plugin, player, plugin.getLocale().getMessage("general.search.global").getPrefixedMessage(), response -> {
             List<Head> searchHeads = plugin.getHeadManager().getHeads().stream()
                     .filter(head -> head.getName().toLowerCase().contains(response.getMessage().toLowerCase()))
+                    .filter(head -> player.hasPermission("epicheads.category." + head.getCategory().getName().replace(" ", "_")))
                     .collect(Collectors.toList());
             Bukkit.getScheduler().scheduleSyncDelayedTask(EpicHeads.getInstance(), ()
                     -> guiManager.showGUI(player, new GUIHeads(plugin, player, response.getMessage(), QueryTypes.SEARCH, searchHeads)), 0L);
