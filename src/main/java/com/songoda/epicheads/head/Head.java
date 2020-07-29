@@ -1,6 +1,7 @@
 package com.songoda.epicheads.head;
 
 import com.songoda.core.compatibility.CompatibleMaterial;
+import com.songoda.core.hooks.EconomyManager;
 import com.songoda.core.utils.ItemUtils;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.settings.Settings;
@@ -100,9 +101,13 @@ public class Head {
             lore.add(plugin.getLocale().getMessage("general.head.staffpicked").getMessage());
         lore.add(plugin.getLocale().getMessage("general.head.id")
                 .processPlaceholder("id", this.id).getMessage());
-        if (!free)
+        if (!free) {
+            String fcost = Settings.ECONOMY_PLUGIN.getString().equalsIgnoreCase("item")
+                    ? cost + " " + Settings.ITEM_TOKEN_TYPE.getString()
+                    : EconomyManager.formatEconomy(cost);
             lore.add(plugin.getLocale().getMessage("general.head.cost")
-                    .processPlaceholder("cost", cost).getMessage());
+                    .processPlaceholder("cost", fcost).getMessage());
+        }
         return lore;
     }
 
