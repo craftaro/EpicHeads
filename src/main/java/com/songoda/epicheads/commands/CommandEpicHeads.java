@@ -10,10 +10,10 @@ import java.util.List;
 
 public class CommandEpicHeads extends AbstractCommand {
 
-    final GuiManager guiManager;
+    private final GuiManager guiManager;
 
     public CommandEpicHeads(GuiManager guiManager) {
-        super(false, "EpicHeads");
+        super(CommandType.PLAYER_ONLY, "EpicHeads");
         this.guiManager = guiManager;
     }
 

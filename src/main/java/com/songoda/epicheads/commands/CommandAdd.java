@@ -12,11 +12,11 @@ import java.util.stream.Collectors;
 
 public class CommandAdd extends AbstractCommand {
 
-    final EpicHeads instance;
+    private final EpicHeads plugin;
 
-    public CommandAdd(EpicHeads instance) {
-        super(false, "add");
-        this.instance = instance;
+    public CommandAdd(EpicHeads plugin) {
+        super(CommandType.CONSOLE_OK, "add");
+        this.plugin = plugin;
     }
 
     @Override
@@ -27,10 +27,10 @@ public class CommandAdd extends AbstractCommand {
         String name = args[1].replace("_", " ");
         String categoryStr = args[2].replace("_", " ");
 
-        HeadManager headManager = instance.getHeadManager();
+        HeadManager headManager = plugin.getHeadManager();
 
         if (headManager.getLocalHeads().stream().anyMatch(head -> head.getURL().equals(url))) {
-            instance.getLocale().getMessage("command.add.exists").sendPrefixedMessage(sender);
+            plugin.getLocale().getMessage("command.add.exists").sendPrefixedMessage(sender);
             return ReturnType.FAILURE;
         }
 
@@ -40,10 +40,10 @@ public class CommandAdd extends AbstractCommand {
 
         headManager.addLocalHead(new Head(headManager.getNextLocalId(), name, url, category, true, null, (byte) 0));
 
-        instance.getLocale().getMessage("command.add.success")
+        plugin.getLocale().getMessage("command.add.success")
                 .processPlaceholder("name", name).sendPrefixedMessage(sender);
         if (categories.isEmpty()) {
-            instance.reloadConfig();
+            plugin.reloadConfig();
         }
         return ReturnType.SUCCESS;
     }

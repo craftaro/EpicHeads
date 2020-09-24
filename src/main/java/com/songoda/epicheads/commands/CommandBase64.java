@@ -12,11 +12,11 @@ import java.util.List;
 
 public class CommandBase64 extends AbstractCommand {
 
-    final EpicHeads instance;
+    private final EpicHeads plugin;
 
-    public CommandBase64(EpicHeads instance) {
-        super(true, "base64");
-        this.instance = instance;
+    public CommandBase64(EpicHeads plugin) {
+        super(CommandType.PLAYER_ONLY, "base64");
+        this.plugin = plugin;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class CommandBase64 extends AbstractCommand {
 
         if (encodededStr == null) return ReturnType.FAILURE;
 
-        instance.getLocale().newMessage(encodededStr).sendPrefixedMessage(player);
+        plugin.getLocale().newMessage(encodededStr).sendPrefixedMessage(player);
 
         return ReturnType.SUCCESS;
     }

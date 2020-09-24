@@ -12,11 +12,11 @@ import java.util.List;
 
 public class CommandUrl extends AbstractCommand {
 
-    final EpicHeads instance;
+    private final EpicHeads plugin;
 
-    public CommandUrl(EpicHeads instance) {
-        super(true, "url");
-        this.instance = instance;
+    public CommandUrl(EpicHeads plugin) {
+        super(CommandType.PLAYER_ONLY, "url");
+        this.plugin = plugin;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class CommandUrl extends AbstractCommand {
 
         String url = ItemUtils.getDecodedTexture(encodededStr);
 
-        instance.getLocale().newMessage("http://textures.minecraft.net/texture/" + url).sendPrefixedMessage(player);
+        plugin.getLocale().newMessage("http://textures.minecraft.net/texture/" + url).sendPrefixedMessage(player);
 
         return ReturnType.SUCCESS;
     }

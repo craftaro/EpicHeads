@@ -11,11 +11,11 @@ import java.util.List;
 
 public class CommandGiveToken extends AbstractCommand {
 
-    final EpicHeads instance;
+    private final EpicHeads plugin;
 
-    public CommandGiveToken(EpicHeads instance) {
-        super(false, "givetoken");
-        this.instance = instance;
+    public CommandGiveToken(EpicHeads plugin) {
+        super(CommandType.CONSOLE_OK, "givetoken");
+        this.plugin = plugin;
     }
 
     @Override
@@ -26,18 +26,18 @@ public class CommandGiveToken extends AbstractCommand {
         int amount = Integer.parseInt(args[1]);
 
         if (player == null) {
-            instance.getLocale().getMessage("command.give.notonline")
+            plugin.getLocale().getMessage("command.give.notonline")
                     .processPlaceholder("name", args[1]).sendPrefixedMessage(sender);
             return ReturnType.FAILURE;
         }
 
         player.getInventory().addItem(Methods.createToken(amount));
 
-        instance.getLocale().getMessage("command.givetoken.receive")
+        plugin.getLocale().getMessage("command.givetoken.receive")
                 .processPlaceholder("amount", amount).sendPrefixedMessage(player);
 
         if (player != sender)
-            instance.getLocale().getMessage("command.givetoken.success")
+            plugin.getLocale().getMessage("command.givetoken.success")
                     .processPlaceholder("player", player.getName())
                     .processPlaceholder("amount", amount).sendPrefixedMessage(sender);
 

@@ -15,11 +15,11 @@ import java.util.Optional;
 
 public class CommandGive extends AbstractCommand {
 
-    final EpicHeads instance;
+    private final EpicHeads plugin;
 
-    public CommandGive(EpicHeads instance) {
-        super(false, "give");
-        this.instance = instance;
+    public CommandGive(EpicHeads plugin) {
+        super(CommandType.CONSOLE_OK, "give");
+        this.plugin = plugin;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class CommandGive extends AbstractCommand {
         int headId = Integer.parseInt(args[2]);
 
         if (player == null && !playerStr.equals("all")) {
-            instance.getLocale().getMessage("command.give.notonline")
+            plugin.getLocale().getMessage("command.give.notonline")
                     .processPlaceholder("name", args[1]).sendPrefixedMessage(sender);
             return ReturnType.FAILURE;
         }
@@ -40,9 +40,9 @@ public class CommandGive extends AbstractCommand {
         List<Head> heads;
 
         if (archive.equalsIgnoreCase("global"))
-            heads = instance.getHeadManager().getGlobalHeads();
+            heads = plugin.getHeadManager().getGlobalHeads();
         else if (archive.equalsIgnoreCase("local"))
-            heads = instance.getHeadManager().getLocalHeads();
+            heads = plugin.getHeadManager().getLocalHeads();
         else {
             return ReturnType.SYNTAX_ERROR;
         }
@@ -61,18 +61,18 @@ public class CommandGive extends AbstractCommand {
                     if (pl == sender) continue;
                     pl.getInventory().addItem(item);
 
-                    instance.getLocale().getMessage("command.give.receive")
+                    plugin.getLocale().getMessage("command.give.receive")
                             .processPlaceholder("name", head.get().getName()).sendPrefixedMessage(pl);
                 }
-                instance.getLocale().getMessage("command.give.success")
-                        .processPlaceholder("player", instance.getLocale().getMessage("general.word.everyone").getMessage())
+                plugin.getLocale().getMessage("command.give.success")
+                        .processPlaceholder("player", plugin.getLocale().getMessage("general.word.everyone").getMessage())
                         .processPlaceholder("name", head.get().getName())
                         .sendPrefixedMessage(sender);
             } else {
                 player.getInventory().addItem(item);
-                instance.getLocale().getMessage("command.give.receive")
+                plugin.getLocale().getMessage("command.give.receive")
                         .processPlaceholder("name", head.get().getName()).sendPrefixedMessage(player);
-                instance.getLocale().getMessage("command.give.success")
+                plugin.getLocale().getMessage("command.give.success")
                         .processPlaceholder("player", player.getName())
                         .processPlaceholder("name", head.get().getName())
                         .sendPrefixedMessage(sender);
@@ -80,7 +80,7 @@ public class CommandGive extends AbstractCommand {
 
             return ReturnType.SUCCESS;
         } else {
-            instance.getLocale().getMessage("command.give.notfound")
+            plugin.getLocale().getMessage("command.give.notfound")
                     .processPlaceholder("name", head.get().getName()).sendPrefixedMessage(sender);
             return ReturnType.FAILURE;
         }
