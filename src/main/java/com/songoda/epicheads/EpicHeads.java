@@ -124,18 +124,12 @@ public class EpicHeads extends SongodaPlugin {
         // Load Heads
         loadHeads();
 
-        // Load Favorites
-        loadData();
-
         int timeout = Settings.AUTOSAVE.getInt() * 60 * 20;
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::saveToFile, timeout, timeout);
     }
 
-    private void saveToFile() {
-        storage.doSave();
-    }
-
-    private void loadData() {
+    @Override
+    public void onDataLoad() {
         // Adding in favorites.
         if (storage.containsGroup("players")) {
             for (StorageRow row : storage.getRowsByGroup("players")) {
@@ -154,6 +148,9 @@ public class EpicHeads extends SongodaPlugin {
         this.saveToFile();
     }
 
+    private void saveToFile() {
+        storage.doSave();
+    }
 
     private void downloadHeads() {
         try {
