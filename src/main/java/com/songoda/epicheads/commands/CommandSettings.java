@@ -11,10 +11,10 @@ import java.util.List;
 
 public class CommandSettings extends AbstractCommand {
 
-    final GuiManager guiManager;
+    private final GuiManager guiManager;
 
     public CommandSettings(GuiManager guiManager) {
-        super(true, "settings");
+        super(CommandType.PLAYER_ONLY, "settings");
         this.guiManager = guiManager;
     }
 

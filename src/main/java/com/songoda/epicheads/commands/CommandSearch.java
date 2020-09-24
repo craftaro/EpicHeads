@@ -11,10 +11,10 @@ import java.util.List;
 
 public class CommandSearch extends AbstractCommand {
 
-    final GuiManager guiManager;
+    private final GuiManager guiManager;
 
     public CommandSearch(GuiManager guiManager) {
-        super(true, "search");
+        super(CommandType.PLAYER_ONLY, "search");
         this.guiManager = guiManager;
     }
 

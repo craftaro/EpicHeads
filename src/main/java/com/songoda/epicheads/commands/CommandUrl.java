@@ -3,7 +3,6 @@ package com.songoda.epicheads.commands;
 import com.songoda.core.commands.AbstractCommand;
 import com.songoda.core.utils.ItemUtils;
 import com.songoda.epicheads.EpicHeads;
-import com.songoda.epicheads.utils.Methods;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -13,11 +12,11 @@ import java.util.List;
 
 public class CommandUrl extends AbstractCommand {
 
-    final EpicHeads instance;
+    private final EpicHeads plugin;
 
-    public CommandUrl(EpicHeads instance) {
-        super(true, "url");
-        this.instance = instance;
+    public CommandUrl(EpicHeads plugin) {
+        super(CommandType.PLAYER_ONLY, "url");
+        this.plugin = plugin;
     }
 
     @Override
@@ -34,7 +33,7 @@ public class CommandUrl extends AbstractCommand {
 
         String url = ItemUtils.getDecodedTexture(encodededStr);
 
-        instance.getLocale().newMessage("http://textures.minecraft.net/texture/" + url).sendPrefixedMessage(player);
+        plugin.getLocale().newMessage("http://textures.minecraft.net/texture/" + url).sendPrefixedMessage(player);
 
         return ReturnType.SUCCESS;
     }

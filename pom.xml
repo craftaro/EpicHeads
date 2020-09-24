@@ -2,7 +2,7 @@
     <groupId>com.songoda</groupId>
     <artifactId>EpicHeads</artifactId>
     <modelVersion>4.0.0</modelVersion>
-    <version>3.2.12</version>
+    <version>3.2.13</version>
     <build>
         <defaultGoal>clean install</defaultGoal>
         <finalName>EpicHeads-${project.version}</finalName>
@@ -83,11 +83,11 @@
     <repositories>
         <repository>
             <id>private</id>
-            <url>https://repo.songoda.com/artifactory/private/</url>
+            <url>https://repo.songoda.com/repository/private/</url>
         </repository>
         <repository>
             <id>public</id>
-            <url>https://repo.songoda.com/artifactory/public/</url>
+            <url>https://repo.songoda.com/repository/public/</url>
         </repository>
         <repository>
             <id>spigot-repo</id>

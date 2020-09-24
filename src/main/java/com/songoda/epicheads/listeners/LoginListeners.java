@@ -53,7 +53,7 @@ public class LoginListeners implements Listener {
             headManager.removeLocalHead(head);
         }
 
-        headManager.addLocalHeads(new Head(id, player.getName(), url, tag, true,null, (byte) 0));
+        headManager.addLocalHeads(new Head(id, player.getName(), url, tag, true, null, (byte) 0));
 
     }
 

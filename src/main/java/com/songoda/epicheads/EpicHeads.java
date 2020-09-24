@@ -29,7 +29,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -118,18 +124,12 @@ public class EpicHeads extends SongodaPlugin {
         // Load Heads
         loadHeads();
 
-        // Load Favorites
-        loadData();
-
         int timeout = Settings.AUTOSAVE.getInt() * 60 * 20;
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::saveToFile, timeout, timeout);
     }
 
-    private void saveToFile() {
-        storage.doSave();
-    }
-
-    private void loadData() {
+    @Override
+    public void onDataLoad() {
         // Adding in favorites.
         if (storage.containsGroup("players")) {
             for (StorageRow row : storage.getRowsByGroup("players")) {
@@ -148,6 +148,9 @@ public class EpicHeads extends SongodaPlugin {
         this.saveToFile();
     }
 
+    private void saveToFile() {
+        storage.doSave();
+    }
 
     private void downloadHeads() {
         try {

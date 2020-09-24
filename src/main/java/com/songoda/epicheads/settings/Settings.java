@@ -5,7 +5,6 @@ import com.songoda.core.configuration.Config;
 import com.songoda.core.configuration.ConfigSetting;
 import com.songoda.core.hooks.EconomyManager;
 import com.songoda.epicheads.EpicHeads;
-import com.songoda.epicheads.head.Head;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;

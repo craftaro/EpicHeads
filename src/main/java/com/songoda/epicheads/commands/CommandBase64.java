@@ -3,7 +3,6 @@ package com.songoda.epicheads.commands;
 import com.songoda.core.commands.AbstractCommand;
 import com.songoda.core.utils.ItemUtils;
 import com.songoda.epicheads.EpicHeads;
-import com.songoda.epicheads.utils.Methods;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -13,11 +12,11 @@ import java.util.List;
 
 public class CommandBase64 extends AbstractCommand {
 
-    final EpicHeads instance;
+    private final EpicHeads plugin;
 
-    public CommandBase64(EpicHeads instance) {
-        super(true, "base64");
-        this.instance = instance;
+    public CommandBase64(EpicHeads plugin) {
+        super(CommandType.PLAYER_ONLY, "base64");
+        this.plugin = plugin;
     }
 
     @Override
@@ -33,7 +32,7 @@ public class CommandBase64 extends AbstractCommand {
 
         if (encodededStr == null) return ReturnType.FAILURE;
 
-        instance.getLocale().newMessage(encodededStr).sendPrefixedMessage(player);
+        plugin.getLocale().newMessage(encodededStr).sendPrefixedMessage(player);
 
         return ReturnType.SUCCESS;
     }
