@@ -81,7 +81,7 @@ public class GUIHeads extends Gui {
         this.setTitle(name + " (" + numHeads + ") " + plugin.getLocale().getMessage("general.word.page").getMessage() + " " + (page) + "/" + (pages));
     }
 
-    void showPage() {
+    private void showPage() {
         updateTitle();
         List<Head> pageHeads = this.heads.stream().skip((page - 1) * (rows - 1) * 9).limit((rows - 1) * 9)
                 .collect(Collectors.toList());

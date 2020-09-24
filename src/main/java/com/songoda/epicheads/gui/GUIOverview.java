@@ -37,7 +37,7 @@ public class GUIOverview extends Gui {
         showPage();
     }
 
-    void showPage() {
+    private void showPage() {
         setButton(4, GuiUtils.createButtonItem(CompatibleMaterial.GOLDEN_APPLE,
                 plugin.getLocale().getMessage("gui.overview.viewfavorites").getMessage(),
                 plugin.getLocale().getMessage("gui.overview.favoriteslore").getMessage().split("\\|")),
