@@ -1,6 +1,5 @@
 package com.songoda.epicheads.head;
 
-import com.songoda.core.compatibility.CompatibleMaterial;
 import com.songoda.core.hooks.EconomyManager;
 import com.songoda.core.utils.ItemUtils;
 import com.songoda.epicheads.EpicHeads;
@@ -81,7 +80,7 @@ public class Head {
         ItemStack item = ItemUtils.getCustomHead(this.URL);
 
         ItemMeta meta = item.getItemMeta();
-        if(meta != null) {
+        if (meta != null) {
             meta.setDisplayName(getHeadItemName(favorite));
             meta.setLore(getHeadItemLore(free));
             item.setItemMeta(meta);
