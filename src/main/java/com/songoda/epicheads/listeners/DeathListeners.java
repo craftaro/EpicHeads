@@ -33,7 +33,7 @@ public class DeathListeners implements Listener {
         double rand = Math.random() * 100;
         if (rand - ch < 0 || ch == 100) {
 
-            ItemStack itemNew;
+            ItemStack itemNew = null;
             if (event.getEntity() instanceof Player) {
                 if (!Settings.DROP_PLAYER_HEADS.getBoolean()) return;
 
@@ -52,7 +52,8 @@ public class DeathListeners implements Listener {
                     Optional<Head> optional = plugin.getHeadManager().getHeads().stream()
                             .filter(head -> url.equals(head.getURL())).findFirst();
 
-                    itemNew = optional.get().asItemStack();
+                    if (optional.isPresent())
+                        itemNew = optional.get().asItemStack();
                 }
             } else {
                 if (!Settings.DROP_MOB_HEADS.getBoolean() || event.getEntity() instanceof ArmorStand) return;
@@ -63,6 +64,7 @@ public class DeathListeners implements Listener {
                         null, true, null, (byte) 0);
                 itemNew = head.asItemStack();
             }
+            if (itemNew == null) return;
 
             ItemMeta meta = itemNew.getItemMeta();
             meta.setLore(new ArrayList<>());
