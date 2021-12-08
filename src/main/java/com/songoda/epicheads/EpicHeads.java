@@ -164,7 +164,7 @@ public class EpicHeads extends SongodaPlugin {
                 file.write(json.toJSONString());
             }
         } catch (Exception e) {
-            System.out.println("Failed to download heads.");
+            Bukkit.getLogger().warning("Failed to download heads.");
         }
     }
 
@@ -240,13 +240,13 @@ public class EpicHeads extends SongodaPlugin {
                 config.set("Main.Disabled Global Heads", null);
             }
 
-            System.out.println("loaded " + headManager.getHeads().size() + " Heads.");
+            Bukkit.getLogger().info("loaded " + headManager.getHeads().size() + " Heads.");
 
         } catch (IOException e) {
-            System.out.println("Heads file not found. Plugin disabling.");
+            Bukkit.getLogger().warning("Heads file not found. Plugin disabling.");
             return false;
         } catch (ParseException e) {
-            System.out.println("Failed to parse heads file. Plugin disabling.");
+            Bukkit.getLogger().warning("Failed to parse heads file. Plugin disabling.");
             return false;
         }
         return true;
