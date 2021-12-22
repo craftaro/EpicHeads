@@ -2,7 +2,7 @@
     <groupId>com.songoda</groupId>
     <artifactId>EpicHeads</artifactId>
     <modelVersion>4.0.0</modelVersion>
-    <version>3.2.14</version>
+    <version>3.3.0</version>
     <build>
         <defaultGoal>clean install</defaultGoal>
         <finalName>EpicHeads-${project.version}</finalName>
