@@ -1,8 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.songoda</groupId>
     <artifactId>EpicHeads</artifactId>
-    <modelVersion>4.0.0</modelVersion>
-    <version>3.3.0</version>
+    <version>3.3.1</version>
+
     <build>
         <defaultGoal>clean install</defaultGoal>
         <finalName>EpicHeads-${project.version}</finalName>
@@ -11,15 +13,18 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
+
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>com.google.code.maven-replacer-plugin</groupId>
                 <artifactId>replacer</artifactId>
                 <version>1.5.3</version>
+
                 <executions>
                     <execution>
                         <phase>prepare-package</phase>
@@ -28,6 +33,7 @@
                         </goals>
                     </execution>
                 </executions>
+
                 <configuration>
                     <file>${project.build.directory}/classes/plugin.yml</file>
                     <replacements>
@@ -38,10 +44,12 @@
                     </replacements>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.3.0-SNAPSHOT</version>
+
                 <executions>
                     <execution>
                         <id>shaded</id>
@@ -49,15 +57,18 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+
                         <configuration>
                             <shadedArtifactAttached>false</shadedArtifactAttached>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <minimizeJar>true</minimizeJar>
+
                             <artifactSet>
                                 <includes>
                                     <include>com.songoda:SongodaCore</include>
                                 </includes>
                             </artifactSet>
+
                             <filters>
                                 <filter>
                                     <artifact>*:*</artifact>
@@ -68,6 +79,7 @@
                                     </excludes>
                                 </filter>
                             </filters>
+
                             <relocations>
                                 <relocation>
                                     <pattern>com.songoda.core</pattern>
@@ -80,12 +92,14 @@
             </plugin>
         </plugins>
     </build>
+
     <pluginRepositories>
         <pluginRepository>
             <id>apache.snapshots</id>
             <url>https://repository.apache.org/snapshots/</url>
         </pluginRepository>
     </pluginRepositories>
+
     <repositories>
         <repository>
             <id>public</id>
@@ -96,6 +110,7 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
     </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -103,10 +118,11 @@
             <version>1.18</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>com.songoda</groupId>
             <artifactId>SongodaCore</artifactId>
-            <version>2.6.9</version>
+            <version>2.6.12</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

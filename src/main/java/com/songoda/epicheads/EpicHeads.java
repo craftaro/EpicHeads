@@ -9,7 +9,16 @@ import com.songoda.core.gui.GuiManager;
 import com.songoda.core.hooks.EconomyManager;
 import com.songoda.core.hooks.PluginHook;
 import com.songoda.core.hooks.economies.Economy;
-import com.songoda.epicheads.commands.*;
+import com.songoda.epicheads.commands.CommandAdd;
+import com.songoda.epicheads.commands.CommandBase64;
+import com.songoda.epicheads.commands.CommandEpicHeads;
+import com.songoda.epicheads.commands.CommandGive;
+import com.songoda.epicheads.commands.CommandGiveToken;
+import com.songoda.epicheads.commands.CommandHelp;
+import com.songoda.epicheads.commands.CommandReload;
+import com.songoda.epicheads.commands.CommandSearch;
+import com.songoda.epicheads.commands.CommandSettings;
+import com.songoda.epicheads.commands.CommandUrl;
 import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.head.HeadManager;
@@ -37,13 +46,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public class EpicHeads extends SongodaPlugin {
-
     private static EpicHeads INSTANCE;
 
     private final GuiManager guiManager = new GuiManager(this);
@@ -133,8 +141,9 @@ public class EpicHeads extends SongodaPlugin {
         // Adding in favorites.
         if (storage.containsGroup("players")) {
             for (StorageRow row : storage.getRowsByGroup("players")) {
-                if (row.get("uuid").asObject() == null)
+                if (row.get("uuid").asObject() == null) {
                     continue;
+                }
 
                 EPlayer player = new EPlayer(
                         UUID.fromString(row.get("uuid").asString()),
@@ -155,7 +164,7 @@ public class EpicHeads extends SongodaPlugin {
     private void downloadHeads() {
         try {
             InputStream is = new URL("http://www.head-db.com/dump").openStream();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             String jsonText = readAll(rd);
             JSONParser parser = new JSONParser();
             JSONArray json = (JSONArray) parser.parse(jsonText);
@@ -163,8 +172,8 @@ public class EpicHeads extends SongodaPlugin {
             try (FileWriter file = new FileWriter(getDataFolder() + "/heads.json")) {
                 file.write(json.toJSONString());
             }
-        } catch (Exception e) {
-            System.out.println("Failed to download heads.");
+        } catch (Exception ex) {
+            getLogger().warning("Failed to download heads: " + ex.getMessage());
         }
     }
 
@@ -240,15 +249,19 @@ public class EpicHeads extends SongodaPlugin {
                 config.set("Main.Disabled Global Heads", null);
             }
 
-            System.out.println("loaded " + headManager.getHeads().size() + " Heads.");
+            getLogger().info("Loaded " + headManager.getHeads().size() + " heads");
+        } catch (IOException | ParseException ex) {
+            getLogger().warning(() -> {
+                if (ex instanceof ParseException) {
+                    return "Disabling plugin, failed to parse heads: " + ex.getMessage();
+                }
 
-        } catch (IOException e) {
-            System.out.println("Heads file not found. Plugin disabling.");
-            return false;
-        } catch (ParseException e) {
-            System.out.println("Failed to parse heads file. Plugin disabling.");
+                return "Disabling plugin, failed to load heads: " + ex.getMessage();
+            });
+
             return false;
         }
+
         return true;
     }
 
