@@ -103,7 +103,7 @@ public class Head {
         if (!free) {
             String fcost = Settings.ECONOMY_PLUGIN.getString().equalsIgnoreCase("item")
                     ? cost + " " + Settings.ITEM_TOKEN_TYPE.getString()
-                    : EconomyManager.formatEconomy(cost);
+                    : /* EconomyManager.formatEconomy(cost) */ String.valueOf(cost);  // FIXME: EconomyManager#formatEconomy etc only work in some languages (. vs ,) and only for the currency symbol $
             lore.add(plugin.getLocale().getMessage("general.head.cost")
                     .processPlaceholder("cost", fcost).getMessage());
         }

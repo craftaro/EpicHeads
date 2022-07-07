@@ -96,7 +96,7 @@ public class GUIOverview extends Gui {
                     plugin.getLocale().getMessage("gui.overview.discord").getMessage(),
                     plugin.getLocale().getMessage("gui.overview.discordlore").getMessage().split("\\|")),
                     (event) -> {
-                        plugin.getLocale().newMessage("&9https://discord.gg/A9TRJQb").sendPrefixedMessage(player);
+                        plugin.getLocale().newMessage("&9https://songoda.com/discord").sendPrefixedMessage(player);
                         exit();
                     });
         }

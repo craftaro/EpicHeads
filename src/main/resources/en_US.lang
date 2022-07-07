@@ -20,7 +20,7 @@ general:
   head:
     staffpicked: '&8Staff Favorite'
     id: '&8ID: &7%id%'
-    cost: '&8Cost: &7%cost%'
+    cost: '&8Cost: &7$%cost%'
 gui:
   heads:
     refine: '&9Refine Search'
