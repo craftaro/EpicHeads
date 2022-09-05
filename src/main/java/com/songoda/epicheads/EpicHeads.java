@@ -5,20 +5,16 @@ import com.songoda.core.SongodaPlugin;
 import com.songoda.core.commands.CommandManager;
 import com.songoda.core.compatibility.CompatibleMaterial;
 import com.songoda.core.configuration.Config;
+import com.songoda.core.database.DataMigrationManager;
+import com.songoda.core.database.DatabaseConnector;
+import com.songoda.core.database.SQLiteConnector;
 import com.songoda.core.gui.GuiManager;
 import com.songoda.core.hooks.EconomyManager;
 import com.songoda.core.hooks.PluginHook;
 import com.songoda.core.hooks.economies.Economy;
-import com.songoda.epicheads.commands.CommandAdd;
-import com.songoda.epicheads.commands.CommandBase64;
-import com.songoda.epicheads.commands.CommandEpicHeads;
-import com.songoda.epicheads.commands.CommandGive;
-import com.songoda.epicheads.commands.CommandGiveToken;
-import com.songoda.epicheads.commands.CommandHelp;
-import com.songoda.epicheads.commands.CommandReload;
-import com.songoda.epicheads.commands.CommandSearch;
-import com.songoda.epicheads.commands.CommandSettings;
-import com.songoda.epicheads.commands.CommandUrl;
+import com.songoda.epicheads.commands.*;
+import com.songoda.epicheads.database.DataManager;
+import com.songoda.epicheads.database.migrations._1_InitialMigration;
 import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.head.HeadManager;
@@ -32,21 +28,17 @@ import com.songoda.epicheads.utils.storage.Storage;
 import com.songoda.epicheads.utils.storage.StorageRow;
 import com.songoda.epicheads.utils.storage.types.StorageYaml;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -60,7 +52,8 @@ public class EpicHeads extends SongodaPlugin {
     private CommandManager commandManager;
     private PluginHook itemEconomyHook;
 
-    private Storage storage;
+    private DatabaseConnector databaseConnector;
+    private DataManager dataManager;
 
     public static EpicHeads getInstance() {
         return INSTANCE;
@@ -74,8 +67,8 @@ public class EpicHeads extends SongodaPlugin {
 
     @Override
     public void onPluginDisable() {
-        this.storage.closeConnection();
-        this.saveToFile();
+        shutdownDataManager(this.dataManager);
+        this.databaseConnector.closeConnection();
     }
 
     @Override
@@ -117,8 +110,6 @@ public class EpicHeads extends SongodaPlugin {
                         new CommandUrl(this)
                 );
 
-        this.storage = new StorageYaml(this);
-
         // Register Listeners
         guiManager.init();
         PluginManager pluginManager = Bukkit.getPluginManager();
@@ -133,32 +124,99 @@ public class EpicHeads extends SongodaPlugin {
         loadHeads();
 
         int timeout = Settings.AUTOSAVE.getInt() * 60 * 20;
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::saveToFile, timeout, timeout);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> dataManager.saveAllPlayers(), timeout, timeout);
     }
 
     @Override
     public void onDataLoad() {
-        // Adding in favorites.
-        if (storage.containsGroup("players")) {
-            for (StorageRow row : storage.getRowsByGroup("players")) {
-                if (row.get("uuid").asObject() == null) {
-                    continue;
+        // Database stuff.
+        this.databaseConnector = new SQLiteConnector(this);
+        this.getLogger().info("Data handler connected using SQLite.");
+
+        this.dataManager = new DataManager(this.databaseConnector, this);
+        DataMigrationManager dataMigrationManager = new DataMigrationManager(this.databaseConnector, this.dataManager,
+                new _1_InitialMigration());
+        dataMigrationManager.runMigrations();
+
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+            // Legacy data! Yay!
+            File folder = getDataFolder();
+            File dataFile = new File(folder, "data.yml");
+
+            boolean converted = false;
+            if (dataFile.exists()) {
+                converted = true;
+                Storage storage = new StorageYaml(this);
+                if (storage.containsGroup("players")) {
+                    console.sendMessage("[" + getDescription().getName() + "] " + ChatColor.RED +
+                            "Conversion process starting. Do NOT turn off your server. " +
+                            "EpicHeads hasn't fully loaded yet, so make sure users don't" +
+                            "interact with the plugin until the conversion process is complete.");
+
+                    List<EPlayer> players = new ArrayList<>();
+                    for (StorageRow row : storage.getRowsByGroup("players")) {
+                        if (row.get("uuid").asObject() == null) {
+                            continue;
+                        }
+
+                        players.add(new EPlayer(
+                                UUID.fromString(row.get("uuid").asString()),
+                                (List<String>) row.get("favorites").asObject()));
+                    }
+                    dataManager.migratePlayers(players);
                 }
 
-                EPlayer player = new EPlayer(
-                        UUID.fromString(row.get("uuid").asString()),
-                        (List<String>) row.get("favorites").asObject());
+                if (storage.containsGroup("local")) {
+                    for (StorageRow row : storage.getRowsByGroup("local")) {
+                        String tagStr = row.get("category").asString();
 
-                this.playerManager.addPlayer(player);
+                        Optional<Category> tagOptional = headManager.getCategories().stream()
+                                .filter(t -> t.getName().equalsIgnoreCase(tagStr)).findFirst();
+
+                        Category category = tagOptional.orElseGet(() -> new Category(tagStr));
+
+                        Head head = new Head(row.get("id").asInt(),
+                                row.get("name").asString(),
+                                row.get("url").asString(),
+                                category,
+                                true,
+                                null,
+                                (byte) 0);
+
+                        dataManager.createLocalHead(head);
+                    }
+
+                    if (storage.containsGroup("disabled")) {
+                        List<Integer> ids = new ArrayList<>();
+                        for (StorageRow row : storage.getRowsByGroup("disabled")) {
+                            ids.add(row.get("id").asInt());
+                        }
+
+                        dataManager.migrateDisabledHead(ids);
+                    }
+                }
+
+                dataFile.delete();
             }
-        }
 
-        // Save data initially so that if the person reloads again fast they don't lose all their data.
-        this.saveToFile();
-    }
+            final boolean finalConverted = converted;
+            dataManager.queueAsync(() -> {
+                if (finalConverted) {
+                    console.sendMessage("[" + getDescription().getName() + "] " + ChatColor.GREEN + "Conversion complete :)");
+                }
 
-    private void saveToFile() {
-        storage.doSave();
+                this.dataManager.getLocalHeads((heads) -> {
+                    this.headManager.addLocalHeads(heads);
+                    getLogger().info("Loaded " + headManager.getHeads().size() + " heads");
+                });
+
+                this.dataManager.getDisabledHeads((ids) -> {
+                    for (int id : ids) {
+                        headManager.disableHead(new Head(id, false));
+                    }
+                });
+            }, "create");
+        });
     }
 
     private void downloadHeads() {
@@ -212,44 +270,6 @@ public class EpicHeads extends SongodaPlugin {
                 headManager.addHead(head);
             }
 
-            if (storage.containsGroup("local")) {
-                for (StorageRow row : storage.getRowsByGroup("local")) {
-                    String tagStr = row.get("category").asString();
-
-                    Optional<Category> tagOptional = headManager.getCategories().stream()
-                            .filter(t -> t.getName().equalsIgnoreCase(tagStr)).findFirst();
-
-                    Category category = tagOptional.orElseGet(() -> new Category(tagStr));
-
-                    Head head = new Head(row.get("id").asInt(),
-                            row.get("name").asString(),
-                            row.get("url").asString(),
-                            category,
-                            true,
-                            null,
-                            (byte) 0);
-
-                    if (!tagOptional.isPresent())
-                        headManager.addCategory(category);
-                    headManager.addLocalHead(head);
-                }
-            }
-
-            if (storage.containsGroup("disabled")) {
-                for (StorageRow row : storage.getRowsByGroup("disabled")) {
-                    headManager.disableHead(new Head(row.get("id").asInt(), false));
-                }
-            }
-
-            // convert disabled heads
-            if (config.contains("Main.Disabled Global Heads")) {
-                for (int id : config.getIntegerList("Main.Disabled Global Heads")) {
-                    EpicHeads.getInstance().getHeadManager().disableHead(new Head(id, false));
-                }
-                config.set("Main.Disabled Global Heads", null);
-            }
-
-            getLogger().info("Loaded " + headManager.getHeads().size() + " heads");
         } catch (IOException | ParseException ex) {
             getLogger().warning(() -> {
                 if (ex instanceof ParseException) {
@@ -276,12 +296,9 @@ public class EpicHeads extends SongodaPlugin {
 
     @Override
     public void onConfigReload() {
-        saveToFile();
-
         this.setLocale(getConfig().getString("System.Language Mode"), true);
         this.locale.reloadMessages();
 
-        saveToFile();
         downloadHeads();
         loadHeads();
     }
@@ -301,5 +318,13 @@ public class EpicHeads extends SongodaPlugin {
 
     public PlayerManager getPlayerManager() {
         return playerManager;
+    }
+
+    public DatabaseConnector getDatabaseConnector() {
+        return databaseConnector;
+    }
+
+    public DataManager getDataManager() {
+        return dataManager;
     }
 }

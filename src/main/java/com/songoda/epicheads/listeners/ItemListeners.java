@@ -4,9 +4,11 @@ import com.songoda.core.compatibility.CompatibleMaterial;
 import com.songoda.core.utils.ItemUtils;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Head;
+import com.songoda.epicheads.utils.ItemEconomy;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -50,6 +52,13 @@ public class ItemListeners implements Listener {
             ItemMeta meta = itemNew.getItemMeta();
             meta.setLore(new ArrayList<>());
             item.setItemMeta(meta);
+        }
+    }
+
+    @EventHandler
+    public void onPlace(BlockPlaceEvent event) {
+        if (ItemEconomy.isItem(event.getItemInHand())) {
+            event.setCancelled(true);
         }
     }
 

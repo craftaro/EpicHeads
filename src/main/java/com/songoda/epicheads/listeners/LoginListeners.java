@@ -8,7 +8,9 @@ import com.songoda.epicheads.head.HeadManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.Optional;
 
@@ -49,12 +51,24 @@ public class LoginListeners implements Listener {
 
         if (optional.isPresent()) {
             Head head = optional.get();
-            id = head.getId();
-            headManager.removeLocalHead(head);
+            head.setURL(url);
+            plugin.getDataManager().updateLocalHead(head);
+            return;
         }
 
-        headManager.addLocalHeads(new Head(id, player.getName(), url, tag, true, null, (byte) 0));
+        Head head = new Head(id, player.getName(), url, tag, true, null, (byte) 0);
+        headManager.addLocalHead(head);
+        plugin.getDataManager().createLocalHead(head);
+    }
 
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        plugin.getDataManager().getPlayer(event.getPlayer(), ePlayer -> plugin.getPlayerManager().addPlayer(ePlayer));
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        plugin.getDataManager().updatePlayer(plugin.getPlayerManager().getPlayer(event.getPlayer()));
     }
 
 }

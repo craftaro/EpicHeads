@@ -38,7 +38,9 @@ public class CommandAdd extends AbstractCommand {
 
         Category category = categories.isEmpty() ? new Category(categoryStr) : categories.get(0);
 
-        headManager.addLocalHead(new Head(headManager.getNextLocalId(), name, url, category, true, null, (byte) 0));
+        Head head = new Head(headManager.getNextLocalId(), name, url, category, true, null, (byte) 0);
+        headManager.addLocalHead(head);
+        plugin.getDataManager().createLocalHead(head);
 
         plugin.getLocale().getMessage("command.add.success")
                 .processPlaceholder("name", name).sendPrefixedMessage(sender);
