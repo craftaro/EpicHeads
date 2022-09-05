@@ -14,7 +14,7 @@ import java.util.Objects;
 
 public class Head {
 
-    private final int id;
+    private int id;
     private String name = null;
     private String URL = null;
     private String pack = null;
@@ -22,6 +22,15 @@ public class Head {
     private final boolean local;
 
     private Category category;
+
+    public Head(String name, String URL, Category category, boolean local, String pack, byte staffPicked) {
+        this.name = name;
+        this.URL = URL;
+        this.category = category;
+        this.pack = pack;
+        this.staffPicked = staffPicked;
+        this.local = local;
+    }
 
     public Head(int id, String name, String URL, Category category, boolean local, String pack, byte staffPicked) {
         this.id = id;
@@ -42,12 +51,24 @@ public class Head {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
 
     public String getPack() {
         return pack;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setURL(String URL) {
+        this.URL = URL;
     }
 
     public String getURL() {

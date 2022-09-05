@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class ItemEconomy extends Economy {
 
-    public boolean isItem(ItemStack itemStack) {
+    public static boolean isItem(ItemStack itemStack) {
         if (itemStack == null || itemStack.getType() == Material.AIR)
             return false;
         if (CompatibleMaterial.getMaterial(itemStack) == CompatibleMaterial.PLAYER_HEAD)

@@ -189,6 +189,7 @@ public class GUIHeads extends Gui {
             setButton(i + 9, item, (event) -> {
                 if (event.clickType == ClickType.MIDDLE && player.hasPermission("epicheads.delete")) {
                     plugin.getHeadManager().disableHead(head);
+                    plugin.getDataManager().disableHead(head);
                     heads.remove(head);
                     showPage();
                     return;
