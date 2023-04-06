@@ -221,13 +221,13 @@ public class EpicHeads extends SongodaPlugin {
 
     private void downloadHeads() {
         try {
-            InputStream is = new URL("http://www.head-db.com/dump").openStream();
+            InputStream is = new URL("https://songoda.github.io/EpicHeads/heads.json").openStream();
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             String jsonText = readAll(rd);
             JSONParser parser = new JSONParser();
             JSONArray json = (JSONArray) parser.parse(jsonText);
 
-            try (FileWriter file = new FileWriter(getDataFolder() + "/heads.json")) {
+            try (FileWriter file = new FileWriter(new File(getDataFolder(), "heads.json"))) {
                 file.write(json.toJSONString());
             }
         } catch (Exception ex) {
