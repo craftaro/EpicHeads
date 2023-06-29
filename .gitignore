@@ -1,7 +1,10 @@
-/bin/
-/.settings/
-/target/
-*.project
-*.classpath
-.idea
-EpicHeads.iml
+## JetBrains IDEs
+/.idea/
+*.iml
+
+## Maven
+/**/target/
+/dependency-reduced-pom.xml
+
+## Misc.
+.DS_Store
