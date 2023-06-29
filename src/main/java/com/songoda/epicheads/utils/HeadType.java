@@ -1,10 +1,6 @@
 package com.songoda.epicheads.utils;
 
-/**
- * Created by songoda on 3/20/2017.
- */
 public enum HeadType {
-
     BAT("978862a56119227aaad4b7c246c8b2256db985db0951f55b0a1f8616c191f"),
     BLAZE("b78ef2e4cf2c41a2d14bfde9caff10219f5b1bf5b35a49eb51c6467882cb5f0"),
     CHICKEN("1638469a599ceef7207537603248a9ab11ff591fd378bea4735b346a7fae893"),
@@ -84,12 +80,11 @@ public enum HeadType {
 
     private final String url;
 
-    private HeadType(String url) {
+    HeadType(String url) {
         this.url = url;
     }
 
     public String getUrl() {
-        return url;
+        return this.url;
     }
-
 }

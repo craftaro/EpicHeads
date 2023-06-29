@@ -1,10 +1,9 @@
 package com.songoda.epicheads.head;
 
-import com.songoda.core.hooks.EconomyManager;
 import com.songoda.core.utils.ItemUtils;
+import com.songoda.core.utils.TextUtils;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.settings.Settings;
-import com.songoda.epicheads.utils.Methods;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -13,29 +12,28 @@ import java.util.List;
 import java.util.Objects;
 
 public class Head {
-
     private int id;
     private String name = null;
-    private String URL = null;
+    private String url = null;
     private String pack = null;
     private byte staffPicked = 0;
     private final boolean local;
 
     private Category category;
 
-    public Head(String name, String URL, Category category, boolean local, String pack, byte staffPicked) {
+    public Head(String name, String url, Category category, boolean local, String pack, byte staffPicked) {
         this.name = name;
-        this.URL = URL;
+        this.url = url;
         this.category = category;
         this.pack = pack;
         this.staffPicked = staffPicked;
         this.local = local;
     }
 
-    public Head(int id, String name, String URL, Category category, boolean local, String pack, byte staffPicked) {
+    public Head(int id, String name, String url, Category category, boolean local, String pack, byte staffPicked) {
         this.id = id;
         this.name = name;
-        this.URL = URL;
+        this.url = url;
         this.category = category;
         this.pack = pack;
         this.staffPicked = staffPicked;
@@ -48,7 +46,7 @@ public class Head {
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(int id) {
@@ -56,37 +54,54 @@ public class Head {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public String getPack() {
-        return pack;
+        return this.pack;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setURL(String URL) {
-        this.URL = URL;
+    /**
+     * @deprecated Use {@link #setUrl(String)} instead.
+     */
+    @Deprecated
+    public void setURL(String url) {
+        setUrl(url);
     }
 
+    /**
+     * @deprecated Use {@link #getUrl()} instead.
+     */
+    @Deprecated
     public String getURL() {
-        if (URL == null)
+        return getUrl();
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUrl() {
+        if (this.url == null) {
             return "d23eaefbd581159384274cdbbd576ced82eb72423f2ea887124f9ed33a6872c";
-        return URL;
+        }
+        return this.url;
     }
 
     public Category getCategory() {
-        return category;
+        return this.category;
     }
 
     public byte getStaffPicked() {
-        return staffPicked;
+        return this.staffPicked;
     }
 
     public boolean isLocal() {
-        return local;
+        return this.local;
     }
 
     public ItemStack asItemStack() {
@@ -98,7 +113,7 @@ public class Head {
     }
 
     public ItemStack asItemStack(boolean favorite, boolean free) {
-        ItemStack item = ItemUtils.getCustomHead(this.URL);
+        ItemStack item = ItemUtils.getCustomHead(this.url);
 
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
@@ -110,15 +125,16 @@ public class Head {
     }
 
     public String getHeadItemName(boolean favorite) {
-        return Methods.formatText((favorite ? "&6⭐ " : "") + "&9" + name);
+        return TextUtils.formatText((favorite ? "&6⭐ " : "") + "&9" + this.name);
     }
 
     public List<String> getHeadItemLore(boolean free) {
         EpicHeads plugin = EpicHeads.getInstance();
         double cost = Settings.HEAD_COST.getDouble();
         List<String> lore = new ArrayList<>();
-        if (this.staffPicked == 1)
+        if (this.staffPicked == 1) {
             lore.add(plugin.getLocale().getMessage("general.head.staffpicked").getMessage());
+        }
         lore.add(plugin.getLocale().getMessage("general.head.id")
                 .processPlaceholder("id", this.id).getMessage());
         if (!free) {
@@ -133,28 +149,32 @@ public class Head {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         Head head = (Head) o;
-        return id == head.id &&
-                local == head.local;
+        return this.id == head.id && this.local == head.local;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, local);
+        return Objects.hash(this.id, this.local);
     }
 
     @Override
     public String toString() {
         return "Head{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", URL='" + URL + '\'' +
-                ", pack='" + pack + '\'' +
-                ", staffPicked=" + staffPicked +
-                ", local=" + local +
-                ", category=" + category +
+                "id=" + this.id +
+                ", name='" + this.name + '\'' +
+                ", URL='" + this.url + '\'' +
+                ", pack='" + this.pack + '\'' +
+                ", staffPicked=" + this.staffPicked +
+                ", local=" + this.local +
+                ", category=" + this.category +
                 '}';
     }
 }

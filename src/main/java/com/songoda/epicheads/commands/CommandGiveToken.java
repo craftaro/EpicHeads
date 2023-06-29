@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class CommandGiveToken extends AbstractCommand {
-
     private final EpicHeads plugin;
 
     public CommandGiveToken(EpicHeads plugin) {
@@ -20,27 +19,29 @@ public class CommandGiveToken extends AbstractCommand {
 
     @Override
     protected ReturnType runCommand(CommandSender sender, String... args) {
-        if (args.length != 2) return ReturnType.SYNTAX_ERROR;
+        if (args.length != 2) {
+            return ReturnType.SYNTAX_ERROR;
+        }
 
         Player player = Bukkit.getPlayer(args[0]);
         int amount = Integer.parseInt(args[1]);
 
         if (player == null) {
-            plugin.getLocale().getMessage("command.give.notonline")
+            this.plugin.getLocale().getMessage("command.give.notonline")
                     .processPlaceholder("name", args[1]).sendPrefixedMessage(sender);
             return ReturnType.FAILURE;
         }
 
         player.getInventory().addItem(Methods.createToken(amount));
 
-        plugin.getLocale().getMessage("command.givetoken.receive")
+        this.plugin.getLocale().getMessage("command.givetoken.receive")
                 .processPlaceholder("amount", amount).sendPrefixedMessage(player);
 
-        if (player != sender)
-            plugin.getLocale().getMessage("command.givetoken.success")
+        if (player != sender) {
+            this.plugin.getLocale().getMessage("command.givetoken.success")
                     .processPlaceholder("player", player.getName())
                     .processPlaceholder("amount", amount).sendPrefixedMessage(sender);
-
+        }
         return ReturnType.SUCCESS;
     }
 

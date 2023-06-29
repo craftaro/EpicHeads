@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class _1_InitialMigration extends DataMigration {
-
     public _1_InitialMigration() {
         super(1);
     }

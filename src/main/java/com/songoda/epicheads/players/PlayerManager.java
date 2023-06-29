@@ -9,11 +9,10 @@ import java.util.Map;
 import java.util.UUID;
 
 public class PlayerManager {
-
-    private static final Map<UUID, EPlayer> registeredHeads = new HashMap<>();
+    private static final Map<UUID, EPlayer> REGISTERED_HEADS = new HashMap<>();
 
     public EPlayer getPlayer(UUID uuid) {
-        return registeredHeads.computeIfAbsent(uuid, u -> new EPlayer(uuid));
+        return REGISTERED_HEADS.computeIfAbsent(uuid, u -> new EPlayer(uuid));
     }
 
     public EPlayer getPlayer(Player player) {
@@ -21,12 +20,11 @@ public class PlayerManager {
     }
 
     public EPlayer addPlayer(EPlayer player) {
-        registeredHeads.put(player.getUuid(), player);
+        REGISTERED_HEADS.put(player.getUuid(), player);
         return player;
     }
 
     public List<EPlayer> getPlayers() {
-        return new ArrayList<>(registeredHeads.values());
+        return new ArrayList<>(REGISTERED_HEADS.values());
     }
-
 }

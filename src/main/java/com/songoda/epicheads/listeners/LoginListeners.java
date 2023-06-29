@@ -15,7 +15,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.Optional;
 
 public class LoginListeners implements Listener {
-
     private final EpicHeads plugin;
 
     public LoginListeners(EpicHeads plugin) {
@@ -24,25 +23,30 @@ public class LoginListeners implements Listener {
 
     @EventHandler
     public void loginEvent(PlayerLoginEvent event) {
-        HeadManager headManager = plugin.getHeadManager();
+        HeadManager headManager = this.plugin.getHeadManager();
 
         Player player = event.getPlayer();
 
         String encodedStr = ItemUtils.getSkullTexture(player);
-
-        if (encodedStr == null) return;
+        if (encodedStr == null) {
+            return;
+        }
 
         String url = ItemUtils.getDecodedTexture(encodedStr);
 
-        String tagStr = plugin.getLocale().getMessage("general.word.playerheads").getMessage();
+        String tagStr = this.plugin.getLocale().getMessage("general.word.playerheads").getMessage();
 
-        Optional<Category> tagOptional = headManager.getCategories()
-                .stream().filter(t -> t.getName().equalsIgnoreCase(tagStr)).findFirst();
+        Optional<Category> tagOptional = headManager
+                .getCategories()
+                .stream()
+                .filter(t -> t.getName().equalsIgnoreCase(tagStr))
+                .findFirst();
 
         Category tag = tagOptional.orElseGet(() -> new Category(tagStr));
 
-        if (!tagOptional.isPresent())
+        if (!tagOptional.isPresent()) {
             headManager.addCategory(tag);
+        }
 
         Optional<Head> optional = headManager.getLocalHeads().stream()
                 .filter(h -> h.getName().equalsIgnoreCase(event.getPlayer().getName())).findFirst();
@@ -51,24 +55,23 @@ public class LoginListeners implements Listener {
 
         if (optional.isPresent()) {
             Head head = optional.get();
-            head.setURL(url);
-            plugin.getDataManager().updateLocalHead(head);
+            head.setUrl(url);
+            this.plugin.getDataManager().updateLocalHead(head);
             return;
         }
 
         Head head = new Head(id, player.getName(), url, tag, true, null, (byte) 0);
         headManager.addLocalHead(head);
-        plugin.getDataManager().createLocalHead(head);
+        this.plugin.getDataManager().createLocalHead(head);
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        plugin.getDataManager().getPlayer(event.getPlayer(), ePlayer -> plugin.getPlayerManager().addPlayer(ePlayer));
+        this.plugin.getDataManager().getPlayer(event.getPlayer(), ePlayer -> this.plugin.getPlayerManager().addPlayer(ePlayer));
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        plugin.getDataManager().updatePlayer(plugin.getPlayerManager().getPlayer(event.getPlayer()));
+        this.plugin.getDataManager().updatePlayer(this.plugin.getPlayerManager().getPlayer(event.getPlayer()));
     }
-
 }

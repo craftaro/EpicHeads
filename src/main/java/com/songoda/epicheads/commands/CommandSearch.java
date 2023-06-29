@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class CommandSearch extends AbstractCommand {
-
     private final GuiManager guiManager;
 
     public CommandSearch(GuiManager guiManager) {
@@ -20,7 +19,7 @@ public class CommandSearch extends AbstractCommand {
 
     @Override
     protected AbstractCommand.ReturnType runCommand(CommandSender sender, String... args) {
-        GUIHeads.doSearch(EpicHeads.getInstance(), null, guiManager, (Player) sender);
+        GUIHeads.doSearch(EpicHeads.getInstance(), null, this.guiManager, (Player) sender);
         return ReturnType.SUCCESS;
     }
 

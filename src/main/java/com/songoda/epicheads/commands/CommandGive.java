@@ -9,12 +9,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 public class CommandGive extends AbstractCommand {
-
     private final EpicHeads plugin;
 
     public CommandGive(EpicHeads plugin) {
@@ -24,7 +23,9 @@ public class CommandGive extends AbstractCommand {
 
     @Override
     protected ReturnType runCommand(CommandSender sender, String... args) {
-        if (args.length != 3) return ReturnType.SYNTAX_ERROR;
+        if (args.length != 3) {
+            return ReturnType.SYNTAX_ERROR;
+        }
 
         String playerStr = args[0].toLowerCase();
         Player player = Bukkit.getPlayer(playerStr);
@@ -32,18 +33,18 @@ public class CommandGive extends AbstractCommand {
         int headId = Integer.parseInt(args[2]);
 
         if (player == null && !playerStr.equals("all")) {
-            plugin.getLocale().getMessage("command.give.notonline")
+            this.plugin.getLocale().getMessage("command.give.notonline")
                     .processPlaceholder("name", args[1]).sendPrefixedMessage(sender);
             return ReturnType.FAILURE;
         }
 
         List<Head> heads;
 
-        if (archive.equalsIgnoreCase("global"))
-            heads = plugin.getHeadManager().getGlobalHeads();
-        else if (archive.equalsIgnoreCase("local"))
-            heads = plugin.getHeadManager().getLocalHeads();
-        else {
+        if (archive.equalsIgnoreCase("global")) {
+            heads = this.plugin.getHeadManager().getGlobalHeads();
+        } else if (archive.equalsIgnoreCase("local")) {
+            heads = this.plugin.getHeadManager().getLocalHeads();
+        } else {
             return ReturnType.SYNTAX_ERROR;
         }
 
@@ -53,26 +54,28 @@ public class CommandGive extends AbstractCommand {
             ItemStack item = head.get().asItemStack();
 
             ItemMeta meta = item.getItemMeta();
-            meta.setLore(new ArrayList<>());
+            meta.setLore(Collections.emptyList());
             item.setItemMeta(meta);
 
             if (playerStr.equals("all")) {
                 for (Player pl : Bukkit.getOnlinePlayers()) {
-                    if (pl == sender) continue;
+                    if (pl == sender) {
+                        continue;
+                    }
                     pl.getInventory().addItem(item);
 
-                    plugin.getLocale().getMessage("command.give.receive")
+                    this.plugin.getLocale().getMessage("command.give.receive")
                             .processPlaceholder("name", head.get().getName()).sendPrefixedMessage(pl);
                 }
-                plugin.getLocale().getMessage("command.give.success")
-                        .processPlaceholder("player", plugin.getLocale().getMessage("general.word.everyone").getMessage())
+                this.plugin.getLocale().getMessage("command.give.success")
+                        .processPlaceholder("player", this.plugin.getLocale().getMessage("general.word.everyone").getMessage())
                         .processPlaceholder("name", head.get().getName())
                         .sendPrefixedMessage(sender);
             } else {
                 player.getInventory().addItem(item);
-                plugin.getLocale().getMessage("command.give.receive")
+                this.plugin.getLocale().getMessage("command.give.receive")
                         .processPlaceholder("name", head.get().getName()).sendPrefixedMessage(player);
-                plugin.getLocale().getMessage("command.give.success")
+                this.plugin.getLocale().getMessage("command.give.success")
                         .processPlaceholder("player", player.getName())
                         .processPlaceholder("name", head.get().getName())
                         .sendPrefixedMessage(sender);
@@ -80,7 +83,7 @@ public class CommandGive extends AbstractCommand {
 
             return ReturnType.SUCCESS;
         } else {
-            plugin.getLocale().getMessage("command.give.notfound")
+            this.plugin.getLocale().getMessage("command.give.notfound")
                     .processPlaceholder("name", head.get().getName()).sendPrefixedMessage(sender);
             return ReturnType.FAILURE;
         }

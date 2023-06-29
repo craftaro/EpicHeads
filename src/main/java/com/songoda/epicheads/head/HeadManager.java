@@ -12,35 +12,34 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class HeadManager {
-
     private final Set<Head> registeredHeads = new HashSet<>();
     private final List<Head> localRegisteredHeads = new ArrayList<>();
     private final List<Category> registeredCategories = new ArrayList<>();
     private final Set<Head> disabledHeads = new HashSet<>();
 
     public Head addHead(Head head) {
-        registeredHeads.add(head);
+        this.registeredHeads.add(head);
         return head;
     }
 
     public void addHeads(Head... heads) {
-        registeredHeads.addAll(Arrays.asList(heads));
+        this.registeredHeads.addAll(Arrays.asList(heads));
     }
 
     public void addHeads(Collection<Head> heads) {
-        registeredHeads.addAll(heads);
+        this.registeredHeads.addAll(heads);
     }
 
     public void addLocalHeads(Head... heads) {
-        localRegisteredHeads.addAll(Arrays.asList(heads));
+        this.localRegisteredHeads.addAll(Arrays.asList(heads));
     }
 
     public void addLocalHead(Head head) {
-        localRegisteredHeads.add(head);
+        this.localRegisteredHeads.add(head);
     }
 
     public void addLocalHeads(Collection<Head> heads) {
-        localRegisteredHeads.addAll(heads);
+        this.localRegisteredHeads.addAll(heads);
     }
 
     public Head getHead(String name) {
@@ -51,8 +50,10 @@ public class HeadManager {
         List<Head> result = getHeads().stream().filter(head -> head.getName().contains(query)).collect(Collectors.toList());
 
         if (result.isEmpty()) {
-            for (Category category : registeredCategories) {
-                if (!category.getName().equalsIgnoreCase(query)) continue;
+            for (Category category : this.registeredCategories) {
+                if (!category.getName().equalsIgnoreCase(query)) {
+                    continue;
+                }
                 return getHeads().stream().filter(head -> head.getCategory() == category).collect(Collectors.toList());
 
             }
@@ -65,35 +66,39 @@ public class HeadManager {
     }
 
     public List<Head> getHeads() {
-        return Collections.unmodifiableList(Stream.concat(registeredHeads.stream(), localRegisteredHeads.stream())
+        return Collections.unmodifiableList(Stream.concat(this.registeredHeads.stream(), this.localRegisteredHeads.stream())
                 .sorted(Comparator.comparing(Head::getName))
                 .sorted(Comparator.comparingInt(head -> (head.getStaffPicked() == 1 ? 0 : 1)))
                 .collect(Collectors.toList()));
     }
 
     public Integer getNextLocalId() {
-        if (localRegisteredHeads.isEmpty()) return 1;
-        return localRegisteredHeads.get(localRegisteredHeads.size() - 1).getId() + 1;
+        if (this.localRegisteredHeads.isEmpty()) {
+            return 1;
+        }
+        return this.localRegisteredHeads.get(this.localRegisteredHeads.size() - 1).getId() + 1;
     }
 
     public List<Head> getLocalHeads() {
-        return Collections.unmodifiableList(localRegisteredHeads);
+        return Collections.unmodifiableList(this.localRegisteredHeads);
     }
 
     public List<Head> getGlobalHeads() {
-        return new ArrayList<>(registeredHeads);
+        return new ArrayList<>(this.registeredHeads);
     }
 
     public Head disableHead(Head head) {
-        if (head.isLocal() && localRegisteredHeads.remove(head))
+        if (head.isLocal() && this.localRegisteredHeads.remove(head)) {
             return head;
+        }
+
         this.disabledHeads.add(head);
         this.registeredHeads.remove(head);
         return head;
     }
 
     public Set<Head> getDisabledHeads() {
-        return Collections.unmodifiableSet(disabledHeads);
+        return Collections.unmodifiableSet(this.disabledHeads);
     }
 
     public List<Head> getLatestPack() {
@@ -101,7 +106,9 @@ public class HeadManager {
 
         Collections.reverse(heads);
 
-        if (heads.isEmpty()) return new ArrayList<>();
+        if (heads.isEmpty()) {
+            return new ArrayList<>();
+        }
 
         String latestPack = heads.get(0).getPack();
 
@@ -111,22 +118,22 @@ public class HeadManager {
     }
 
     public void removeLocalHead(Head head) {
-        localRegisteredHeads.remove(head);
+        this.localRegisteredHeads.remove(head);
     }
 
     public Category addCategory(Category category) {
-        registeredCategories.add(category);
+        this.registeredCategories.add(category);
         return category;
     }
 
     public List<Category> getCategories() {
-        return Collections.unmodifiableList(registeredCategories);
+        return Collections.unmodifiableList(this.registeredCategories);
     }
 
     public void clear() {
-        registeredHeads.clear();
-        localRegisteredHeads.clear();
-        disabledHeads.clear();
-        registeredCategories.clear();
+        this.registeredHeads.clear();
+        this.localRegisteredHeads.clear();
+        this.disabledHeads.clear();
+        this.registeredCategories.clear();
     }
 }

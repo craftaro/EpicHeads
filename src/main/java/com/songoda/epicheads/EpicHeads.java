@@ -90,14 +90,14 @@ public class EpicHeads extends SongodaPlugin {
         // Set economy preference
         String ecoPreference = Settings.ECONOMY_PLUGIN.getString();
         if (ecoPreference.equalsIgnoreCase("item")) {
-            EconomyManager.getManager().setPreferredHook(itemEconomyHook);
+            EconomyManager.getManager().setPreferredHook(this.itemEconomyHook);
         } else {
             EconomyManager.getManager().setPreferredHook(ecoPreference);
         }
 
         // Register commands
         this.commandManager = new CommandManager(this);
-        this.commandManager.addCommand(new CommandEpicHeads(guiManager))
+        this.commandManager.addCommand(new CommandEpicHeads(this.guiManager))
                 .addSubCommands(
                         new CommandAdd(this),
                         new CommandBase64(this),
@@ -105,13 +105,13 @@ public class EpicHeads extends SongodaPlugin {
                         new CommandGiveToken(this),
                         new CommandHelp(this),
                         new CommandReload(this),
-                        new CommandSearch(guiManager),
-                        new CommandSettings(guiManager),
+                        new CommandSearch(this.guiManager),
+                        new CommandSettings(this.guiManager),
                         new CommandUrl(this)
                 );
 
         // Register Listeners
-        guiManager.init();
+        this.guiManager.init();
         PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(new DeathListeners(this), this);
         pluginManager.registerEvents(new ItemListeners(this), this);
@@ -124,7 +124,7 @@ public class EpicHeads extends SongodaPlugin {
         loadHeads();
 
         int timeout = Settings.AUTOSAVE.getInt() * 60 * 20;
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> dataManager.saveAllPlayers(), timeout, timeout);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> this.dataManager.saveAllPlayers(), timeout, timeout);
     }
 
     @Override
@@ -148,7 +148,7 @@ public class EpicHeads extends SongodaPlugin {
                 converted = true;
                 Storage storage = new StorageYaml(this);
                 if (storage.containsGroup("players")) {
-                    console.sendMessage("[" + getDescription().getName() + "] " + ChatColor.RED +
+                    this.console.sendMessage("[" + getDescription().getName() + "] " + ChatColor.RED +
                             "Conversion process starting. Do NOT turn off your server. " +
                             "EpicHeads hasn't fully loaded yet, so make sure users don't" +
                             "interact with the plugin until the conversion process is complete.");
@@ -163,14 +163,14 @@ public class EpicHeads extends SongodaPlugin {
                                 UUID.fromString(row.get("uuid").asString()),
                                 (List<String>) row.get("favorites").asObject()));
                     }
-                    dataManager.migratePlayers(players);
+                    this.dataManager.migratePlayers(players);
                 }
 
                 if (storage.containsGroup("local")) {
                     for (StorageRow row : storage.getRowsByGroup("local")) {
                         String tagStr = row.get("category").asString();
 
-                        Optional<Category> tagOptional = headManager.getCategories().stream()
+                        Optional<Category> tagOptional = this.headManager.getCategories().stream()
                                 .filter(t -> t.getName().equalsIgnoreCase(tagStr)).findFirst();
 
                         Category category = tagOptional.orElseGet(() -> new Category(tagStr));
@@ -183,7 +183,7 @@ public class EpicHeads extends SongodaPlugin {
                                 null,
                                 (byte) 0);
 
-                        dataManager.createLocalHead(head);
+                        this.dataManager.createLocalHead(head);
                     }
 
                     if (storage.containsGroup("disabled")) {
@@ -192,7 +192,7 @@ public class EpicHeads extends SongodaPlugin {
                             ids.add(row.get("id").asInt());
                         }
 
-                        dataManager.migrateDisabledHead(ids);
+                        this.dataManager.migrateDisabledHead(ids);
                     }
                 }
 
@@ -200,19 +200,19 @@ public class EpicHeads extends SongodaPlugin {
             }
 
             final boolean finalConverted = converted;
-            dataManager.queueAsync(() -> {
+            this.dataManager.queueAsync(() -> {
                 if (finalConverted) {
-                    console.sendMessage("[" + getDescription().getName() + "] " + ChatColor.GREEN + "Conversion complete :)");
+                    this.console.sendMessage("[" + getDescription().getName() + "] " + ChatColor.GREEN + "Conversion complete :)");
                 }
 
                 this.dataManager.getLocalHeads((heads) -> {
                     this.headManager.addLocalHeads(heads);
-                    getLogger().info("Loaded " + headManager.getHeads().size() + " heads");
+                    getLogger().info("Loaded " + this.headManager.getHeads().size() + " heads");
                 });
 
                 this.dataManager.getDisabledHeads((ids) -> {
                     for (int id : ids) {
-                        headManager.disableHead(new Head(id, false));
+                        this.headManager.disableHead(new Head(id, false));
                     }
                 });
             }, "create");
@@ -248,7 +248,7 @@ public class EpicHeads extends SongodaPlugin {
                 JSONObject jsonObject = (JSONObject) o;
 
                 String categoryStr = (String) jsonObject.get("tags");
-                Optional<Category> tagOptional = headManager.getCategories().stream().filter(t -> t.getName().equalsIgnoreCase(categoryStr)).findFirst();
+                Optional<Category> tagOptional = this.headManager.getCategories().stream().filter(t -> t.getName().equalsIgnoreCase(categoryStr)).findFirst();
 
                 Category category = tagOptional.orElseGet(() -> new Category(categoryStr));
 
@@ -266,8 +266,8 @@ public class EpicHeads extends SongodaPlugin {
                         || head.getPack() != null && head.getPack().equals("null")) continue;
 
                 if (!tagOptional.isPresent())
-                    headManager.addCategory(category);
-                headManager.addHead(head);
+                    this.headManager.addCategory(category);
+                this.headManager.addHead(head);
             }
 
         } catch (IOException | ParseException ex) {
@@ -309,22 +309,22 @@ public class EpicHeads extends SongodaPlugin {
     }
 
     public CommandManager getCommandManager() {
-        return commandManager;
+        return this.commandManager;
     }
 
     public HeadManager getHeadManager() {
-        return headManager;
+        return this.headManager;
     }
 
     public PlayerManager getPlayerManager() {
-        return playerManager;
+        return this.playerManager;
     }
 
     public DatabaseConnector getDatabaseConnector() {
-        return databaseConnector;
+        return this.databaseConnector;
     }
 
     public DataManager getDataManager() {
-        return dataManager;
+        return this.dataManager;
     }
 }

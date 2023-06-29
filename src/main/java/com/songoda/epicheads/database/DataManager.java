@@ -11,14 +11,20 @@ import com.songoda.epicheads.players.EPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class DataManager extends DataManagerAbstract {
-
-    public DataManager(DatabaseConnector connector, Plugin plugin) {
-        super(connector, plugin);
+    public DataManager(DatabaseConnector databaseConnector, Plugin plugin) {
+        super(databaseConnector, plugin);
     }
 
     public void updatePlayer(EPlayer ePlayer) {
@@ -93,7 +99,7 @@ public class DataManager extends DataManagerAbstract {
                 try (PreparedStatement statement = connection.prepareStatement(createHead)) {
                     statement.setString(1, head.getCategory().getName());
                     statement.setString(2, head.getName());
-                    statement.setString(3, head.getURL());
+                    statement.setString(3, head.getUrl());
                     statement.executeUpdate();
                 }
 
@@ -133,8 +139,9 @@ public class DataManager extends DataManagerAbstract {
                                 null,
                                 (byte) 0);
 
-                        if (!tagOptional.isPresent())
+                        if (!tagOptional.isPresent()) {
                             EpicHeads.getInstance().getHeadManager().addCategory(category);
+                        }
 
                         heads.add(head);
                     }
@@ -153,7 +160,7 @@ public class DataManager extends DataManagerAbstract {
                 String updateHead = "UPDATE " + this.getTablePrefix() + "local_heads SET name = ?, url = ? WHERE id = ?";
                 try (PreparedStatement statement = connection.prepareStatement(updateHead)) {
                     statement.setString(1, head.getName());
-                    statement.setString(2, head.getURL());
+                    statement.setString(2, head.getUrl());
                     statement.setInt(3, head.getId());
                     statement.executeUpdate();
                 }

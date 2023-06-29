@@ -34,7 +34,7 @@ public class EPlayer {
 
     public List<Head> getFavoritesAsHeads() {
         return EpicHeads.getInstance().getHeadManager().getHeads().stream()
-                .filter(head -> favorites.contains(head.getURL())).collect(Collectors.toList());
+                .filter(head -> favorites.contains(head.getUrl())).collect(Collectors.toList());
     }
 
     public void addFavorite(String url) {

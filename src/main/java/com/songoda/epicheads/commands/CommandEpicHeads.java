@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class CommandEpicHeads extends AbstractCommand {
-
     private final GuiManager guiManager;
 
     public CommandEpicHeads(GuiManager guiManager) {
@@ -19,7 +18,7 @@ public class CommandEpicHeads extends AbstractCommand {
 
     @Override
     protected ReturnType runCommand(CommandSender sender, String... args) {
-        guiManager.showGUI((Player) sender, new GUIOverview((Player) sender));
+        this.guiManager.showGUI((Player) sender, new GUIOverview((Player) sender));
         return ReturnType.SUCCESS;
     }
 

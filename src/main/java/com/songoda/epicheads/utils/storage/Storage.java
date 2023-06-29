@@ -8,7 +8,6 @@ import com.songoda.epicheads.players.EPlayer;
 import java.util.List;
 
 public abstract class Storage {
-
     protected final EpicHeads instance;
     protected final Config dataFile;
 
@@ -27,19 +26,19 @@ public abstract class Storage {
 
     public void updateData(EpicHeads plugin) {
         // Save game data
-        for (EPlayer player : instance.getPlayerManager().getPlayers()) {
+        for (EPlayer player : this.instance.getPlayerManager().getPlayers()) {
             prepareSaveItem("players", new StorageItem("uuid", player.getUuid().toString()),
                     new StorageItem("favorites", player.getFavorites()));
         }
 
-        for (Head head : instance.getHeadManager().getLocalHeads()) {
-            prepareSaveItem("local", new StorageItem("url", head.getURL()),
+        for (Head head : this.instance.getHeadManager().getLocalHeads()) {
+            prepareSaveItem("local", new StorageItem("url", head.getUrl()),
                     new StorageItem("name", head.getName()),
                     new StorageItem("id", head.getId()),
                     new StorageItem("category", head.getCategory().getName()));
         }
 
-        for (Head head : instance.getHeadManager().getDisabledHeads()) {
+        for (Head head : this.instance.getHeadManager().getDisabledHeads()) {
             prepareSaveItem("disabled", new StorageItem("id", String.valueOf(head.getId())));
         }
     }

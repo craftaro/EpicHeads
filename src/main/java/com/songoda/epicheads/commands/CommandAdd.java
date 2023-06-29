@@ -7,11 +7,11 @@ import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.head.HeadManager;
 import org.bukkit.command.CommandSender;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CommandAdd extends AbstractCommand {
-
     private final EpicHeads plugin;
 
     public CommandAdd(EpicHeads plugin) {
@@ -21,16 +21,18 @@ public class CommandAdd extends AbstractCommand {
 
     @Override
     protected ReturnType runCommand(CommandSender sender, String... args) {
-        if (args.length != 3) return ReturnType.SYNTAX_ERROR;
+        if (args.length != 3) {
+            return ReturnType.SYNTAX_ERROR;
+        }
 
         String url = args[0];
         String name = args[1].replace("_", " ");
         String categoryStr = args[2].replace("_", " ");
 
-        HeadManager headManager = plugin.getHeadManager();
+        HeadManager headManager = this.plugin.getHeadManager();
 
-        if (headManager.getLocalHeads().stream().anyMatch(head -> head.getURL().equals(url))) {
-            plugin.getLocale().getMessage("command.add.exists").sendPrefixedMessage(sender);
+        if (headManager.getLocalHeads().stream().anyMatch(head -> head.getUrl().equals(url))) {
+            this.plugin.getLocale().getMessage("command.add.exists").sendPrefixedMessage(sender);
             return ReturnType.FAILURE;
         }
 
@@ -40,19 +42,19 @@ public class CommandAdd extends AbstractCommand {
 
         Head head = new Head(headManager.getNextLocalId(), name, url, category, true, null, (byte) 0);
         headManager.addLocalHead(head);
-        plugin.getDataManager().createLocalHead(head);
+        this.plugin.getDataManager().createLocalHead(head);
 
-        plugin.getLocale().getMessage("command.add.success")
+        this.plugin.getLocale().getMessage("command.add.success")
                 .processPlaceholder("name", name).sendPrefixedMessage(sender);
         if (categories.isEmpty()) {
-            plugin.reloadConfig();
+            this.plugin.reloadConfig();
         }
         return ReturnType.SUCCESS;
     }
 
     @Override
     protected List<String> onTab(CommandSender sender, String... args) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

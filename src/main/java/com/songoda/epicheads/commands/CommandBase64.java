@@ -1,6 +1,7 @@
 package com.songoda.epicheads.commands;
 
 import com.songoda.core.commands.AbstractCommand;
+import com.songoda.core.compatibility.CompatibleHand;
 import com.songoda.core.utils.ItemUtils;
 import com.songoda.epicheads.EpicHeads;
 import org.bukkit.command.CommandSender;
@@ -8,10 +9,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.util.Collections;
 import java.util.List;
 
 public class CommandBase64 extends AbstractCommand {
-
     private final EpicHeads plugin;
 
     public CommandBase64(EpicHeads plugin) {
@@ -21,25 +22,26 @@ public class CommandBase64 extends AbstractCommand {
 
     @Override
     protected ReturnType runCommand(CommandSender sender, String... args) {
-
         Player player = (Player) sender;
+        ItemStack item = CompatibleHand.MAIN_HAND.getItem(player);
 
-        ItemStack item = player.getItemInHand();
-
-        if (!item.hasItemMeta() || !(item.getItemMeta() instanceof SkullMeta)) return ReturnType.FAILURE;
+        if (!item.hasItemMeta() || !(item.getItemMeta() instanceof SkullMeta)) {
+            return ReturnType.FAILURE;
+        }
 
         String encodededStr = ItemUtils.getSkullTexture(item);
+        if (encodededStr == null) {
+            return ReturnType.FAILURE;
+        }
 
-        if (encodededStr == null) return ReturnType.FAILURE;
-
-        plugin.getLocale().newMessage(encodededStr).sendPrefixedMessage(player);
+        this.plugin.getLocale().newMessage(encodededStr).sendPrefixedMessage(player);
 
         return ReturnType.SUCCESS;
     }
 
     @Override
     protected List<String> onTab(CommandSender sender, String... args) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -56,5 +58,4 @@ public class CommandBase64 extends AbstractCommand {
     public String getDescription() {
         return "Gives you the base64 code of the head you are holding.";
     }
-
 }

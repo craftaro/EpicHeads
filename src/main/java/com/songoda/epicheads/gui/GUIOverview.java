@@ -72,7 +72,7 @@ public class GUIOverview extends Gui {
 
             if (!player.hasPermission("epicheads.category." + category.getName().replace(" ", "_"))) continue;
 
-            setButton(i + 10 + add, GuiUtils.createButtonItem(ItemUtils.getCustomHead(firstHead.getURL()),
+            setButton(i + 10 + add, GuiUtils.createButtonItem(ItemUtils.getCustomHead(firstHead.getUrl()),
                     plugin.getLocale().getMessage("gui.overview.headname")
                             .processPlaceholder("name", Color.getRandomColor() + category.getName())
                             .getMessage(),

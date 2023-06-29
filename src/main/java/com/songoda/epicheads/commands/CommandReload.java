@@ -4,10 +4,10 @@ import com.songoda.core.commands.AbstractCommand;
 import com.songoda.epicheads.EpicHeads;
 import org.bukkit.command.CommandSender;
 
+import java.util.Collections;
 import java.util.List;
 
 public class CommandReload extends AbstractCommand {
-
     private final EpicHeads plugin;
 
     public CommandReload(EpicHeads plugin) {
@@ -17,14 +17,14 @@ public class CommandReload extends AbstractCommand {
 
     @Override
     protected ReturnType runCommand(CommandSender sender, String... args) {
-        plugin.reloadConfig();
-        plugin.getLocale().getMessage("&7Configuration and Language files reloaded.").sendPrefixedMessage(sender);
+        this.plugin.reloadConfig();
+        this.plugin.getLocale().getMessage("&7Configuration and Language files reloaded.").sendPrefixedMessage(sender);
         return ReturnType.SUCCESS;
     }
 
     @Override
     protected List<String> onTab(CommandSender sender, String... args) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
