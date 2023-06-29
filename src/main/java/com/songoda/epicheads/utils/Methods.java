@@ -1,7 +1,7 @@
 package com.songoda.epicheads.utils;
 
-import com.songoda.core.compatibility.ServerVersion;
-import com.songoda.core.utils.TextUtils;
+import com.craftaro.core.compatibility.ServerVersion;
+import com.craftaro.core.utils.TextUtils;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.settings.Settings;
 import org.bukkit.Material;
@@ -17,9 +17,14 @@ public class Methods {
 
         if (itemStack.getType() == (ServerVersion.isServerVersionAtLeast(ServerVersion.V1_13)
                 ? Material.PLAYER_HEAD : Material.valueOf("SKULL_ITEM"))) {
-            itemStack = EpicHeads.getInstance().getHeadManager().getHeads().stream()
+            itemStack = EpicHeads.getInstance()
+                    .getHeadManager()
+                    .getHeads()
+                    .stream()
                     .filter(head -> head.getId() == Settings.ITEM_TOKEN_ID.getInt())
-                    .findFirst().get().asItemStack();
+                    .findFirst()
+                    .get()
+                    .asItemStack();
         }
         itemStack.setAmount(amount);
 

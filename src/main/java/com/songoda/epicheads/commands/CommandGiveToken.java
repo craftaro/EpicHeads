@@ -1,6 +1,6 @@
 package com.songoda.epicheads.commands;
 
-import com.songoda.core.commands.AbstractCommand;
+import com.craftaro.core.commands.AbstractCommand;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.utils.Methods;
 import org.bukkit.Bukkit;

@@ -1,11 +1,11 @@
 package com.songoda.epicheads.gui;
 
-import com.songoda.core.compatibility.CompatibleMaterial;
-import com.songoda.core.gui.Gui;
-import com.songoda.core.gui.GuiManager;
-import com.songoda.core.gui.GuiUtils;
-import com.songoda.core.hooks.EconomyManager;
-import com.songoda.core.input.ChatPrompt;
+import com.craftaro.core.gui.Gui;
+import com.craftaro.core.gui.GuiManager;
+import com.craftaro.core.gui.GuiUtils;
+import com.craftaro.core.hooks.EconomyManager;
+import com.craftaro.core.input.ChatPrompt;
+import com.craftaro.core.third_party.com.cryptomorin.xseries.XMaterial;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.head.Head;
@@ -86,7 +86,7 @@ public class GUIHeads extends Gui {
                 .collect(Collectors.toList());
 
         if (this.page - 3 >= 1) {
-            setButton(0, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, this.page - 3,
+            setButton(0, GuiUtils.createButtonItem(XMaterial.ARROW, this.page - 3,
                             ChatColor.RED.toString() + this.plugin.getLocale().getMessage("general.word.page").getMessage() + " " + (this.page - 3)),
                     (event) -> changePage(-3));
         } else {
@@ -95,7 +95,7 @@ public class GUIHeads extends Gui {
         }
 
         if (this.page - 2 >= 1) {
-            setButton(1, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, this.page - 2,
+            setButton(1, GuiUtils.createButtonItem(XMaterial.ARROW, this.page - 2,
                             ChatColor.RED.toString() + this.plugin.getLocale().getMessage("general.word.page").getMessage() + " " + (this.page - 2)),
                     (event) -> changePage(-2));
         } else {
@@ -104,7 +104,7 @@ public class GUIHeads extends Gui {
         }
 
         if (this.page > 1) {
-            setButton(2, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, this.page - 1,
+            setButton(2, GuiUtils.createButtonItem(XMaterial.ARROW, this.page - 1,
                             ChatColor.RED.toString() + this.plugin.getLocale().getMessage("general.word.page").getMessage() + " " + (this.page - 1)),
                     (event) -> changePage(-1));
         } else {
@@ -112,15 +112,15 @@ public class GUIHeads extends Gui {
             setItem(2, null);
         }
 
-        setButton(3, GuiUtils.createButtonItem(CompatibleMaterial.COMPASS,
+        setButton(3, GuiUtils.createButtonItem(XMaterial.COMPASS,
                         this.plugin.getLocale().getMessage("gui.heads.search").getMessage()),
                 (event) -> doSearch(this.plugin, this, this.guiManager, event.player));
 
-        setButton(4, GuiUtils.createButtonItem(CompatibleMaterial.MAP, this.page,
+        setButton(4, GuiUtils.createButtonItem(XMaterial.MAP, this.page,
                 this.plugin.getLocale().getMessage("gui.heads.categories").getMessage()), (event) -> this.guiManager.showGUI(this.player, new GUIOverview(event.player)));
 
         if (pageHeads.size() > 1) {
-            setButton(5, GuiUtils.createButtonItem(CompatibleMaterial.COMPASS,
+            setButton(5, GuiUtils.createButtonItem(XMaterial.COMPASS,
                             this.plugin.getLocale().getMessage("gui.heads.refine").getMessage()),
                     (event) -> {
                         exit();
@@ -143,7 +143,7 @@ public class GUIHeads extends Gui {
         }
 
         if (this.page + 1 <= this.pages) {
-            setButton(6, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, this.page + 1,
+            setButton(6, GuiUtils.createButtonItem(XMaterial.ARROW, this.page + 1,
                             ChatColor.RED.toString() + this.plugin.getLocale().getMessage("general.word.page").getMessage() + " " + (this.page + 1)),
                     (event) -> changePage(+1));
         } else {
@@ -152,7 +152,7 @@ public class GUIHeads extends Gui {
         }
 
         if (this.page + 2 <= this.pages) {
-            setButton(7, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, this.page + 2,
+            setButton(7, GuiUtils.createButtonItem(XMaterial.ARROW, this.page + 2,
                             ChatColor.RED.toString() + this.plugin.getLocale().getMessage("general.word.page").getMessage() + " " + (this.page + 2)),
                     (event) -> changePage(+2));
         } else {
@@ -161,7 +161,7 @@ public class GUIHeads extends Gui {
         }
 
         if (this.page + 3 <= this.pages) {
-            setButton(8, GuiUtils.createButtonItem(CompatibleMaterial.ARROW, this.page + 3,
+            setButton(8, GuiUtils.createButtonItem(XMaterial.ARROW, this.page + 3,
                             ChatColor.RED.toString() + this.plugin.getLocale().getMessage("general.word.page").getMessage() + " " + (this.page + 3)),
                     (event) -> changePage(+3));
         } else {
@@ -246,8 +246,7 @@ public class GUIHeads extends Gui {
                     .filter(head -> head.getName().toLowerCase().contains(response.getMessage().toLowerCase()))
                     .filter(head -> player.hasPermission("epicheads.category." + head.getCategory().getName().replace(" ", "_")))
                     .collect(Collectors.toList());
-            Bukkit.getScheduler().scheduleSyncDelayedTask(EpicHeads.getInstance(), ()
-                    -> guiManager.showGUI(player, new GUIHeads(plugin, player, response.getMessage(), QueryTypes.SEARCH, searchHeads)), 0L);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> guiManager.showGUI(player, new GUIHeads(plugin, player, response.getMessage(), QueryTypes.SEARCH, searchHeads)), 0);
         }).setOnCancel(() -> {
             plugin.getLocale().getMessage("general.search.canceled").sendPrefixedMessage(player);
         });

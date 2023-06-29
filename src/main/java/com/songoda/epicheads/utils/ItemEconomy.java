@@ -1,8 +1,8 @@
 package com.songoda.epicheads.utils;
 
-import com.songoda.core.compatibility.CompatibleMaterial;
-import com.songoda.core.hooks.economies.Economy;
-import com.songoda.core.utils.ItemUtils;
+import com.craftaro.core.hooks.economies.Economy;
+import com.craftaro.core.third_party.com.cryptomorin.xseries.XMaterial;
+import com.craftaro.core.utils.ItemUtils;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
@@ -13,7 +13,7 @@ public class ItemEconomy extends Economy {
             return false;
         }
 
-        if (CompatibleMaterial.getMaterial(itemStack) == CompatibleMaterial.PLAYER_HEAD) {
+        if (XMaterial.PLAYER_HEAD.isSimilar(itemStack)) {
             return ItemUtils.getSkullTexture(itemStack).equals(ItemUtils.getSkullTexture(Methods.createToken(1)));
         }
         return itemStack.isSimilar(Methods.createToken(1));
@@ -76,7 +76,6 @@ public class ItemEconomy extends Economy {
         player.getPlayer().getInventory().setContents(contents);
 
         return true;
-
     }
 
     @Override

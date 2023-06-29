@@ -1,15 +1,14 @@
 package com.songoda.epicheads.database;
 
+import com.craftaro.core.database.DataManagerAbstract;
+import com.craftaro.core.database.DatabaseConnector;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import com.songoda.core.database.DataManagerAbstract;
-import com.songoda.core.database.DatabaseConnector;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Category;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.players.EPlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,8 +22,11 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class DataManager extends DataManagerAbstract {
-    public DataManager(DatabaseConnector databaseConnector, Plugin plugin) {
-        super(databaseConnector, plugin);
+    private final EpicHeads epicHeads;
+
+    public DataManager(DatabaseConnector databaseConnector, EpicHeads epicHeads) {
+        super(databaseConnector, epicHeads);
+        this.epicHeads = epicHeads;
     }
 
     public void updatePlayer(EPlayer ePlayer) {
@@ -123,8 +125,12 @@ public class DataManager extends DataManagerAbstract {
                         int id = result.getInt("id");
 
                         String categoryString = result.getString("category");
-                        Optional<Category> tagOptional = EpicHeads.getInstance().getHeadManager().getCategories().stream()
-                                .filter(t -> t.getName().equalsIgnoreCase(categoryString)).findFirst();
+                        Optional<Category> tagOptional = EpicHeads.getInstance()
+                                .getHeadManager()
+                                .getCategories()
+                                .stream()
+                                .filter(t -> t.getName().equalsIgnoreCase(categoryString))
+                                .findFirst();
 
                         Category category = tagOptional.orElseGet(() -> new Category(categoryString));
 
@@ -140,7 +146,7 @@ public class DataManager extends DataManagerAbstract {
                                 (byte) 0);
 
                         if (!tagOptional.isPresent()) {
-                            EpicHeads.getInstance().getHeadManager().addCategory(category);
+                            this.epicHeads.getHeadManager().addCategory(category);
                         }
 
                         heads.add(head);
@@ -228,7 +234,7 @@ public class DataManager extends DataManagerAbstract {
         try (Connection connection = this.databaseConnector.getConnection()) {
             String updatePlayer = "UPDATE " + this.getTablePrefix() + "players SET favorites = ? WHERE uuid = ?";
             try (PreparedStatement update = connection.prepareStatement(updatePlayer)) {
-                for (EPlayer player : EpicHeads.getInstance().getPlayerManager().getPlayers()) {
+                for (EPlayer player : this.epicHeads.getPlayerManager().getPlayers()) {
                     update.setString(1, gson.toJson(player.getFavorites()));
                     update.setString(2, player.getUuid().toString());
                     update.addBatch();

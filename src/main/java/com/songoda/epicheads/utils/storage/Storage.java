@@ -1,6 +1,6 @@
 package com.songoda.epicheads.utils.storage;
 
-import com.songoda.core.configuration.Config;
+import com.craftaro.core.configuration.Config;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.players.EPlayer;

@@ -1,7 +1,7 @@
 package com.songoda.epicheads.head;
 
-import com.songoda.core.utils.ItemUtils;
-import com.songoda.core.utils.TextUtils;
+import com.craftaro.core.utils.ItemUtils;
+import com.craftaro.core.utils.TextUtils;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.settings.Settings;
 import org.bukkit.inventory.ItemStack;

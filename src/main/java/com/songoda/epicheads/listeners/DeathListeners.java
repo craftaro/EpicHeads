@@ -1,8 +1,8 @@
 package com.songoda.epicheads.listeners;
 
-import com.songoda.core.compatibility.CompatibleMaterial;
-import com.songoda.core.utils.ItemUtils;
-import com.songoda.core.utils.TextUtils;
+import com.craftaro.core.third_party.com.cryptomorin.xseries.XMaterial;
+import com.craftaro.core.utils.ItemUtils;
+import com.craftaro.core.utils.TextUtils;
 import com.songoda.epicheads.EpicHeads;
 import com.songoda.epicheads.head.Head;
 import com.songoda.epicheads.settings.Settings;
@@ -39,7 +39,7 @@ public class DeathListeners implements Listener {
 
                 String encodededStr = ItemUtils.getSkullTexture((Player) event.getEntity());
                 if (encodededStr == null) {
-                    itemNew = CompatibleMaterial.PLAYER_HEAD.getItem();
+                    itemNew = XMaterial.PLAYER_HEAD.parseItem();
 
                     ItemMeta meta = itemNew.getItemMeta();
                     meta.setDisplayName(TextUtils.formatText("&9" + ((Player) event.getEntity()).getDisplayName()));

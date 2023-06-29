@@ -1,8 +1,8 @@
 package com.songoda.epicheads.commands;
 
-import com.songoda.core.chat.ChatMessage;
-import com.songoda.core.commands.AbstractCommand;
-import com.songoda.core.utils.TextUtils;
+import com.craftaro.core.chat.ChatMessage;
+import com.craftaro.core.commands.AbstractCommand;
+import com.craftaro.core.utils.TextUtils;
 import com.songoda.epicheads.EpicHeads;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

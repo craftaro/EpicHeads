@@ -1,18 +1,27 @@
 package com.songoda.epicheads;
 
-import com.songoda.core.SongodaCore;
-import com.songoda.core.SongodaPlugin;
-import com.songoda.core.commands.CommandManager;
-import com.songoda.core.compatibility.CompatibleMaterial;
-import com.songoda.core.configuration.Config;
-import com.songoda.core.database.DataMigrationManager;
-import com.songoda.core.database.DatabaseConnector;
-import com.songoda.core.database.SQLiteConnector;
-import com.songoda.core.gui.GuiManager;
-import com.songoda.core.hooks.EconomyManager;
-import com.songoda.core.hooks.PluginHook;
-import com.songoda.core.hooks.economies.Economy;
-import com.songoda.epicheads.commands.*;
+import com.craftaro.core.SongodaCore;
+import com.craftaro.core.SongodaPlugin;
+import com.craftaro.core.commands.CommandManager;
+import com.craftaro.core.configuration.Config;
+import com.craftaro.core.database.DataMigrationManager;
+import com.craftaro.core.database.DatabaseConnector;
+import com.craftaro.core.database.SQLiteConnector;
+import com.craftaro.core.gui.GuiManager;
+import com.craftaro.core.hooks.EconomyManager;
+import com.craftaro.core.hooks.PluginHook;
+import com.craftaro.core.hooks.economies.Economy;
+import com.craftaro.core.third_party.com.cryptomorin.xseries.XMaterial;
+import com.songoda.epicheads.commands.CommandAdd;
+import com.songoda.epicheads.commands.CommandBase64;
+import com.songoda.epicheads.commands.CommandEpicHeads;
+import com.songoda.epicheads.commands.CommandGive;
+import com.songoda.epicheads.commands.CommandGiveToken;
+import com.songoda.epicheads.commands.CommandHelp;
+import com.songoda.epicheads.commands.CommandReload;
+import com.songoda.epicheads.commands.CommandSearch;
+import com.songoda.epicheads.commands.CommandSettings;
+import com.songoda.epicheads.commands.CommandUrl;
 import com.songoda.epicheads.database.DataManager;
 import com.songoda.epicheads.database.migrations._1_InitialMigration;
 import com.songoda.epicheads.head.Category;
@@ -35,7 +44,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -44,8 +60,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class EpicHeads extends SongodaPlugin {
-    private static EpicHeads INSTANCE;
-
     private final GuiManager guiManager = new GuiManager(this);
     private HeadManager headManager;
     private PlayerManager playerManager;
@@ -55,13 +69,16 @@ public class EpicHeads extends SongodaPlugin {
     private DatabaseConnector databaseConnector;
     private DataManager dataManager;
 
+    /**
+     * @deprecated Use {@link #getPlugin(Class)} instead
+     */
+    @Deprecated
     public static EpicHeads getInstance() {
-        return INSTANCE;
+        return getPlugin(EpicHeads.class);
     }
 
     @Override
     public void onPluginLoad() {
-        INSTANCE = this;
         this.itemEconomyHook = PluginHook.addHook(Economy.class, "EpicHeads", com.songoda.epicheads.utils.ItemEconomy.class);
     }
 
@@ -73,8 +90,7 @@ public class EpicHeads extends SongodaPlugin {
 
     @Override
     public void onPluginEnable() {
-        // Run Songoda Updater
-        SongodaCore.registerPlugin(this, 26, CompatibleMaterial.PLAYER_HEAD);
+        SongodaCore.registerPlugin(this, 26, XMaterial.PLAYER_HEAD);
 
         // Load Economy
         EconomyManager.load();
@@ -105,8 +121,8 @@ public class EpicHeads extends SongodaPlugin {
                         new CommandGiveToken(this),
                         new CommandHelp(this),
                         new CommandReload(this),
-                        new CommandSearch(this.guiManager),
-                        new CommandSettings(this.guiManager),
+                        new CommandSearch(this, this.guiManager),
+                        new CommandSettings(this, this.guiManager),
                         new CommandUrl(this)
                 );
 
@@ -134,8 +150,7 @@ public class EpicHeads extends SongodaPlugin {
         this.getLogger().info("Data handler connected using SQLite.");
 
         this.dataManager = new DataManager(this.databaseConnector, this);
-        DataMigrationManager dataMigrationManager = new DataMigrationManager(this.databaseConnector, this.dataManager,
-                new _1_InitialMigration());
+        DataMigrationManager dataMigrationManager = new DataMigrationManager(this.databaseConnector, this.dataManager, new _1_InitialMigration(this));
         dataMigrationManager.runMigrations();
 
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
@@ -148,7 +163,7 @@ public class EpicHeads extends SongodaPlugin {
                 converted = true;
                 Storage storage = new StorageYaml(this);
                 if (storage.containsGroup("players")) {
-                    this.console.sendMessage("[" + getDescription().getName() + "] " + ChatColor.RED +
+                    Bukkit.getConsoleSender().sendMessage("[" + getDescription().getName() + "] " + ChatColor.RED +
                             "Conversion process starting. Do NOT turn off your server. " +
                             "EpicHeads hasn't fully loaded yet, so make sure users don't" +
                             "interact with the plugin until the conversion process is complete.");
@@ -202,7 +217,7 @@ public class EpicHeads extends SongodaPlugin {
             final boolean finalConverted = converted;
             this.dataManager.queueAsync(() -> {
                 if (finalConverted) {
-                    this.console.sendMessage("[" + getDescription().getName() + "] " + ChatColor.GREEN + "Conversion complete :)");
+                    Bukkit.getConsoleSender().sendMessage("[" + getDescription().getName() + "] " + ChatColor.GREEN + "Conversion complete :)");
                 }
 
                 this.dataManager.getLocalHeads((heads) -> {
