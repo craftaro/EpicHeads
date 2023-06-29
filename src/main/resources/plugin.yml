@@ -1,13 +1,20 @@
-name: EpicHeads
-description: EpicHeads
-main: com.songoda.epicheads.EpicHeads
-version: maven-version-number
-author: Songoda
-softdepend: [Vault, PlayerPoints, Reserve]
+name: ${project.name}
+description: ${project.description}
+version: ${project.version}
 api-version: 1.13
+
+main: com.songoda.epicheads.EpicHeads
+softdepend:
+  - PlayerPoints
+  - Reserve
+  - Vault
+
+author: Craftaro
+website: ${project.url}
+
 commands:
   EpicHeads:
     description: View information on this plugin.
     default: true
-    aliases: [heads, ehe]
+    aliases: [ heads, ehe ]
     usage: /epicheads
