@@ -3,7 +3,7 @@
 <img src="https://craftaro.com/images/products/518/icons/m8k1iVH0YuKsEFT4viNYGy2X6FIlBWARNfPrmmZ2.png" width="128px">
 
 # EpicHeads
-Allows you and your players to search over 19,000 unique and artistic heads which are perfect for building immersive masterpieces
+**Allows you and your players to search over 19,000 unique and artistic heads which are perfect for building immersive masterpieces**
 
 
 [![Discord][Discord shield]][Discord invite]
