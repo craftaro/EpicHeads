@@ -2,6 +2,7 @@ package com.craftaro.epicheads.commands;
 
 import com.craftaro.core.commands.AbstractCommand;
 import com.craftaro.epicheads.EpicHeads;
+import com.craftaro.epicheads.database.DataHelper;
 import com.craftaro.epicheads.head.Category;
 import com.craftaro.epicheads.head.Head;
 import com.craftaro.epicheads.head.HeadManager;
@@ -42,7 +43,7 @@ public class CommandAdd extends AbstractCommand {
 
         Head head = new Head(headManager.getNextLocalId(), name, url, category, true, null, (byte) 0);
         headManager.addLocalHead(head);
-        this.plugin.getDataManager().createLocalHead(head);
+        DataHelper.createLocalHead(head);
 
         this.plugin.getLocale().getMessage("command.add.success")
                 .processPlaceholder("name", name).sendPrefixedMessage(sender);

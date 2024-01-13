@@ -7,6 +7,7 @@ import com.craftaro.core.hooks.EconomyManager;
 import com.craftaro.core.input.ChatPrompt;
 import com.craftaro.core.third_party.com.cryptomorin.xseries.XMaterial;
 import com.craftaro.epicheads.EpicHeads;
+import com.craftaro.epicheads.database.DataHelper;
 import com.craftaro.epicheads.head.Category;
 import com.craftaro.epicheads.head.Head;
 import com.craftaro.epicheads.players.EPlayer;
@@ -192,7 +193,7 @@ public class GUIHeads extends Gui {
             setButton(i + 9, item, (event) -> {
                 if (event.clickType == ClickType.MIDDLE && this.player.hasPermission("epicheads.delete")) {
                     this.plugin.getHeadManager().disableHead(head);
-                    this.plugin.getDataManager().disableHead(head);
+                    DataHelper.disableHead(head);
                     this.heads.remove(head);
                     showPage();
                     return;

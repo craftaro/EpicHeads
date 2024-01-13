@@ -2,6 +2,7 @@ package com.craftaro.epicheads.listeners;
 
 import com.craftaro.core.utils.ItemUtils;
 import com.craftaro.epicheads.EpicHeads;
+import com.craftaro.epicheads.database.DataHelper;
 import com.craftaro.epicheads.head.Category;
 import com.craftaro.epicheads.head.Head;
 import com.craftaro.epicheads.head.HeadManager;
@@ -56,22 +57,22 @@ public class LoginListeners implements Listener {
         if (optional.isPresent()) {
             Head head = optional.get();
             head.setUrl(url);
-            this.plugin.getDataManager().updateLocalHead(head);
+            DataHelper.updateLocalHead(head);
             return;
         }
 
         Head head = new Head(id, player.getName(), url, tag, true, null, (byte) 0);
         headManager.addLocalHead(head);
-        this.plugin.getDataManager().createLocalHead(head);
+        DataHelper.createLocalHead(head);
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        this.plugin.getDataManager().getPlayer(event.getPlayer(), ePlayer -> this.plugin.getPlayerManager().addPlayer(ePlayer));
+        DataHelper.getPlayer(event.getPlayer(), ePlayer -> this.plugin.getPlayerManager().addPlayer(ePlayer));
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        this.plugin.getDataManager().updatePlayer(this.plugin.getPlayerManager().getPlayer(event.getPlayer()));
+        DataHelper.updatePlayer(this.plugin.getPlayerManager().getPlayer(event.getPlayer()));
     }
 }

@@ -4,7 +4,6 @@ import com.craftaro.core.SongodaCore;
 import com.craftaro.core.SongodaPlugin;
 import com.craftaro.core.commands.CommandManager;
 import com.craftaro.core.configuration.Config;
-import com.craftaro.core.database.DataMigrationManager;
 import com.craftaro.core.database.DatabaseConnector;
 import com.craftaro.core.database.SQLiteConnector;
 import com.craftaro.core.gui.GuiManager;
@@ -22,7 +21,7 @@ import com.craftaro.epicheads.commands.CommandReload;
 import com.craftaro.epicheads.commands.CommandSearch;
 import com.craftaro.epicheads.commands.CommandSettings;
 import com.craftaro.epicheads.commands.CommandUrl;
-import com.craftaro.epicheads.database.DataManager;
+import com.craftaro.epicheads.database.DataHelper;
 import com.craftaro.epicheads.database.migrations._1_InitialMigration;
 import com.craftaro.epicheads.utils.ItemEconomy;
 import com.craftaro.epicheads.head.Category;
@@ -68,7 +67,6 @@ public class EpicHeads extends SongodaPlugin {
     private PluginHook itemEconomyHook;
 
     private DatabaseConnector databaseConnector;
-    private DataManager dataManager;
 
     /**
      * @deprecated Use {@link #getPlugin(Class)} instead
@@ -85,8 +83,7 @@ public class EpicHeads extends SongodaPlugin {
 
     @Override
     public void onPluginDisable() {
-        shutdownDataManager(this.dataManager);
-        this.databaseConnector.closeConnection();
+        this.dataManager.shutdown();
     }
 
     @Override
@@ -141,7 +138,7 @@ public class EpicHeads extends SongodaPlugin {
         loadHeads();
 
         int timeout = Settings.AUTOSAVE.getInt() * 60 * 20;
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> this.dataManager.saveAllPlayers(), timeout, timeout);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, DataHelper::saveAllPlayers, timeout, timeout);
     }
 
     @Override
@@ -150,9 +147,8 @@ public class EpicHeads extends SongodaPlugin {
         this.databaseConnector = new SQLiteConnector(this);
         this.getLogger().info("Data handler connected using SQLite.");
 
-        this.dataManager = new DataManager(this.databaseConnector, this);
-        DataMigrationManager dataMigrationManager = new DataMigrationManager(this.databaseConnector, this.dataManager, new _1_InitialMigration(this));
-        dataMigrationManager.runMigrations();
+        initDatabase(new _1_InitialMigration(this));
+        DataHelper.init(this.dataManager);
 
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
             // Legacy data! Yay!
@@ -179,7 +175,7 @@ public class EpicHeads extends SongodaPlugin {
                                 UUID.fromString(row.get("uuid").asString()),
                                 (List<String>) row.get("favorites").asObject()));
                     }
-                    this.dataManager.migratePlayers(players);
+                    DataHelper.migratePlayers(players);
                 }
 
                 if (storage.containsGroup("local")) {
@@ -199,7 +195,7 @@ public class EpicHeads extends SongodaPlugin {
                                 null,
                                 (byte) 0);
 
-                        this.dataManager.createLocalHead(head);
+                        DataHelper.createLocalHead(head);
                     }
 
                     if (storage.containsGroup("disabled")) {
@@ -208,7 +204,7 @@ public class EpicHeads extends SongodaPlugin {
                             ids.add(row.get("id").asInt());
                         }
 
-                        this.dataManager.migrateDisabledHead(ids);
+                        DataHelper.migrateDisabledHead(ids);
                     }
                 }
 
@@ -216,17 +212,17 @@ public class EpicHeads extends SongodaPlugin {
             }
 
             final boolean finalConverted = converted;
-            this.dataManager.queueAsync(() -> {
+            this.dataManager.getAsyncPool().submit(() -> {
                 if (finalConverted) {
                     Bukkit.getConsoleSender().sendMessage("[" + getDescription().getName() + "] " + ChatColor.GREEN + "Conversion complete :)");
                 }
 
-                this.dataManager.getLocalHeads((heads) -> {
+                DataHelper.getLocalHeads((heads) -> {
                     this.headManager.addLocalHeads(heads);
                     getLogger().info("Loaded " + this.headManager.getHeads().size() + " heads");
                 });
 
-                this.dataManager.getDisabledHeads((ids) -> {
+                DataHelper.getDisabledHeads((ids) -> {
                     for (int id : ids) {
                         this.headManager.disableHead(new Head(id, false));
                     }
@@ -338,9 +334,5 @@ public class EpicHeads extends SongodaPlugin {
 
     public DatabaseConnector getDatabaseConnector() {
         return this.databaseConnector;
-    }
-
-    public DataManager getDataManager() {
-        return this.dataManager;
     }
 }
