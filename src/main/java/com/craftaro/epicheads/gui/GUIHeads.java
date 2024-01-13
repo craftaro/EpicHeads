@@ -5,7 +5,7 @@ import com.craftaro.core.gui.GuiManager;
 import com.craftaro.core.gui.GuiUtils;
 import com.craftaro.core.hooks.EconomyManager;
 import com.craftaro.core.input.ChatPrompt;
-import com.craftaro.core.third_party.com.cryptomorin.xseries.XMaterial;
+import com.craftaro.third_party.com.cryptomorin.xseries.XMaterial;
 import com.craftaro.epicheads.EpicHeads;
 import com.craftaro.epicheads.database.DataHelper;
 import com.craftaro.epicheads.head.Category;

@@ -1,7 +1,7 @@
 package com.craftaro.epicheads.utils;
 
 import com.craftaro.core.hooks.economies.Economy;
-import com.craftaro.core.third_party.com.cryptomorin.xseries.XMaterial;
+import com.craftaro.third_party.com.cryptomorin.xseries.XMaterial;
 import com.craftaro.core.utils.ItemUtils;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;

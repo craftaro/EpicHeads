@@ -10,7 +10,7 @@ import com.craftaro.core.gui.GuiManager;
 import com.craftaro.core.hooks.EconomyManager;
 import com.craftaro.core.hooks.PluginHook;
 import com.craftaro.core.hooks.economies.Economy;
-import com.craftaro.core.third_party.com.cryptomorin.xseries.XMaterial;
+import com.craftaro.third_party.com.cryptomorin.xseries.XMaterial;
 import com.craftaro.epicheads.commands.CommandAdd;
 import com.craftaro.epicheads.commands.CommandBase64;
 import com.craftaro.epicheads.commands.CommandEpicHeads;

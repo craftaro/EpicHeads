@@ -2,7 +2,7 @@ package com.craftaro.epicheads.gui;
 
 import com.craftaro.core.gui.Gui;
 import com.craftaro.core.gui.GuiUtils;
-import com.craftaro.core.third_party.com.cryptomorin.xseries.XMaterial;
+import com.craftaro.third_party.com.cryptomorin.xseries.XMaterial;
 import com.craftaro.core.utils.ItemUtils;
 import com.craftaro.epicheads.EpicHeads;
 import com.craftaro.epicheads.head.Category;
