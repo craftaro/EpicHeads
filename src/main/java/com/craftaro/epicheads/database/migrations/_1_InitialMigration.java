@@ -22,7 +22,7 @@ public class _1_InitialMigration extends DataMigration {
 
         // Create player profiles
         try (Statement statement = connection.createStatement()) {
-            statement.execute("CREATE TABLE " + tablePrefix + "players (" +
+            statement.execute("CREATE TABLE IF NOT EXISTS " + tablePrefix + "players (" +
                     "uuid VARCHAR(36) PRIMARY KEY, " +
                     "favorites MEDIUMTEXT NOT NULL" +
                     ")");
@@ -30,7 +30,7 @@ public class _1_InitialMigration extends DataMigration {
 
         // Create local heads table
         try (Statement statement = connection.createStatement()) {
-            statement.execute("CREATE TABLE " + tablePrefix + "local_heads (" +
+            statement.execute("CREATE TABLE IF NOT EXISTS " + tablePrefix + "local_heads (" +
                     "id INTEGER PRIMARY KEY" + autoIncrement + ", " +
                     "category VARCHAR(48) NOT NULL, " +
                     "name VARCHAR(64) NOT NULL," +
@@ -40,7 +40,7 @@ public class _1_InitialMigration extends DataMigration {
 
         // Create disabled heads table
         try (Statement statement = connection.createStatement()) {
-            statement.execute("CREATE TABLE " + tablePrefix + "disabled_heads (" +
+            statement.execute("CREATE TABLE IF NOT EXISTS " + tablePrefix + "disabled_heads (" +
                     "id INTEGER PRIMARY KEY" +
                     ")");
         }
