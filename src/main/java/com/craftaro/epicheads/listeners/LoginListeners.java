@@ -6,6 +6,7 @@ import com.craftaro.epicheads.database.DataHelper;
 import com.craftaro.epicheads.head.Category;
 import com.craftaro.epicheads.head.Head;
 import com.craftaro.epicheads.head.HeadManager;
+import com.craftaro.third_party.com.cryptomorin.xseries.SkullUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,7 +29,7 @@ public class LoginListeners implements Listener {
 
         Player player = event.getPlayer();
 
-        String encodedStr = ItemUtils.getSkullTexture(player);
+        String encodedStr = SkullUtils.getSkinValue(SkullUtils.getSkull(player.getUniqueId()).getItemMeta());
         if (encodedStr == null) {
             return;
         }

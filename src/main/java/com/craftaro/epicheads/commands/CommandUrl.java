@@ -4,6 +4,7 @@ import com.craftaro.core.commands.AbstractCommand;
 import com.craftaro.core.compatibility.CompatibleHand;
 import com.craftaro.core.utils.ItemUtils;
 import com.craftaro.epicheads.EpicHeads;
+import com.craftaro.third_party.com.cryptomorin.xseries.SkullUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -28,12 +29,12 @@ public class CommandUrl extends AbstractCommand {
             return ReturnType.FAILURE;
         }
 
-        String encodededStr = ItemUtils.getSkullTexture(item);
-        if (encodededStr == null) {
+        String encodedStr = SkullUtils.getSkinValue(item.getItemMeta());
+        if (encodedStr == null) {
             return ReturnType.FAILURE;
         }
 
-        String url = ItemUtils.getDecodedTexture(encodededStr);
+        String url = ItemUtils.getDecodedTexture(encodedStr);
 
         player.sendMessage(this.plugin.getLocale().newMessage("http://textures.minecraft.net/texture/" + url).getPrefixedMessage());
         return ReturnType.SUCCESS;

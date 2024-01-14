@@ -1,12 +1,13 @@
 package com.craftaro.epicheads.listeners;
 
-import com.craftaro.third_party.com.cryptomorin.xseries.XMaterial;
 import com.craftaro.core.utils.ItemUtils;
 import com.craftaro.core.utils.TextUtils;
 import com.craftaro.epicheads.EpicHeads;
 import com.craftaro.epicheads.head.Head;
-import com.craftaro.epicheads.utils.HeadType;
 import com.craftaro.epicheads.settings.Settings;
+import com.craftaro.epicheads.utils.HeadType;
+import com.craftaro.third_party.com.cryptomorin.xseries.SkullUtils;
+import com.craftaro.third_party.com.cryptomorin.xseries.XMaterial;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -37,15 +38,15 @@ public class DeathListeners implements Listener {
                     return;
                 }
 
-                String encodededStr = ItemUtils.getSkullTexture((Player) event.getEntity());
-                if (encodededStr == null) {
+                String encodedStr = SkullUtils.getSkinValue(SkullUtils.getSkull(event.getEntity().getUniqueId()).getItemMeta());
+                if (encodedStr == null) {
                     itemNew = XMaterial.PLAYER_HEAD.parseItem();
 
                     ItemMeta meta = itemNew.getItemMeta();
                     meta.setDisplayName(TextUtils.formatText("&9" + ((Player) event.getEntity()).getDisplayName()));
                     itemNew.setItemMeta(meta);
                 } else {
-                    String url = ItemUtils.getDecodedTexture(encodededStr);
+                    String url = ItemUtils.getDecodedTexture(encodedStr);
 
                     Optional<Head> optional = this.plugin.getHeadManager().getHeads().stream()
                             .filter(head -> url.equals(head.getUrl())).findFirst();

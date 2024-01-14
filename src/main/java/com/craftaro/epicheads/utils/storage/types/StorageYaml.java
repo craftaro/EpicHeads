@@ -1,9 +1,9 @@
 package com.craftaro.epicheads.utils.storage.types;
 
 import com.craftaro.epicheads.EpicHeads;
+import com.craftaro.epicheads.utils.storage.Storage;
 import com.craftaro.epicheads.utils.storage.StorageItem;
 import com.craftaro.epicheads.utils.storage.StorageRow;
-import com.craftaro.epicheads.utils.storage.Storage;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemorySection;
 

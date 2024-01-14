@@ -1,20 +1,19 @@
 package com.craftaro.epicheads.utils;
 
 import com.craftaro.core.hooks.economies.Economy;
+import com.craftaro.third_party.com.cryptomorin.xseries.SkullUtils;
 import com.craftaro.third_party.com.cryptomorin.xseries.XMaterial;
-import com.craftaro.core.utils.ItemUtils;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 
 public class ItemEconomy extends Economy {
     public static boolean isItem(ItemStack itemStack) {
-        if (itemStack == null || itemStack.getType() == Material.AIR) {
+        if (itemStack == null || XMaterial.AIR.isSimilar(itemStack)) {
             return false;
         }
 
         if (XMaterial.PLAYER_HEAD.isSimilar(itemStack)) {
-            return ItemUtils.getSkullTexture(itemStack).equals(ItemUtils.getSkullTexture(Methods.createToken(1)));
+            return SkullUtils.getSkinValue(itemStack.getItemMeta()).equals(SkullUtils.getSkinValue(Methods.createToken(1).getItemMeta()));
         }
         return itemStack.isSimilar(Methods.createToken(1));
     }
