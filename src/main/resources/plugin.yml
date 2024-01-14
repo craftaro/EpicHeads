@@ -3,7 +3,7 @@ description: ${project.description}
 version: ${project.version}
 api-version: 1.13
 
-main: com.songoda.epicheads.EpicHeads
+main: com.craftaro.epicheads.EpicHeads
 softdepend:
   - PlayerPoints
   - Reserve
