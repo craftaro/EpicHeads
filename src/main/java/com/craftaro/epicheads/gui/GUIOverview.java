@@ -55,7 +55,11 @@ public class GUIOverview extends Gui {
         int numTemplates = this.plugin.getHeadManager().getCategories().size();
         this.pages = (int) Math.floor(numTemplates / 21.0);
 
-        List<Category> categories = this.plugin.getHeadManager().getCategories().stream().skip((this.page - 1) * (this.rows - 1) * 9).limit((this.rows - 1) * 9)
+        List<Category> categories = this.plugin.getHeadManager()
+                .getCategories()
+                .stream()
+                .skip((this.page - 1) * (this.rows - 1) * 9)
+                .limit((this.rows - 1) * 9)
                 .collect(Collectors.toList());
 
         int add = 0;

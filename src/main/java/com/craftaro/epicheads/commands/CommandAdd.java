@@ -10,7 +10,6 @@ import org.bukkit.command.CommandSender;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CommandAdd extends AbstractCommand {
     private final EpicHeads plugin;
@@ -37,19 +36,15 @@ public class CommandAdd extends AbstractCommand {
             return ReturnType.FAILURE;
         }
 
-        List<Category> categories = headManager.getCategories().stream().filter(category1 -> category1.getName().equals(categoryStr)).collect(Collectors.toList());
-
-        Category category = categories.isEmpty() ? new Category(categoryStr) : categories.get(0);
-
+        Category category = headManager.getOrCreateCategoryByName(categoryStr);
         Head head = new Head(headManager.getNextLocalId(), name, url, category, true, null, (byte) 0);
         headManager.addLocalHead(head);
         DataHelper.createLocalHead(head);
 
-        this.plugin.getLocale().getMessage("command.add.success")
-                .processPlaceholder("name", name).sendPrefixedMessage(sender);
-        if (categories.isEmpty()) {
-            this.plugin.reloadConfig();
-        }
+        this.plugin.getLocale()
+                .getMessage("command.add.success")
+                .processPlaceholder("name", name)
+                .sendPrefixedMessage(sender);
         return ReturnType.SUCCESS;
     }
 

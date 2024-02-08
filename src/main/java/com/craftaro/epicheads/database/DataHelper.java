@@ -130,7 +130,7 @@ public class DataHelper {
                             Head head = new Head(id,
                                     name,
                                     url,
-                                    new Category(categoryString),
+                                    EpicHeads.getInstance().getHeadManager().getOrCreateCategoryByName(categoryString),
                                     true,
                                     null,
                                     (byte) 0);
