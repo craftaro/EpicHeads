@@ -120,6 +120,7 @@ public class DataHelper {
                 List<Head> heads = new ArrayList<>();
                 dslContext.select()
                         .from(DSL.table(getTablePrefix() + "local_heads"))
+                        .orderBy(DSL.field("id asc"))
                         .fetch()
                         .forEach(record -> {
                             int id = record.get(DSL.field("id", Integer.class));
