@@ -3,7 +3,6 @@ package com.craftaro.epicheads.database;
 import com.craftaro.core.database.DataManager;
 import com.craftaro.core.database.DatabaseConnector;
 import com.craftaro.epicheads.EpicHeads;
-import com.craftaro.epicheads.head.Category;
 import com.craftaro.epicheads.head.Head;
 import com.craftaro.epicheads.players.EPlayer;
 import com.craftaro.third_party.org.jooq.Query;
@@ -205,5 +204,9 @@ public class DataHelper {
                 }
             });
         });
+    }
+
+    public static boolean isInitialized() {
+        return dataManager != null;
     }
 }

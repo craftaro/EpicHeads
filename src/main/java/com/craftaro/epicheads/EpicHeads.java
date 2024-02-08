@@ -22,6 +22,7 @@ import com.craftaro.epicheads.commands.CommandSettings;
 import com.craftaro.epicheads.commands.CommandUrl;
 import com.craftaro.epicheads.database.DataHelper;
 import com.craftaro.epicheads.database.migrations._1_InitialMigration;
+import com.craftaro.epicheads.database.migrations._2_FixAutoIncrementMigration;
 import com.craftaro.epicheads.head.Category;
 import com.craftaro.epicheads.head.Head;
 import com.craftaro.epicheads.head.HeadManager;
@@ -66,6 +67,8 @@ public class EpicHeads extends SongodaPlugin {
     private PluginHook itemEconomyHook;
 
     private DatabaseConnector databaseConnector;
+
+    private boolean doneLoadingHeads = false;
 
     /**
      * @deprecated Use {@link #getPlugin(Class)} instead
@@ -215,6 +218,8 @@ public class EpicHeads extends SongodaPlugin {
                 DataHelper.getLocalHeads((heads) -> {
                     this.headManager.addLocalHeads(heads);
                     getLogger().info("Loaded " + this.headManager.getHeads().size() + " heads");
+
+                    this.doneLoadingHeads = true;
                 });
 
                 DataHelper.getDisabledHeads((ids) -> {
@@ -273,7 +278,6 @@ public class EpicHeads extends SongodaPlugin {
                 );
                 this.headManager.addHead(head);
             }
-
         } catch (IOException | ParseException ex) {
             getLogger().warning(() -> {
                 if (ex instanceof ParseException) {
@@ -326,5 +330,9 @@ public class EpicHeads extends SongodaPlugin {
 
     public DatabaseConnector getDatabaseConnector() {
         return this.databaseConnector;
+    }
+
+    public boolean isDoneLoadingHeads() {
+        return this.doneLoadingHeads;
     }
 }

@@ -25,9 +25,13 @@ public class LoginListeners implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onPreJoin(PlayerJoinEvent event) {
-        HeadManager headManager = this.plugin.getHeadManager();
+        if (!this.plugin.isDoneLoadingHeads()) {
+            // This is a hotfix/workaround for when EpicHeads is not fully loaded yet (prevents duplicate heads due to race condition)
+            return;
+        }
 
         Player player = event.getPlayer();
+        HeadManager headManager = this.plugin.getHeadManager();
 
         String encodedStr = SkullUtils.getSkinValue(SkullUtils.getSkull(player.getUniqueId()).getItemMeta());
         if (encodedStr == null) {
@@ -51,13 +55,19 @@ public class LoginListeners implements Listener {
         Category category = headManager.getOrCreateCategoryByName(categoryName);
 
         Head head = new Head(headManager.getNextLocalId(), player.getName(), url, category, true, null, (byte) 0);
-        headManager.addLocalHead(head);
         DataHelper.createLocalHead(head);
+        headManager.addLocalHead(head);
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        DataHelper.getPlayer(event.getPlayer(), ePlayer -> this.plugin.getPlayerManager().addPlayer(ePlayer));
+        Runnable task = () -> DataHelper.getPlayer(event.getPlayer(), ePlayer -> this.plugin.getPlayerManager().addPlayer(ePlayer));
+        if (DataHelper.isInitialized()) {
+            task.run();
+            return;
+        }
+
+        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, task, 20 * 3); // hotfix/workaround for another race condition \o/
     }
 
     @EventHandler
