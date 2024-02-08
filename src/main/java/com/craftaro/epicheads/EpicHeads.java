@@ -146,7 +146,7 @@ public class EpicHeads extends SongodaPlugin {
         this.databaseConnector = new SQLiteConnector(this);
         this.getLogger().info("Data handler connected using SQLite.");
 
-        initDatabase(new _1_InitialMigration(this));
+        initDatabase(new _1_InitialMigration(), new _2_FixAutoIncrementMigration());
         DataHelper.init(this.dataManager);
 
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
