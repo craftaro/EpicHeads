@@ -54,15 +54,24 @@ public class HeadManager {
                 if (!category.getName().equalsIgnoreCase(query)) {
                     continue;
                 }
-                return getHeads().stream().filter(head -> head.getCategory() == category).collect(Collectors.toList());
 
+                return getHeads()
+                        .stream()
+                        .filter(head -> head.getCategory() == category)
+                        .collect(Collectors.toList());
             }
         }
         return result;
     }
 
     public List<Head> getHeadsByCategory(Category category) {
-        return getHeads().stream().filter(head -> head.getCategory() == category).collect(Collectors.toList());
+        List<Head> list = new ArrayList<>();
+        for (Head head : getHeads()) {
+            if (head.getCategory().equals(category)) {
+                list.add(head);
+            }
+        }
+        return list;
     }
 
     public List<Head> getHeads() {
@@ -122,12 +131,32 @@ public class HeadManager {
     }
 
     public Category addCategory(Category category) {
-        this.registeredCategories.add(category);
+        if (!this.registeredCategories.contains(category)) {
+            this.registeredCategories.add(category);
+        }
         return category;
     }
 
     public List<Category> getCategories() {
         return Collections.unmodifiableList(this.registeredCategories);
+    }
+
+    public Category getCategory(String name) {
+        for (Category category : this.registeredCategories) {
+            if (category.getName().equalsIgnoreCase(name)) {
+                return category;
+            }
+        }
+        return null;
+    }
+
+    public Category getOrCreateCategoryByName(String name) {
+        for (Category category : this.registeredCategories) {
+            if (category.getName().equalsIgnoreCase(name)) {
+                return category;
+            }
+        }
+        return addCategory(new Category(name));
     }
 
     public void clear() {

@@ -9,9 +9,9 @@ import com.craftaro.epicheads.head.HeadManager;
 import com.craftaro.third_party.com.cryptomorin.xseries.SkullUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.Optional;
@@ -23,11 +23,15 @@ public class LoginListeners implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
-    public void loginEvent(PlayerLoginEvent event) {
-        HeadManager headManager = this.plugin.getHeadManager();
+    @EventHandler(priority = EventPriority.LOW)
+    public void onPreJoin(PlayerJoinEvent event) {
+        if (!this.plugin.isDoneLoadingHeads()) {
+            // This is a hotfix/workaround for when EpicHeads is not fully loaded yet (prevents duplicate heads due to race condition)
+            return;
+        }
 
         Player player = event.getPlayer();
+        HeadManager headManager = this.plugin.getHeadManager();
 
         String encodedStr = SkullUtils.getSkinValue(SkullUtils.getSkull(player.getUniqueId()).getItemMeta());
         if (encodedStr == null) {
@@ -36,40 +40,34 @@ public class LoginListeners implements Listener {
 
         String url = ItemUtils.getDecodedTexture(encodedStr);
 
-        String tagStr = this.plugin.getLocale().getMessage("general.word.playerheads").getMessage();
-
-        Optional<Category> tagOptional = headManager
-                .getCategories()
+        Optional<Head> existingPlayerHead = headManager.getLocalHeads()
                 .stream()
-                .filter(t -> t.getName().equalsIgnoreCase(tagStr))
+                .filter(h -> h.getName().equalsIgnoreCase(event.getPlayer().getName()))
                 .findFirst();
-
-        Category tag = tagOptional.orElseGet(() -> new Category(tagStr));
-
-        if (!tagOptional.isPresent()) {
-            headManager.addCategory(tag);
-        }
-
-        Optional<Head> optional = headManager.getLocalHeads().stream()
-                .filter(h -> h.getName().equalsIgnoreCase(event.getPlayer().getName())).findFirst();
-
-        int id = headManager.getNextLocalId();
-
-        if (optional.isPresent()) {
-            Head head = optional.get();
+        if (existingPlayerHead.isPresent()) {
+            Head head = existingPlayerHead.get();
             head.setUrl(url);
             DataHelper.updateLocalHead(head);
             return;
         }
 
-        Head head = new Head(id, player.getName(), url, tag, true, null, (byte) 0);
-        headManager.addLocalHead(head);
+        String categoryName = this.plugin.getLocale().getMessage("general.word.playerheads").getMessage();
+        Category category = headManager.getOrCreateCategoryByName(categoryName);
+
+        Head head = new Head(headManager.getNextLocalId(), player.getName(), url, category, true, null, (byte) 0);
         DataHelper.createLocalHead(head);
+        headManager.addLocalHead(head);
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        DataHelper.getPlayer(event.getPlayer(), ePlayer -> this.plugin.getPlayerManager().addPlayer(ePlayer));
+        Runnable task = () -> DataHelper.getPlayer(event.getPlayer(), ePlayer -> this.plugin.getPlayerManager().addPlayer(ePlayer));
+        if (DataHelper.isInitialized()) {
+            task.run();
+            return;
+        }
+
+        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, task, 20 * 3); // hotfix/workaround for another race condition \o/
     }
 
     @EventHandler

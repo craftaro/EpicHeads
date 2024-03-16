@@ -3,7 +3,6 @@ package com.craftaro.epicheads.database;
 import com.craftaro.core.database.DataManager;
 import com.craftaro.core.database.DatabaseConnector;
 import com.craftaro.epicheads.EpicHeads;
-import com.craftaro.epicheads.head.Category;
 import com.craftaro.epicheads.head.Head;
 import com.craftaro.epicheads.players.EPlayer;
 import com.craftaro.third_party.org.jooq.Query;
@@ -120,6 +119,7 @@ public class DataHelper {
                 List<Head> heads = new ArrayList<>();
                 dslContext.select()
                         .from(DSL.table(getTablePrefix() + "local_heads"))
+                        .orderBy(DSL.field("id asc"))
                         .fetch()
                         .forEach(record -> {
                             int id = record.get(DSL.field("id", Integer.class));
@@ -130,7 +130,7 @@ public class DataHelper {
                             Head head = new Head(id,
                                     name,
                                     url,
-                                    new Category(categoryString),
+                                    EpicHeads.getInstance().getHeadManager().getOrCreateCategoryByName(categoryString),
                                     true,
                                     null,
                                     (byte) 0);
@@ -204,5 +204,9 @@ public class DataHelper {
                 }
             });
         });
+    }
+
+    public static boolean isInitialized() {
+        return dataManager != null;
     }
 }

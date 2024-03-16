@@ -22,6 +22,7 @@ import com.craftaro.epicheads.commands.CommandSettings;
 import com.craftaro.epicheads.commands.CommandUrl;
 import com.craftaro.epicheads.database.DataHelper;
 import com.craftaro.epicheads.database.migrations._1_InitialMigration;
+import com.craftaro.epicheads.database.migrations._2_FixAutoIncrementMigration;
 import com.craftaro.epicheads.head.Category;
 import com.craftaro.epicheads.head.Head;
 import com.craftaro.epicheads.head.HeadManager;
@@ -56,7 +57,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public class EpicHeads extends SongodaPlugin {
@@ -67,6 +67,8 @@ public class EpicHeads extends SongodaPlugin {
     private PluginHook itemEconomyHook;
 
     private DatabaseConnector databaseConnector;
+
+    private boolean doneLoadingHeads = false;
 
     /**
      * @deprecated Use {@link #getPlugin(Class)} instead
@@ -147,7 +149,7 @@ public class EpicHeads extends SongodaPlugin {
         this.databaseConnector = new SQLiteConnector(this);
         this.getLogger().info("Data handler connected using SQLite.");
 
-        initDatabase(new _1_InitialMigration(this));
+        initDatabase(new _1_InitialMigration(), new _2_FixAutoIncrementMigration());
         DataHelper.init(this.dataManager);
 
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
@@ -180,12 +182,8 @@ public class EpicHeads extends SongodaPlugin {
 
                 if (storage.containsGroup("local")) {
                     for (StorageRow row : storage.getRowsByGroup("local")) {
-                        String tagStr = row.get("category").asString();
-
-                        Optional<Category> tagOptional = this.headManager.getCategories().stream()
-                                .filter(t -> t.getName().equalsIgnoreCase(tagStr)).findFirst();
-
-                        Category category = tagOptional.orElseGet(() -> new Category(tagStr));
+                        String categoryName = row.get("category").asString();
+                        Category category = this.headManager.getOrCreateCategoryByName(categoryName);
 
                         Head head = new Head(row.get("id").asInt(),
                                 row.get("name").asString(),
@@ -220,6 +218,8 @@ public class EpicHeads extends SongodaPlugin {
                 DataHelper.getLocalHeads((heads) -> {
                     this.headManager.addLocalHeads(heads);
                     getLogger().info("Loaded " + this.headManager.getHeads().size() + " heads");
+
+                    this.doneLoadingHeads = true;
                 });
 
                 DataHelper.getDisabledHeads((ids) -> {
@@ -250,8 +250,7 @@ public class EpicHeads extends SongodaPlugin {
     private boolean loadHeads() {
         try {
             this.headManager.clear();
-            this.headManager.addCategory(new Category(getLocale()
-                    .getMessage("general.word.latestpack").getMessage(), true));
+            this.headManager.addCategory(new Category(getLocale().getMessage("general.word.latestpack").getMessage(), true));
 
             JSONParser parser = new JSONParser();
             JSONArray jsonArray = (JSONArray) parser.parse(new FileReader(getDataFolder() + "/heads.json"));
@@ -259,29 +258,26 @@ public class EpicHeads extends SongodaPlugin {
             for (Object o : jsonArray) {
                 JSONObject jsonObject = (JSONObject) o;
 
-                String categoryStr = (String) jsonObject.get("tags");
-                Optional<Category> tagOptional = this.headManager.getCategories().stream().filter(t -> t.getName().equalsIgnoreCase(categoryStr)).findFirst();
+                String headName = (String) jsonObject.get("name");
+                String headPack = (String) jsonObject.get("pack");
+                if (headName == null || headName.equals("null") || (headPack != null && headPack.equals("null"))) {
+                    continue;
+                }
 
-                Category category = tagOptional.orElseGet(() -> new Category(categoryStr));
+                String categoryName = (String) jsonObject.get("tags");
+                Category category = this.headManager.getOrCreateCategoryByName(categoryName);
 
-                int id = Integer.parseInt((String) jsonObject.get("id"));
-
-                Head head = new Head(id,
-                        (String) jsonObject.get("name"),
+                Head head = new Head(
+                        Integer.parseInt((String) jsonObject.get("id")),
+                        headName,
                         (String) jsonObject.get("url"),
                         category,
                         false,
-                        (String) jsonObject.get("pack"),
-                        Byte.parseByte((String) jsonObject.get("staff_picked")));
-
-                if (head.getName() == null || head.getName().equals("null")
-                        || head.getPack() != null && head.getPack().equals("null")) continue;
-
-                if (!tagOptional.isPresent())
-                    this.headManager.addCategory(category);
+                        headPack,
+                        Byte.parseByte((String) jsonObject.get("staff_picked"))
+                );
                 this.headManager.addHead(head);
             }
-
         } catch (IOException | ParseException ex) {
             getLogger().warning(() -> {
                 if (ex instanceof ParseException) {
@@ -334,5 +330,9 @@ public class EpicHeads extends SongodaPlugin {
 
     public DatabaseConnector getDatabaseConnector() {
         return this.databaseConnector;
+    }
+
+    public boolean isDoneLoadingHeads() {
+        return this.doneLoadingHeads;
     }
 }
